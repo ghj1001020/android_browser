@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">웹 브라우저</string>
+
+    <!-- 공통 -->
+    <string name="common_ok">확인</string>
+    <string name="common_cancel">취소</string>
+    
+    <!-- 메인 -->
+    <string name="url_hint">검색어 또는 URL 입력</string>
+
+</resources>

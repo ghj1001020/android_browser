@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fitsSystemWindows : status bar와 ui가 안겹치도록 조정 (뷰가 상태바와 소프트키 영역을 제외한 영역까지만 차지한다) -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- 타이틀바 -->
+    <include
+        android:id="@+id/appbar_main"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/appbar_main" />
+
+    <!-- 웹뷰 -->
+    <RelativeLayout
+        app:layout_constraintTop_toBottomOf="@id/appbar_main"
+        app:layout_constraintBottom_toTopOf="@id/toolbar_main"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <com.ghj.browser.webkit.CustomWebView
+            android:id="@+id/wv_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <include layout="@layout/webview_loading_bar" />
+
+    </RelativeLayout>
+
+    <!-- 하단 툴바 -->
+    <include
+        android:id="@+id/toolbar_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_main" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

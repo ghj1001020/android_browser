@@ -1,0 +1,25 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/app_main_color</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 뷰가 상태바및 소프트키 영역을 제외한 전체영역을 차지 -->
+        <item name="android:fitsSystemWindows">false</item>
+        <!-- 툴바 아래 그림자 삭제 -->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionModeOverlay">@null</item>
+
+        <!-- 상태바 투명 처리 -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!-- 상태바 색상 변경 -->
+        <item name="android:statusBarColor">@color/app_status_bar_color</item>
+
+        <!-- 바운스 될때 엣지 색상 -->
+        <item name="android:colorEdgeEffect">@color/app_main_color</item>
+    </style>
+
+</resources>

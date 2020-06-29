@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/btn_toolbar_back"
+        android:src="@drawable/ic_back"
+        app:srcCompat="@drawable/ic_back"
+        android:scaleType="centerInside"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_toolbar_next"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="@dimen/toolbar_height"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <ImageButton
+        android:id="@+id/btn_toolbar_next"
+        android:src="@drawable/ic_next"
+        app:srcCompat="@drawable/ic_next"
+        android:scaleType="centerInside"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintLeft_toRightOf="@id/btn_toolbar_back"
+        app:layout_constraintRight_toLeftOf="@id/btn_toolbar_home"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="@dimen/toolbar_height"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <ImageButton
+        android:id="@+id/btn_toolbar_home"
+        android:src="@drawable/ic_home"
+        app:srcCompat="@drawable/ic_home"
+        android:scaleType="centerInside"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintLeft_toRightOf="@id/btn_toolbar_next"
+        app:layout_constraintRight_toLeftOf="@id/btn_toolbar_bookmark"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="@dimen/toolbar_height"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <ImageButton
+        android:id="@+id/btn_toolbar_bookmark"
+        android:src="@drawable/ic_toolbar_bookmark"
+        app:srcCompat="@drawable/ic_toolbar_bookmark"
+        android:scaleType="centerInside"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintLeft_toRightOf="@id/btn_toolbar_home"
+        app:layout_constraintRight_toLeftOf="@id/btn_toolbar_more"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="@dimen/toolbar_height"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <ImageButton
+        android:id="@+id/btn_toolbar_more"
+        android:src="@drawable/ic_more"
+        app:srcCompat="@drawable/ic_more"
+        android:scaleType="centerInside"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintLeft_toRightOf="@id/btn_toolbar_bookmark"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="@dimen/toolbar_height"
+        android:layout_height="@dimen/toolbar_height" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

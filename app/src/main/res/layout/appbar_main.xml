@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Toolbar를 AppBarLayout로 감싸 주면 enterAlwaysCollapsed나 exitUntilCollapsed 같은 flag를 지정해 스크롤 이벤트에 반응할 수 있습니다 -->
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/transparent"
+    android:fitsSystemWindows="true"
+    android:elevation="0dp"
+    app:elevation="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- contentInsetStartWithNavigation : 타이틀과 아이콘 사이의 간격 -->
+    <!-- contentInsetStart : 툴바 왼쪽 기본 마진 -->
+    <!-- contentInsetLeft : 툴바 공백 간격 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        >
+
+        <RelativeLayout
+            android:gravity="center"
+            android:background="@color/app_main_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 클릭전 -->
+            <LinearLayout
+                android:id="@+id/layout_url_txt_mode"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <ImageButton
+                    android:id="@+id/btn_bookmark"
+                    android:src="@drawable/ic_bookmark"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:layout_width="@dimen/toolbar_height"
+                    android:layout_height="@dimen/toolbar_height"
+                    app:srcCompat="@drawable/ic_bookmark" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_txt_url"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageButton
+                        android:id="@+id/btn_info"
+                        android:src="@drawable/ic_lock"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:layout_toLeftOf="@id/txt_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_lock" />
+
+                    <TextView
+                        android:id="@+id/txt_title"
+                        android:gravity="center"
+                        android:text=""
+                        android:textSize="14dp"
+                        android:textColor="@color/txt_webview_title"
+                        android:layout_centerInParent="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="3"
+                        tools:text="https://wwww.naver.com"/>
+
+                </RelativeLayout>
+
+                <ImageButton
+                    android:id="@+id/btn_refersh"
+                    android:src="@drawable/ic_refresh"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:layout_width="@dimen/toolbar_height"
+                    android:layout_height="@dimen/toolbar_height"
+                    app:srcCompat="@drawable/ic_refresh"/>
+            </LinearLayout>
+
+            <!-- 클릭후 -->
+            <RelativeLayout
+                android:id="@+id/layout_url_edit_mode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/url_layout_bg"
+                android:paddingLeft="16dp"
+                android:visibility="visible">
+
+                <!-- flagNoExtractUi : 전체화면과 같이 사용자 편의에 맞춘 UI가 아니라 기본 UI로 출력 -->
+                <EditText
+                    android:id="@+id/edit_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toLeftOf="@id/btn_delete"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/url_hint"
+                    android:imeOptions="actionGo|flagNoExtractUi"
+                    android:inputType="textUri"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@color/txt_webview_title"
+                    android:textColorHint="@color/txt_hint_url"
+                    android:textCursorDrawable="@drawable/cursor_url"
+                    android:textSize="14dp" />
+
+                <ImageButton
+                    android:id="@+id/btn_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_delete"
+                    app:srcCompat="@drawable/ic_delete" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+</com.google.android.material.appbar.AppBarLayout>

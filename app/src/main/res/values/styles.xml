@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 뷰가 상태바및 소프트키 영역을 제외한 전체영역을 차지 -->
+        <item name="android:fitsSystemWindows">false</item>
+        <!-- 툴바 아래 그림자 삭제 -->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionModeOverlay">@null</item>
+    </style>
+
+</resources>

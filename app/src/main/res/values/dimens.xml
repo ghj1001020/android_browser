@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="text_letter_pacing">-0.05</dimen>
+    <dimen name="toolbar_height">44dp</dimen>
+
+</resources>

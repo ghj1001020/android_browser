@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+
+// 설정변수
+ext {
+    appMode = '"release"'   // 운영 - release , 개발 - dev
+    isLogBlock = 'false' // 운영 - true , 개발 - false
+}
+
+android {
+    compileSdkVersion 29
+
+
+    defaultConfig {
+        applicationId "com.ghj.browser"
+        minSdkVersion 14
+        targetSdkVersion 29
+        versionCode 10000
+        versionName "01.00.00"
+
+        multiDexEnabled true
+
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        all {
+            buildConfigField('boolean', 'BUILD_CONFIG_IS_LOG_BLOCK', project.ext.isLogBlock)
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    // multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // coordinator layout
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+
+    // material design
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
+
+//    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+}
