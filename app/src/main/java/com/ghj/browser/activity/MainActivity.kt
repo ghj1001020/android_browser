@@ -15,6 +15,7 @@ import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefinePage
 import com.ghj.browser.util.LogUtil
+import com.ghj.browser.util.PermissionUtil
 import com.ghj.browser.util.StringUtil
 import com.ghj.browser.webkit.OnWebViewListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
 
-class MainActivity : BaseWebViewActivity() , OnWebViewListener , View.OnClickListener , View.OnTouchListener {
+class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener {
 
     private val TAG : String = "MainActivity"
 
@@ -81,8 +82,9 @@ class MainActivity : BaseWebViewActivity() , OnWebViewListener , View.OnClickLis
         }
 
         // 웹뷰
-        wv_main?.initWebView( this ,false )
+        wv_main?.initWebView( this ,true )
         wv_main?.setOnTouchListener( this )
+        wv_main?.setActivity( this )
 
         // 앱바
         btn_refersh?.setOnClickListener( this )
@@ -160,6 +162,12 @@ class MainActivity : BaseWebViewActivity() , OnWebViewListener , View.OnClickLis
                 isToolbarHiding = true
             }
         })
+
+
+        // todo 테스트 하드코딩
+        btn_test?.setOnClickListener(){
+            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
+        }
     }
 
     override fun onCreateAfter() {
@@ -462,5 +470,4 @@ class MainActivity : BaseWebViewActivity() , OnWebViewListener , View.OnClickLis
             }
         }
     }
-
 }

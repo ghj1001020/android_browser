@@ -11,4 +11,7 @@
     <color name="layout_url_bg">#e3dede</color>
     <color name="txt_hint_url">#8b8687</color>
 
+    <color name="btn_alert_dialog_ok">#3087E9</color>
+    <color name="btn_alert_dialog_cancel">#F27474</color>
+
 </resources>

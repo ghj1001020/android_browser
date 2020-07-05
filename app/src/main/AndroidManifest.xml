@@ -5,6 +5,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 위치권한 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  <!-- 정확한 위치에 액세스 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />  <!-- 대략적인 위치에 액세스 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
 
     <!-- allowBackup : 앱삭제 후 재설치시 데이터 자동백업 -->
     <!-- supportsRtl : Right to Left 레이아웃 지원여부 (오른쪽에서 왼쪽 순으로 읽기) -->

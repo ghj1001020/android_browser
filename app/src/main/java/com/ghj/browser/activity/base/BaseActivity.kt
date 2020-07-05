@@ -1,7 +1,12 @@
 package com.ghj.browser.activity.base
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
+import com.ghj.browser.util.LogUtil
+import java.lang.Exception
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -41,4 +46,24 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     abstract fun onCreateAfter();   // 앱 실행 후 기본적인 체크 후 액티비티 로직 실행
+
+
+    // 설정 > 권한화면으로 이동
+    fun moveToPermSetting( requestCode : Int )
+    {
+        try {
+            val intent = Intent( Settings.ACTION_APPLICATION_DETAILS_SETTINGS )
+            intent.data = Uri.parse( "package:" + packageName )
+            startActivityForResult( intent, requestCode )
+        }
+        catch ( e1 : Exception) {
+            try {
+                val intent = Intent( Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS ) // 설정 > 어플리케이션 목록
+                startActivityForResult( intent, requestCode )
+            }
+            catch ( e2 : Exception) {
+                LogUtil.e( TAG , "err = " + e2.message )
+            }
+        }
+    }
 }

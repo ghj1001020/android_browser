@@ -44,4 +44,14 @@
         android:layout_height="wrap_content"
         layout="@layout/toolbar_main" />
 
+
+    <!-- todo 테스트 하드코딩 -->
+    <Button
+        android:id="@+id/btn_test"
+        android:text="테스트"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.ghj.browser.webkit
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
@@ -17,6 +18,7 @@ class CustomWebView : WebView {
 
     private var mContext : Context? = null
     private var listener : OnWebViewListener? = null
+    private var customWebChromeClient : CustomWebChromeClient? = null
 
 
     constructor( context: Context ) : this(context, null){
@@ -38,7 +40,8 @@ class CustomWebView : WebView {
 
         this.listener = listener
 
-        webChromeClient = CustomWebChromeClient( mContext , this.listener )
+        customWebChromeClient = CustomWebChromeClient( mContext , this.listener )
+        webChromeClient = customWebChromeClient
         webViewClient = CustomWebViewClient( mContext , this.listener )
         initWebViewSettings( hasWindowOpen )
 
@@ -172,5 +175,17 @@ class CustomWebView : WebView {
 
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         listener?.onScrollChanged( t, oldt )
+    }
+
+    // 웹뷰에 액티비티 전달
+    fun setActivity( activity : Activity )
+    {
+        customWebChromeClient?.setActivity( activity )
+    }
+
+    // 위치권한 결과
+    fun onLocationPermissionResult( isGranted : Boolean )
+    {
+        customWebChromeClient?.onLocationPermissionResult( isGranted )
     }
 }
