@@ -1,6 +1,11 @@
 package com.ghj.browser.common
 
+import android.app.Dialog
+
 object DefineCode {
+
+    // 기본페이지 - 네이버
+    val DEFAULT_PAGE = "https://www.naver.com"
 
     // 인텐트 프로토콜
     val INTENT_PROTOCOL = "intent:"
@@ -28,5 +33,8 @@ object DefineCode {
     // permission ID
     private val BASE_PERM_ID = 1000
     val PERM_ID_WEBVIEW_LOCATION = BASE_PERM_ID + 1
+    val PERM_ID_WEBVIEW_WRITE_EXTERNAL_STORAGE = BASE_PERM_ID + 2
 
 }
+
+public typealias CommonDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int, data : String?)->Unit

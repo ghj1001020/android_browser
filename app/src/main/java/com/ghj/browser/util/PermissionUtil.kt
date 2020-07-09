@@ -17,6 +17,8 @@ object PermissionUtil {
 
     // 위치 권한
     val LOCATION_PERMISSION = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_COARSE_LOCATION)
+    // 저장 권한
+    val WRITE_EXTERNAL_PERMISSION = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 
     // 권한 있는지 확인

@@ -2,6 +2,7 @@ package com.ghj.browser.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -13,6 +14,7 @@ import android.webkit.WebView
 import androidx.appcompat.app.ActionBar
 import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
+import com.ghj.browser.common.DefineCode
 import com.ghj.browser.common.DefinePage
 import com.ghj.browser.util.LogUtil
 import com.ghj.browser.util.PermissionUtil
@@ -92,7 +94,8 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         btn_delete?.setOnClickListener( this )
         edit_url?.setOnKeyListener { view, keyCode, keyEvent ->
             if( keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER ) {
-                loadUrl()
+                var url = edit_url.text.toString();
+                loadUrl( url )
                 changeLayoutUrlEdit( false )
                 true
             }
@@ -357,8 +360,12 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     // 웹페이지 로딩
-    fun loadUrl() {
-        var url = edit_url.text.toString();
+    fun loadUrl( _url : String? ) {
+        if( TextUtils.isEmpty( _url ) ) {
+            return
+        }
+
+        var url = _url as String
         if( !url.contains( "://" ) ) {
             url = "https://" + url
         }
@@ -416,9 +423,8 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // 웹뷰 기본페이지로가기
     fun moveToDefaultPage() {
-        val defaultPage = DefinePage.DEFAULT_PAGE
-
-        wv_main?.loadUrl( defaultPage )
+        val defaultPage = DefineCode.DEFAULT_PAGE
+        loadUrl( defaultPage )
     }
 
     // 웹뷰 스크롤시 타이툴바 툴바 show/hide

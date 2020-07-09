@@ -9,4 +9,7 @@
     <!-- 메인 -->
     <string name="url_hint">검색어 또는 URL 입력</string>
 
+    <!-- 권한 -->
+    <string name="perm_deny_setting_desc">단말의 설정 화면에서 권한을 다시 설정하시겠습니까?</string>
+
 </resources>

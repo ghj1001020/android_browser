@@ -3,20 +3,22 @@ package com.ghj.browser.activity.base
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.util.PermissionUtil
 import com.ghj.browser.webkit.OnWebViewListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
 
+    private val TAG : String = "BaseWebViewActivity"
+
+    var dialog : CommonDialog? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateAfter() {
-
     }
 
     override fun onResume() {
@@ -33,8 +35,23 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
             PermissionUtil.requestPermissions( this , permissions , requestCode )
         }
         else if( permissionResult == PermissionUtil.PERMISSION_RATIONALE ) {
-            moveToPermSetting( requestCode )
+            showMoveToPermSettingDialog(requestCode)
         }
+    }
+
+    // 권한부여위해 설정화면으로 이동 팝업
+    fun showMoveToPermSettingDialog( requestCode : Int ) {
+        dialog?.dismiss()
+
+        val message = getString( R.string.perm_deny_setting_desc )
+        val buttons = arrayOf( getString( R.string.common_cancel) , getString( R.string.common_ok) )
+        dialog = CommonDialog( this , 0 , message , buttons , true, TAG ){ dialog, dialogId, selected, data ->
+            if( selected == DefineCode.BTN_RIGHT ) {
+                moveToPermSetting( requestCode )
+            }
+        }
+
+        dialog?.show()
     }
 
     // 액티비티 콜백
@@ -49,6 +66,12 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
                 }
                 else {
                     wv_main?.onLocationPermissionResult( false )
+                }
+            }
+            // 웹뷰에서 저장권한
+            DefineCode.PERM_ID_WEBVIEW_WRITE_EXTERNAL_STORAGE -> {
+                if( PermissionUtil.checkPermissions( this , PermissionUtil.WRITE_EXTERNAL_PERMISSION ) == PermissionUtil.PERMISSION_GRANTED ) {
+                    wv_main?.onWriteExternalStoragePermissionResult( true )
                 }
             }
         }
@@ -72,6 +95,12 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
                 }
                 else {
                     wv_main?.onLocationPermissionResult( false )
+                }
+            }
+            // 웹뷰에서 저장권한
+            DefineCode.PERM_ID_WEBVIEW_WRITE_EXTERNAL_STORAGE -> {
+                if( deniedPermissions.size == 0 ) {
+                    wv_main?.onWriteExternalStoragePermissionResult( true )
                 }
             }
         }

@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
+    <color name="white">#ffffff</color>
+    <color name="divider">#f5f5f5</color>
 
     <color name="app_main_color">#a3daff</color>
     <color name="app_status_bar_color">#30A9DE</color>
@@ -13,5 +15,11 @@
 
     <color name="btn_alert_dialog_ok">#3087E9</color>
     <color name="btn_alert_dialog_cancel">#F27474</color>
+
+    <!-- 다이얼로그 -->
+    <color name="txt_dialog_message">#676767</color>
+    <color name="btn_dialog_left">#323232</color>
+    <color name="btn_dialog_right">#03c75a</color>
+
 
 </resources>

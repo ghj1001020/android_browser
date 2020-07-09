@@ -2,13 +2,23 @@ package com.ghj.browser.webkit
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
-import android.webkit.CookieManager
-import android.webkit.WebSettings
-import android.webkit.WebView
+import android.webkit.*
+import com.ghj.browser.common.DefineCode
+import com.ghj.browser.util.LogUtil
+import com.ghj.browser.util.PermissionUtil
+import com.ghj.browser.util.StringUtil
+import java.io.File
+import java.lang.Exception
+import java.net.URLDecoder
 
 
 class CustomWebView : WebView {
@@ -19,6 +29,11 @@ class CustomWebView : WebView {
     private var mContext : Context? = null
     private var listener : OnWebViewListener? = null
     private var customWebChromeClient : CustomWebChromeClient? = null
+
+
+    // 파일다운로드 정보
+    var fileDownloadUrl : String? = null
+    var fileDownloadFilename : String? = null
 
 
     constructor( context: Context ) : this(context, null){
@@ -93,7 +108,21 @@ class CustomWebView : WebView {
         }
 
         // 다운로드
-        setDownloadListener( null )
+        setDownloadListener( DownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+            var filename = ""
+
+            if( !TextUtils.isEmpty( contentDisposition ) ) {
+                try {
+                    filename = URLUtil.guessFileName( url , contentDisposition , mimetype )
+                    filename = URLDecoder.decode( filename , "UTF-8" )
+                }
+                catch ( e : Exception ) {
+                    LogUtil.e( TAG , "err=" + e.message )
+                }
+            }
+
+            fileDownload( url , filename )
+        } )
     }
 
     // 웹뷰 설정
@@ -187,5 +216,55 @@ class CustomWebView : WebView {
     fun onLocationPermissionResult( isGranted : Boolean )
     {
         customWebChromeClient?.onLocationPermissionResult( isGranted )
+    }
+
+    // 파일 다운로드
+    fun fileDownload( url : String , _filename : String? ) {
+        if( mContext == null ) {
+            return
+        }
+
+        val perm = PermissionUtil.checkPermissions( mContext as Context , PermissionUtil.WRITE_EXTERNAL_PERMISSION )
+        // 저장 권한없을 경우 권한 요청
+        if( perm != PermissionUtil.PERMISSION_GRANTED ) {
+            fileDownloadUrl = url
+            fileDownloadFilename = _filename
+
+            listener?.onRequestPermissions( DefineCode.PERM_ID_WEBVIEW_WRITE_EXTERNAL_STORAGE , perm , PermissionUtil.WRITE_EXTERNAL_PERMISSION )
+        }
+        // 파일다운로드
+        else {
+            try {
+                // 다운받을 파일명
+                val filename : String = if( TextUtils.isEmpty( _filename ) ) StringUtil.getFilenameFromUrl( url ) else _filename!!
+                val request : DownloadManager.Request = DownloadManager.Request( Uri.parse( url ) )
+
+                val cookies = CookieManager.getInstance().getCookie( url )
+                request.addRequestHeader( "cookie" , cookies )
+
+                request.setTitle( filename )
+                request.setDescription( "File Download")
+                if( Build.VERSION_CODES.Q > Build.VERSION.SDK_INT ) {
+                    request.allowScanningByMediaScanner()
+                }
+                request.setNotificationVisibility( DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED )
+                request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DOWNLOADS , filename )
+
+                val dm : DownloadManager? = (mContext as Context).getSystemService( Context.DOWNLOAD_SERVICE ) as DownloadManager?
+                dm?.enqueue( request )
+            }
+            catch ( e : Exception ) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    // 저장권한 결과
+    fun onWriteExternalStoragePermissionResult( isGranted : Boolean) {
+        if( isGranted ) {
+            fileDownloadUrl?.let {
+                fileDownload( it , fileDownloadFilename )
+            }
+        }
     }
 }

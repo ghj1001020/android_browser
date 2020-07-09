@@ -1,7 +1,6 @@
 package com.ghj.browser.webkit
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
 import android.text.TextUtils
 import android.webkit.GeolocationPermissions
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.dialog.AlertDialogFragment
-import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.util.DeviceUtil
 import com.ghj.browser.util.LogUtil
 import com.ghj.browser.util.PermissionUtil
