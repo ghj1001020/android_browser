@@ -35,6 +35,11 @@ object DefineCode {
     val PERM_ID_WEBVIEW_LOCATION = BASE_PERM_ID + 1
     val PERM_ID_WEBVIEW_WRITE_EXTERNAL_STORAGE = BASE_PERM_ID + 2
 
+    // 툴바 > 더보기 메뉴 코드
+    private val BASE_MORE_MENU = 2000
+    val MORE_MENU_COOKIE = BASE_MORE_MENU + 1
+
 }
 
 public typealias CommonDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int, data : String?)->Unit
+public typealias ToolbarMoreDialogCallback = (dialog : Dialog , dialogId : Int , selected : Int )->Unit

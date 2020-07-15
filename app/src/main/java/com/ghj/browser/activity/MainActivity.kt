@@ -1,5 +1,6 @@
 package com.ghj.browser.activity
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
@@ -15,11 +16,9 @@ import androidx.appcompat.app.ActionBar
 import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
-import com.ghj.browser.common.DefinePage
+import com.ghj.browser.dialog.ToolbarMoreDialog
 import com.ghj.browser.util.LogUtil
-import com.ghj.browser.util.PermissionUtil
 import com.ghj.browser.util.StringUtil
-import com.ghj.browser.webkit.OnWebViewListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
@@ -46,6 +45,10 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     // data
     var isEditMode : Boolean = false
     var scrollSum = 0
+
+
+    // dialog
+    var moreDialog : Dialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -290,9 +293,21 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             }
             // 설정
             R.id.btn_toolbar_more -> {
-
+                moreDialog = ToolbarMoreDialog(this , 0 ) { dialog, dialogId, selected ->
+                    when( selected ) {
+                        DefineCode.MORE_MENU_COOKIE -> {
+                            moveToCookie()
+                        }
+                    }
+                }
+                moreDialog?.show()
             }
         }
+    }
+
+    // 쿠키설정 화면으로 이동
+    fun moveToCookie() {
+        
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/toolbar_main_more_bg"
+    android:layout_marginBottom="8dp"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- 쿠키 -->
+    <RelativeLayout
+        android:id="@+id/btn_more_cookie"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/toolbar_more_menu"
+        android:layout_width="72dp"
+        android:layout_height="72dp">
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_toolbar_cookie"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:text="@string/toolbar_more_cookie"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:textColor="@color/txt_toolbar_menu"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

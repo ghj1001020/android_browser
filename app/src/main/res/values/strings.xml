@@ -12,4 +12,7 @@
     <!-- 권한 -->
     <string name="perm_deny_setting_desc">단말의 설정 화면에서 권한을 다시 설정하시겠습니까?</string>
 
+    <!-- 툴바 > 더보기 메뉴 -->
+    <string name="toolbar_more_cookie">쿠키</string>
+
 </resources>
