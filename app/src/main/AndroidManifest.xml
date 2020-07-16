@@ -42,6 +42,11 @@
             </intent-filter>
         </activity-alias>
 
+
+        <activity android:name=".activity.CookieActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
     </application>
 
 </manifest>

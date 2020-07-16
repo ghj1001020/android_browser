@@ -10,6 +10,9 @@ object DefineCode {
     // 인텐트 프로토콜
     val INTENT_PROTOCOL = "intent:"
 
+    // 인텐트 파라미터명
+    val IT_PARAM_COOKIE_URL = "it_param_cookie_url"
+
     // URL 타입
     val URL_TYPE_HTTP = 0
     val URL_TYPE_TEL = 1

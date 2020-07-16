@@ -2,6 +2,7 @@ package com.ghj.browser.activity
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.KeyEvent
@@ -307,7 +308,11 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // 쿠키설정 화면으로 이동
     fun moveToCookie() {
-        
+        val url = wv_main?.url
+
+        val intent : Intent = Intent( this , CookieActivity::class.java )
+        intent.putExtra( DefineCode.IT_PARAM_COOKIE_URL , url )
+        startActivity( intent )
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {

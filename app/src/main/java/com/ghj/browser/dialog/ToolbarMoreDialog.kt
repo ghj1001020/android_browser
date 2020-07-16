@@ -12,7 +12,7 @@ import android.view.WindowManager
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.common.ToolbarMoreDialogCallback
-import kotlinx.android.synthetic.main.toolbar_main_more.*
+import kotlinx.android.synthetic.main.dialog_toolbar_more.*
 
 class ToolbarMoreDialog( var mContext: Context,
                          var dialogId: Int,
@@ -25,7 +25,7 @@ class ToolbarMoreDialog( var mContext: Context,
         window?.requestFeature( Window.FEATURE_NO_TITLE )
         window?.setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT) )
 
-        setContentView( R.layout.toolbar_main_more )
+        setContentView( R.layout.dialog_toolbar_more )
 
         updateLayout()
     }
