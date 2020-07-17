@@ -14,5 +14,6 @@
 
     <!-- 툴바 > 더보기 메뉴 -->
     <string name="toolbar_more_cookie">쿠키</string>
+    <string name="toolbar_more_cookie_desc">저장된 쿠키 %d개</string>
 
 </resources>

@@ -24,5 +24,8 @@
     <!-- 툴바 -->
     <color name="txt_toolbar_menu">#4d5156</color>
     <color name="btn_toolbar_menu">#e0e0e0</color>
+    <color name="txt_toolbar_title">#000000</color>
+    <color name="txt_toolbar_sub_desc1">#1b1e1f</color>
+    <color name="txt_toolbar_sub_desc2">#716F6d</color>
 
 </resources>

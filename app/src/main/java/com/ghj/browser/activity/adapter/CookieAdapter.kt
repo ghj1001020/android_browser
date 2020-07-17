@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.ghj.browser.R
+import com.ghj.browser.activity.adapter.data.CookieData
 
-class CookieAdapter( var mContext: Context , var cookieData : ArrayList<String> ) : BaseAdapter() {
+class CookieAdapter( var mContext: Context , var cookieData : ArrayList<CookieData> ) : BaseAdapter() {
 
 
     override fun getView(position : Int , view : View? , parent : ViewGroup?): View {
@@ -20,7 +21,7 @@ class CookieAdapter( var mContext: Context , var cookieData : ArrayList<String> 
         }
 
         val cookieKey = convertView?.findViewById<TextView>( R.id.txt_cookie_key )
-        cookieKey?.text = cookieData.get( position )
+        cookieKey?.text = cookieData.get( position ).key + " , " + cookieData.get( position ).cookie
 
         return convertView as View
     }
@@ -42,7 +43,7 @@ class CookieAdapter( var mContext: Context , var cookieData : ArrayList<String> 
     }
 
     // 데이터 추가
-    fun addItem( item : String ) {
+    fun addItem( item : CookieData ) {
         cookieData.add( item )
     }
 

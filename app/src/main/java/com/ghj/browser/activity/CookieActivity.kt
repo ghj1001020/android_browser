@@ -1,16 +1,24 @@
 package com.ghj.browser.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.CookieAdapter
+import com.ghj.browser.activity.adapter.data.CookieData
 import com.ghj.browser.activity.base.BaseActivity
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.util.CookieUtil
+import com.ghj.browser.util.LogUtil
 import kotlinx.android.synthetic.main.activity_cookie.*
 import kotlinx.android.synthetic.main.appbar_cookie.*
 
 class CookieActivity : BaseActivity() {
+
+    private val TAG = "CookieActivity"
+
 
     // ui
     var actionBar : ActionBar? = null
@@ -34,6 +42,7 @@ class CookieActivity : BaseActivity() {
 
     fun initData( intent : Intent ) {
         domain = intent.getStringExtra( DefineCode.IT_PARAM_COOKIE_URL ) ?: ""
+        LogUtil.d( TAG , "domain=" + domain )
     }
 
     fun initLayout() {
@@ -46,37 +55,22 @@ class CookieActivity : BaseActivity() {
             it.setDisplayShowHomeEnabled( false )   // 홈 아이콘 표시여부
         }
 
-        // todo 테스트 하드코딩
-        val cookieData = arrayListOf<String>()
-        cookieData.add( "1111" )
-        cookieData.add( "2222" )
-        cookieData.add( "3333" )
-        cookieData.add( "4444" )
-        cookieData.add( "5555" )
-        cookieData.add( "6666" )
-        cookieData.add( "7777" )
-        cookieData.add( "8888" )
-        cookieData.add( "9999" )
-        cookieData.add( "0000" )
-        cookieData.add( "ㅁㅁㅁ" )
-        cookieData.add( "ㄴㄴㄴㄴ" )
-        cookieData.add( "ㅇㅇㅇㅇ" )
-        cookieData.add( "DDDD" )
-        cookieData.add( "EEEE" )
-        cookieData.add( "ffff" )
-        cookieData.add( "dddd" )
-        cookieData.add( "1" )
-        cookieData.add( "2" )
-        cookieData.add( "3" )
-        cookieData.add( "4" )
-        cookieData.add( "5" )
-        cookieData.add( "6" )
-        cookieData.add( "7" )
-
+        // 쿠키목록
+        val cookieData : ArrayList<CookieData> = arrayListOf()
+        val cookies : Map<String,String> = CookieUtil.getCookies( domain )
+        for( cookie in cookies ) {
+            cookieData.add( CookieData( cookie.key , cookie.value ) )
+        }
 
         cookieAdapter = CookieAdapter( this , cookieData )
         list_cookies.adapter = cookieAdapter
-        list_cookies.isNestedScrollingEnabled = true
 
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+            list_cookies.isNestedScrollingEnabled = true
+            list_cookies.startNestedScroll( View.OVER_SCROLL_ALWAYS )
+        }
+
+        txt_toolbar_sub_desc1.text = String.format( getString(R.string.toolbar_more_cookie_desc) , cookieAdapter.count )
+        txt_toolbar_sub_desc2.text = domain
     }
 }

@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:layout_width="match_parent"
     android:layout_height="48dp">
 
-    <TextView
+    <EditText
         android:id="@+id/txt_cookie_key"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp" />
+        android:gravity="center_vertical"
+        android:inputType="text"
+        android:textSize="13dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+
+    <View
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/divider_cookie" />
+
+    <EditText
+        android:id="@+id/txt_cookie_value"
+        android:gravity="center_vertical"
+        android:enabled="false"
+        android:inputType="text"
+        android:textSize="13dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
