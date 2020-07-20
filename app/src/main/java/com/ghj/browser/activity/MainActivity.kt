@@ -3,7 +3,12 @@ package com.ghj.browser.activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintJob
+import android.print.PrintManager
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -299,6 +304,9 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                         DefineCode.MORE_MENU_COOKIE -> {
                             moveToCookie()
                         }
+                        DefineCode.MORE_MENU_PRINTER -> {
+                            moveToPrinter()
+                        }
                     }
                 }
                 moreDialog?.show()
@@ -313,6 +321,31 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         val intent : Intent = Intent( this , CookieActivity::class.java )
         intent.putExtra( DefineCode.IT_PARAM_COOKIE_URL , url )
         startActivity( intent )
+    }
+
+    // 인쇄화면으로 이동
+    fun moveToPrinter() {
+        if( wv_main == null ) {
+            return
+        }
+
+        if( Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ) {
+            return
+        }
+
+        val pm : PrintManager? = getSystemService( Context.PRINT_SERVICE ) as? PrintManager
+        pm?.let {
+            var documentAdapter : PrintDocumentAdapter =
+                if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+                    val documentName = if( !TextUtils.isEmpty( wv_main?.title ) ) wv_main.title else getString( R.string.app_name )
+                    wv_main.createPrintDocumentAdapter( documentName )
+                } else {
+                    wv_main.createPrintDocumentAdapter()
+                }
+
+            val printJobName : String = getString( R.string.app_name )
+            val printJob : PrintJob = it.print( printJobName , documentAdapter , PrintAttributes.Builder().build() )
+        }
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {

@@ -47,6 +47,7 @@ class ToolbarMoreDialog( var mContext: Context,
 
     fun updateLayout() {
         btn_more_cookie.setOnClickListener( this )
+        btn_more_printer.setOnClickListener( this )
     }
 
     override fun onClick(p0: View?) {
@@ -55,6 +56,10 @@ class ToolbarMoreDialog( var mContext: Context,
         when( p0?.id ) {
             R.id.btn_more_cookie -> {
                 callback?.invoke( this , dialogId , DefineCode.MORE_MENU_COOKIE )
+            }
+
+            R.id.btn_more_printer -> {
+                callback?.invoke( this , dialogId , DefineCode.MORE_MENU_PRINTER )
             }
         }
     }

@@ -41,8 +41,10 @@ object DefineCode {
     // 툴바 > 더보기 메뉴 코드
     private val BASE_MORE_MENU = 2000
     val MORE_MENU_COOKIE = BASE_MORE_MENU + 1
+    val MORE_MENU_PRINTER = BASE_MORE_MENU + 2
 
 }
 
 public typealias CommonDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int, data : String?)->Unit
 public typealias ToolbarMoreDialogCallback = (dialog : Dialog , dialogId : Int , selected : Int )->Unit
+public typealias CookieAddDialogCallback = (dialog : Dialog , selected : Int , data : String? )->Unit

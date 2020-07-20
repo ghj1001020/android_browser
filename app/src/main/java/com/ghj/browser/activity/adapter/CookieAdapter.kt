@@ -21,7 +21,9 @@ class CookieAdapter( var mContext: Context , var cookieData : ArrayList<CookieDa
         }
 
         val cookieKey = convertView?.findViewById<TextView>( R.id.txt_cookie_key )
-        cookieKey?.text = cookieData.get( position ).key + " , " + cookieData.get( position ).cookie
+        val cookieValue = convertView?.findViewById<TextView>( R.id.txt_cookie_value )
+        cookieKey?.text = cookieData.get( position ).key.trim()
+        cookieValue?.text = cookieData.get( position ).cookie.trim()
 
         return convertView as View
     }

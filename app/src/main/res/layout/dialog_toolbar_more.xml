@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/toolbar_main_more_bg"
     android:layout_marginBottom="8dp"
@@ -14,6 +15,9 @@
         android:clickable="true"
         android:focusable="true"
         android:background="@drawable/toolbar_more_menu"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_more_printer"
         android:layout_width="72dp"
         android:layout_height="72dp">
 
@@ -43,5 +47,44 @@
 
     </RelativeLayout>
 
+    <!-- 프린터 -->
+    <RelativeLayout
+        android:id="@+id/btn_more_printer"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginLeft="4dp"
+        android:background="@drawable/toolbar_more_menu"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btn_more_cookie"
+        android:layout_width="72dp"
+        android:layout_height="72dp">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_toolbar_printer"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:text="@string/toolbar_more_printer"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:textColor="@color/txt_toolbar_menu"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

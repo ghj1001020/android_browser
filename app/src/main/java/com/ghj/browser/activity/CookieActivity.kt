@@ -1,5 +1,6 @@
 package com.ghj.browser.activity
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,12 +11,13 @@ import com.ghj.browser.activity.adapter.CookieAdapter
 import com.ghj.browser.activity.adapter.data.CookieData
 import com.ghj.browser.activity.base.BaseActivity
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.dialog.CookieAddDialog
 import com.ghj.browser.util.CookieUtil
 import com.ghj.browser.util.LogUtil
 import kotlinx.android.synthetic.main.activity_cookie.*
 import kotlinx.android.synthetic.main.appbar_cookie.*
 
-class CookieActivity : BaseActivity() {
+class CookieActivity : BaseActivity() , View.OnClickListener {
 
     private val TAG = "CookieActivity"
 
@@ -23,6 +25,9 @@ class CookieActivity : BaseActivity() {
     // ui
     var actionBar : ActionBar? = null
     lateinit var cookieAdapter : CookieAdapter
+
+    // dialog
+    var dialog : Dialog? = null
 
     var domain : String = ""
 
@@ -72,5 +77,30 @@ class CookieActivity : BaseActivity() {
 
         txt_toolbar_sub_desc1.text = String.format( getString(R.string.toolbar_more_cookie_desc) , cookieAdapter.count )
         txt_toolbar_sub_desc2.text = domain
+
+        btn_back.setOnClickListener( this )
+        btn_cookie_add.setOnClickListener( this )
+    }
+
+    override fun onClick(p0: View?) {
+        when( p0?.id ) {
+            R.id.btn_back -> {
+
+            }
+
+            R.id.btn_cookie_add -> {
+                onCookieAdd()
+            }
+        }
+    }
+
+    // 쿠키추가 다이얼로그
+    fun onCookieAdd() {
+        dialog?.dismiss()
+
+        dialog = CookieAddDialog( this ) { dialog: Dialog, selected: Int, data: String? ->
+
+        }
+        dialog?.show()
     }
 }
