@@ -29,4 +29,18 @@ class CookieAddDialog( var mContext : Context , callback : CookieAddDialogCallba
     fun updateLayout() {
 
     }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        // 딤처리
+        val layoutParams : WindowManager.LayoutParams? = window?.attributes
+        layoutParams?.let {
+            it.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND
+            it.dimAmount = 0.7f
+            it.width = WindowManager.LayoutParams.MATCH_PARENT
+            it.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window?.attributes = it
+        }
+    }
 }

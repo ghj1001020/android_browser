@@ -5,6 +5,8 @@
     <string name="common_ok">확인</string>
     <string name="common_cancel">취소</string>
     <string name="common_notice">알림</string>
+    <string name="common_key">키</string>
+    <string name="common_cookie">쿠키</string>
     
     <!-- 메인 -->
     <string name="url_hint">검색어 또는 URL 입력</string>
@@ -16,5 +18,8 @@
     <string name="toolbar_more_cookie">쿠키</string>
     <string name="toolbar_more_printer">인쇄</string>
     <string name="toolbar_more_cookie_desc">저장된 쿠키 %d개</string>
+
+    <!-- 쿠키 -->
+    <string name="cookie_add">쿠키 추가</string>
 
 </resources>
