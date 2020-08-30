@@ -1,19 +1,14 @@
 package com.ghj.browser.dialog
 
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import com.ghj.browser.R
 import com.ghj.browser.util.LogUtil
-import java.lang.Exception
 
 
 class AlertDialogFragment : DialogFragment {
@@ -80,10 +75,14 @@ class AlertDialogFragment : DialogFragment {
             builder.setTitle( title )
             builder.setMessage( message )
 
-            buttons?.let {
-                var btnPositive : String = getString( R.string.common_ok )
-                var btnNegative : String = getString( R.string.common_cancel )
+            var btnPositive : String = getString( R.string.common_ok )
+            var btnNegative : String = getString( R.string.common_cancel )
 
+            if( buttons == null || buttons?.size == 0 ) {
+                buttons = arrayOf( btnPositive )
+            }
+
+            buttons?.let {
                 if( it.size == 1 ) {
                     if( !TextUtils.isEmpty( it[0] ) ) btnPositive = it[0]
                 }

@@ -13,6 +13,12 @@ object DefineCode {
     // 인텐트 파라미터명
     val IT_PARAM_COOKIE_URL = "it_param_cookie_url"
 
+    // 핸들러 파라미터명
+    val HDL_PARAM_WV_BRIDGE_RTN = "hdl_param_wv_bridge_rtn"
+
+    // 핸들러 what
+    val HDL_WHAT_JS_GET_MESSAGE = 0
+
     // URL 타입
     val URL_TYPE_HTTP = 0
     val URL_TYPE_TEL = 1
@@ -43,6 +49,9 @@ object DefineCode {
     val MORE_MENU_COOKIE = BASE_MORE_MENU + 1
     val MORE_MENU_PRINTER = BASE_MORE_MENU + 2
 
+    // JS브릿지 타입
+    private val BASE_JS_ID = 3000
+    val JS_ALERT_POPUP = BASE_JS_ID + 1
 }
 
 public typealias CommonDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int, data : String?)->Unit

@@ -1,11 +1,19 @@
 package com.ghj.browser.activity.base
 
+import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.text.TextUtils
+import android.webkit.ValueCallback
+import android.webkit.WebView
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.dialog.CommonDialog
+import com.ghj.browser.util.LogUtil
 import com.ghj.browser.util.PermissionUtil
 import com.ghj.browser.webkit.OnWebViewListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -103,6 +111,78 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
                     wv_main?.onWriteExternalStoragePermissionResult( true )
                 }
             }
+        }
+    }
+
+
+    // Native -> Js 호출
+    fun callJsFunction(webView : WebView?, funcName : String, params : Array<String> ) {
+        try {
+            var script = "javascript:" + funcName +"("
+
+            var param = ""
+            if( params.isNotEmpty() )
+            {
+                param = TextUtils.join( "', '" , params )
+                script += "'" + param + "'"
+            }
+
+            script += ");"
+
+            LogUtil.d( TAG , "callJavaScript : ${script}" )
+
+            Thread( Runnable {
+                webView?.let {
+                    runOnUiThread {
+                        it.loadUrl( script )
+                    }
+                }
+            }).start()
+        }
+        catch ( e : Exception )
+        {
+            LogUtil.e( TAG , "callJavaScript err : " + e.message )
+        }
+    }
+
+    // Native -> Js 호출 후 값리턴
+    @TargetApi( Build.VERSION_CODES.KITKAT )
+    fun callJsFunction(webView : WebView?, funcName : String, params : Array<String> , handler : Handler , what : Int ) {
+        try {
+            var script = "javascript:" + funcName +"("
+
+            var param = ""
+            if( params.isNotEmpty() )
+            {
+                param = TextUtils.join( "', '" , params )
+                script += "'" + param + "'"
+            }
+
+            script += ");"
+
+            val javascript = script
+            LogUtil.d( TAG , "callJavaScript : " + javascript )
+            val rtnHandler : Handler = handler
+            val rtnWhat : Int = what
+
+            Thread( Runnable {
+                webView?.let {
+                    runOnUiThread {
+                        it.evaluateJavascript( javascript ) { value : String? ->
+                            val message : Message = rtnHandler.obtainMessage( rtnWhat )
+                            val bundle : Bundle = Bundle()
+                            bundle.putString( DefineCode.HDL_PARAM_WV_BRIDGE_RTN , value )
+                            message.data = bundle
+
+                            rtnHandler.sendMessage( message )
+                        }
+                    }
+                }
+            }).start()
+        }
+        catch ( e : Exception )
+        {
+            LogUtil.e( TAG , "callJavaScriptReturn err : " + e.message )
         }
     }
 }

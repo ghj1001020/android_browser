@@ -3,8 +3,7 @@ package com.ghj.browser.activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
+import android.os.*
 import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
 import android.print.PrintJob
@@ -19,18 +18,24 @@ import android.view.inputmethod.InputMethodManager
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.ToolbarMoreDialog
+import com.ghj.browser.util.JsonUtil
 import com.ghj.browser.util.LogUtil
 import com.ghj.browser.util.StringUtil
+import com.ghj.browser.webkit.JsAlertPopupData
+import com.ghj.browser.webkit.JsBridge
+import com.ghj.browser.webkit.JsGetMessageData
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
 
-class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener {
+class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
     private val TAG : String = "MainActivity"
 
@@ -51,6 +56,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     // data
     var isEditMode : Boolean = false
     var scrollSum = 0
+    var jsReturnHandler = JsReturnHandler()
 
 
     // dialog
@@ -93,7 +99,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         }
 
         // 웹뷰
-        wv_main?.initWebView( this ,true )
+        wv_main?.initWebView( this ,this, true )
         wv_main?.setOnTouchListener( this )
         wv_main?.setActivity( this )
 
@@ -178,7 +184,12 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
         // todo 테스트 하드코딩
         btn_test?.setOnClickListener(){
-            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
+//            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
+            wv_main?.loadUrl( "file:///android_asset/www/BridgePage/BridgePage.html" )
+        }
+        btn_appcall?.setOnClickListener() { view ->
+            onWebMessage()
+//            onWebMessageReturn()
         }
     }
 
@@ -526,6 +537,58 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             }
             if( toolbar_main?.visibility != View.VISIBLE && !isToolbarShowing ) {
                 toolbar_main?.startAnimation( animationToolbarShow )
+            }
+        }
+    }
+
+    override fun onRequestFromJs(requestId: Int, vararg params: String?) {
+        when (requestId) {
+            DefineCode.JS_ALERT_POPUP -> {
+                onJsAlertPopup( *params )
+            }
+        }
+    }
+
+    fun onJsAlertPopup( vararg params : String? ) {
+        if( params.isEmpty() ) {
+            return
+        }
+
+        val dto = JsonUtil.parseJson( params[0] , JsAlertPopupData::class.java )
+        dto?.let {
+            val dialog = AlertDialogFragment.newInstance( 0 , it.title , it.message , false , null, object : AlertDialogFragment.AlertDialogFragmentInterface {
+                override fun onClickListener( dialog: AlertDialogFragment, requestId: Int, selected: Int ) {
+
+                }
+            })
+            dialog.show( supportFragmentManager , TAG )
+        }
+    }
+
+    // 앱 -> 웹에 메시지 전달
+    fun onWebMessage() {
+        val dto = JsGetMessageData( "알림" , "App에서 전달한 메시지 !!!!!" )
+        val json = JsonUtil.dtoToJsonString( dto )
+        callJsFunction( wv_main , "appGetMessage" , arrayOf(json) )
+    }
+
+    // 앱 -> 웹에 메시지 전달 후 리턴값 받음
+    fun onWebMessageReturn() {
+        val dto = JsGetMessageData( "알림" , "App에서 전달한 메시지 !!!!!" )
+        val json = JsonUtil.dtoToJsonString( dto )
+        callJsFunction( wv_main , "appGetMessageReturn" , arrayOf(json) , jsReturnHandler , DefineCode.HDL_WHAT_JS_GET_MESSAGE )
+    }
+
+    // Native -> Js 에서 값 리턴
+    inner class JsReturnHandler : Handler( Looper.getMainLooper() ) {
+
+        override fun handleMessage(msg: Message) {
+
+            // appGetMessage : 반환딘값 alert
+            if( msg.what == DefineCode.HDL_WHAT_JS_GET_MESSAGE ) {
+                val message = msg.data?.getString( DefineCode.HDL_PARAM_WV_BRIDGE_RTN , "" )
+                val dialog = AlertDialogFragment.newInstance( 0 , "" , message , false , null, null )
+                dialog.show( supportFragmentManager , TAG)
             }
         }
     }

@@ -49,7 +49,7 @@ class CustomWebView : WebView {
 
     // 웹뷰 초기화
     @SuppressLint("JavascriptInterface")
-    fun initWebView(listener: OnWebViewListener, hasWindowOpen : Boolean ) {
+    fun initWebView(listener: OnWebViewListener, callback: JsBridge.JsCallback, hasWindowOpen : Boolean ) {
         clearHistory()
         clearCache( true )
 
@@ -62,7 +62,7 @@ class CustomWebView : WebView {
 
         // 브릿지 함수
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ) {
-            addJavascriptInterface( JsBridge() , "browserApp" )
+            addJavascriptInterface( JsBridge( callback ) , "browserApp" )
         }
 
         // 웹뷰에 포커스를 받을 수 있도록 설정
