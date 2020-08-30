@@ -11,6 +11,7 @@ import android.webkit.*
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.util.LogUtil
 import com.ghj.browser.util.getFileExtension
+import java.util.*
 
 class CustomWebViewClient : WebViewClient {
 
@@ -72,10 +73,9 @@ class CustomWebViewClient : WebViewClient {
             listener?.shouldOverrideLoading( view, type, url, request.isRedirect )  // isRedirect : 요청이 서버측 리다이렉션의 결과인지 여부
 
             LogUtil.d( TAG , "shouldOverrideUrlLoading2 type=" + type + " , url=" + url + " , isRedirect=" + request.isRedirect )
-            return false
         }
 
-        return false
+        return type != DefineCode.URL_TYPE_HTTP
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
@@ -114,6 +114,10 @@ class CustomWebViewClient : WebViewClient {
     @SuppressWarnings("deprecation")
     override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
         super.onReceivedError(view, errorCode, description, failingUrl)
+
+        if( Build.VERSION.SDK_INT < Build.VERSION_CODES.M ) {
+            return
+        }
 
         if( view == null ) {
             return
@@ -186,7 +190,7 @@ class CustomWebViewClient : WebViewClient {
         val uri : Uri = Uri.parse( _url )
         val scheme : String = uri.scheme ?: ""
         val ext : String = _url.getFileExtension()
-        val url = _url as String
+        val url = (_url as String).toLowerCase( Locale.KOREAN )
 
         if( ext.endsWith( "mp3", true ) ) {
             type = DefineCode.URL_TYPE_AUDIO

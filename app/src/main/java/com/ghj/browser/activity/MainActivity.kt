@@ -209,11 +209,18 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         showWebViewLoadingBar( true , 0 )
     }
 
+    // URL 리다이렉트
     override fun shouldOverrideLoading( _webView: WebView, urlType: Int, url: String, isRedirect: Boolean ) {
         LogUtil.d( TAG , "shouldOverrideLoading urlType=" + urlType + " , url=" + url + " , isRedirect=" + isRedirect )
 
-        txt_title?.text = url
-        edit_url?.setText( url )
+        if( urlType == DefineCode.URL_TYPE_HTTP ) {
+            txt_title?.text = url
+            edit_url?.setText( url )
+        }
+        else {
+            super.shouldOverrideLoading( _webView , urlType , url , isRedirect )
+        }
+
         changePageMoveButton()
     }
 

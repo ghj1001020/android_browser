@@ -7,6 +7,9 @@ object DefineCode {
     // 기본페이지 - 네이버
     val DEFAULT_PAGE = "https://www.naver.com"
 
+    // 인텐트 스키마
+    val SCHEME_APP_MARKET = "market://details?id="
+
     // 인텐트 프로토콜
     val INTENT_PROTOCOL = "intent:"
 

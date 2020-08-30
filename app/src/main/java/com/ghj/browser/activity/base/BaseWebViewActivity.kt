@@ -3,6 +3,7 @@ package com.ghj.browser.activity.base
 import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -183,6 +184,48 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
         catch ( e : Exception )
         {
             LogUtil.e( TAG , "callJavaScriptReturn err : " + e.message )
+        }
+    }
+
+    // URL 리다이렉트 - URL 타입별 처리
+    override fun shouldOverrideLoading( _webView: WebView , urlType: Int , url: String , isRedirect: Boolean ) {
+        // intent: 스키마
+        if( urlType == DefineCode.URL_TYPE_INTENT ) {
+            moveToIntentUrl( url )
+        }
+    }
+
+    // Intent 이동
+    fun moveToIntentUrl( url : String ) {
+        val intent : Intent = Intent.parseUri( url , Intent.URI_INTENT_SCHEME )
+        val uri : Uri? = intent.data
+
+        try {
+            uri?.let {
+                // launch url page
+                try {
+                    val sendIntent : Intent = Intent( Intent.ACTION_VIEW , it )
+                    sendIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK )
+                    startActivity( sendIntent )
+                }
+                catch ( e : Exception ) {
+                    // 설치되어 있는 경우
+                    val appIntent : Intent? = packageManager.getLaunchIntentForPackage( intent.`package` ?: "" )
+                    if( appIntent != null ) {
+                        appIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK )
+                        startActivity( appIntent )
+                    }
+                    // 설치안되어 있는 경우 ( 구글플레이 열기 )
+                    else {
+                        val marketIntent : Intent = Intent( Intent.ACTION_VIEW , Uri.parse( DefineCode.SCHEME_APP_MARKET + intent.`package` ) )
+                        marketIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK )
+                        startActivity( marketIntent )
+                    }
+                }
+            }
+        }
+        catch ( e1 : Exception ) {
+            LogUtil.e( TAG , "err=${e1.localizedMessage}")
         }
     }
 }
