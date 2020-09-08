@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.common.ToolbarMoreDialogCallback
@@ -48,6 +49,16 @@ class ToolbarMoreDialog( var mContext: Context,
     fun updateLayout() {
         btn_more_cookie.setOnClickListener( this )
         btn_more_printer.setOnClickListener( this )
+        btn_more_pcm_mode.setOnClickListener( this )
+
+        if( BrowserApp.isMobile ) {
+            txt_more_pcm_mode.text = mContext.getString( R.string.toolbar_more_pc_mode )
+            img_more_pcm_mode.setImageResource( R.drawable.ic_toolbar_desktop )
+        }
+        else {
+            txt_more_pcm_mode.text = mContext.getString( R.string.toolbar_more_mobile_mode )
+            img_more_pcm_mode.setImageResource( R.drawable.ic_toolbar_mobile )
+        }
     }
 
     override fun onClick(p0: View?) {
@@ -60,6 +71,10 @@ class ToolbarMoreDialog( var mContext: Context,
 
             R.id.btn_more_printer -> {
                 callback?.invoke( this , dialogId , DefineCode.MORE_MENU_PRINTER )
+            }
+
+            R.id.btn_more_pcm_mode -> {
+                callback?.invoke( this , dialogId , DefineCode.MORE_MENU_PCM_MODE )
             }
         }
     }

@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
+import com.ghj.browser.BrowserApp
 import com.ghj.browser.util.LogUtil
 import java.lang.Exception
 
@@ -65,5 +66,10 @@ abstract class BaseActivity : AppCompatActivity() {
                 LogUtil.e( TAG , "err = " + e2.message )
             }
         }
+    }
+
+    // 어플리케이션 클래스
+    fun getApp() : BrowserApp {
+        return (application as BrowserApp)
     }
 }

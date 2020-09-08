@@ -19,6 +19,7 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
@@ -26,6 +27,7 @@ import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.ToolbarMoreDialog
 import com.ghj.browser.util.JsonUtil
 import com.ghj.browser.util.LogUtil
+import com.ghj.browser.util.PreferenceUtil
 import com.ghj.browser.util.StringUtil
 import com.ghj.browser.webkit.JsAlertPopupData
 import com.ghj.browser.webkit.JsBridge
@@ -325,6 +327,9 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                         DefineCode.MORE_MENU_PRINTER -> {
                             moveToPrinter()
                         }
+                        DefineCode.MORE_MENU_PCM_MODE -> {
+                            chnagePcMobileMode()
+                        }
                     }
                 }
                 moreDialog?.show()
@@ -353,7 +358,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
         val pm : PrintManager? = getSystemService( Context.PRINT_SERVICE ) as? PrintManager
         pm?.let {
-            var documentAdapter : PrintDocumentAdapter =
+            val documentAdapter : PrintDocumentAdapter =
                 if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                     val documentName = if( !TextUtils.isEmpty( wv_main?.title ) ) wv_main.title else getString( R.string.app_name )
                     wv_main.createPrintDocumentAdapter( documentName )
@@ -363,6 +368,27 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
             val printJobName : String = getString( R.string.app_name )
             val printJob : PrintJob = it.print( printJobName , documentAdapter , PrintAttributes.Builder().build() )
+        }
+    }
+
+    // 데스크탑 모드 <-> 모바일 모드 토클
+    fun chnagePcMobileMode() {
+        wv_main?.let {
+            if( BrowserApp.isMobile ) {
+                val userAgent = it.settings.userAgentString.replace( "Android" , "droidA" ).replace( "Mobile" , "obileM" )
+                it.settings.userAgentString = userAgent
+
+                val url = it.url.replace( Regex("^https:\\/\\/m\\.") , "https://www.").replace( Regex( "^http:\\/\\/m\\.") , "http://www.")
+                loadUrl( url )
+            }
+            else {
+                val userAgent = it.settings.userAgentString.replace( "droidA" , "Android" ).replace( "obileM" , "Mobile" )
+                it.settings.userAgentString = userAgent
+
+                it.reload()
+            }
+
+            BrowserApp.isMobile = !BrowserApp.isMobile
         }
     }
 
@@ -528,7 +554,6 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
         // 아래로 스크롤하면 숨기고
         if( scrollSum > appbar_main.height ) {
-            LogUtil.d( TAG , "hide scrollSum=" + scrollSum + " , gap=" + gap )
             if( appbar_main?.visibility == View.VISIBLE && !isAppbarHiding ) {
                 appbar_main?.startAnimation( animationAppbarHide )
             }
@@ -538,7 +563,6 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         }
         // 위로 스크롤하면 보인다
         else if( scrollSum < -appbar_main.height) {
-            LogUtil.d( TAG , "show scrollSum=" + scrollSum + " , gap=" + gap )
             if( appbar_main?.visibility != View.VISIBLE && !isAppbarShowing ) {
                 appbar_main?.startAnimation( animationAppbarShow )
             }
