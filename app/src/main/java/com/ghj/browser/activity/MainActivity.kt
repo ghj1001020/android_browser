@@ -187,7 +187,8 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         // todo 테스트 하드코딩
         btn_test?.setOnClickListener(){
 //            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
-            wv_main?.loadUrl( "file:///android_asset/www/BridgePage/BridgePage.html" )
+//            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
+            wv_main?.loadUrl( "file:///android_asset/www/LinkPage.html" )
         }
         btn_appcall?.setOnClickListener() { view ->
             onWebMessage()

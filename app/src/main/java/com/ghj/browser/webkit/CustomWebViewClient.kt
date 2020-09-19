@@ -207,7 +207,7 @@ class CustomWebViewClient : WebViewClient {
         else if( scheme.contains("market://", true) ) {
             type = DefineCode.URL_TYPE_MARKET
         }
-        else if( url.startsWith( "sms" ) ) {
+        else if( url.startsWith( "sms:" ) || url.startsWith("smsto:" ) ) {
             type = DefineCode.URL_TYPE_SMS
         }
         else if( url.startsWith( DefineCode.INTENT_PROTOCOL ) ) {

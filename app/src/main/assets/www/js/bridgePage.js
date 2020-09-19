@@ -16,14 +16,7 @@ var pages = {
                 title : "알림" ,
                 message : "테스트 팝업 ...... TEST!!!!"
             };
-
-            var userAgent = navigator.userAgent.toLowerCase()
-            if( /android/i.test( userAgent ) ) {
-                window.browserApp.appAlertPopup( JSON.stringify(json) );
-            }
-            else if( /iphone|ipad|ipod/i.test( userAgent ) ) {
-                webkit.messageHandlers.appAlertPopup.postMessage( JSON.stringify(json) );
-            }
+            webkit.messageHandlers.appAlertPopup.postMessage( JSON.stringify(json) );
 		});
 	}
 }

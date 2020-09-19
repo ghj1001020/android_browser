@@ -18,6 +18,7 @@ import com.ghj.browser.util.LogUtil
 import com.ghj.browser.util.PermissionUtil
 import com.ghj.browser.webkit.OnWebViewListener
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.URLDecoder
 
 abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
 
@@ -193,6 +194,10 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
         if( urlType == DefineCode.URL_TYPE_INTENT ) {
             moveToIntentUrl( url )
         }
+        // sms: smsto:
+        else if( urlType == DefineCode.URL_TYPE_SMS ) {
+            moveToSms( url )
+        }
     }
 
     // Intent 이동
@@ -226,6 +231,30 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
         }
         catch ( e1 : Exception ) {
             LogUtil.e( TAG , "err=${e1.localizedMessage}")
+        }
+    }
+
+    // sms 메시지앱 이동
+    fun moveToSms( url : String ) {
+        try {
+            val intent : Intent = Intent( Intent.ACTION_SENDTO, Uri.parse( url ) )
+
+            if( url.contains( "body=" ) ) {
+                var body = url.split( "body=" )[1]
+                try {
+                    body = URLDecoder.decode( body , "UTF-8" )
+                    intent.putExtra( "sms_body" , body )
+                }
+                catch ( e : Exception ) {
+                    LogUtil.e( TAG , "err=" + e.localizedMessage )
+                }
+            }
+
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity( intent )
+        }
+        catch ( e : Exception ) {
+            LogUtil.e( TAG , "err=${e.localizedMessage}" )
         }
     }
 }
