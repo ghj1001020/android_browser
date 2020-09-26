@@ -7,8 +7,11 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.text.TextUtils
+import android.util.Log
 import android.webkit.*
+import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.util.DeviceUtil
 import com.ghj.browser.util.LogUtil
 import com.ghj.browser.util.getFileExtension
 import java.util.*
@@ -20,6 +23,8 @@ class CustomWebViewClient : WebViewClient {
     private var context : Context? = null
     private var listener : OnWebViewListener? = null
 
+    private var startUrl : String = ""  // 페이지 로딩 url
+
 
     constructor( context: Context? , listener: OnWebViewListener? ) : super() {
         this.context = context
@@ -28,17 +33,37 @@ class CustomWebViewClient : WebViewClient {
 
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-        super.onPageStarted(view, url, favicon)
-
         if( view == null || TextUtils.isEmpty( url ) ) {
             return
         }
 
         // url 타입 체크
         val type = checkCatchUrlType( url )
-        listener?.onPageStarted( view, type, url!! )
 
         LogUtil.d( TAG , "onPageStarted type=" + type + " , url=" + url )
+
+        if( type != DefineCode.URL_TYPE_HTTP ) {
+            listener?.onPageStarted( view, type, url!! )
+            return
+        }
+
+        if( this.context == null ) {
+            return
+        }
+
+        // 네트워크 체크
+        if( !DeviceUtil.checkNetworkConnection( this.context as Context ) ) {
+            if( url != null && !url.startsWith( DefineCode.ERROR_PAGE ) ) {
+                val msg = (context as Context).resources.getString( R.string.webview_error_network )
+                listener?.onReceivedError( view , msg, url )
+            }
+            return
+        }
+
+        listener?.onPageStarted( view, type, url!! )
+        startUrl = url ?: ""
+
+        super.onPageStarted(view, url, favicon)
     }
 
     @SuppressWarnings("deprecation")
@@ -49,12 +74,28 @@ class CustomWebViewClient : WebViewClient {
 
         // url 타입 체크
         val type = checkCatchUrlType( url )
-        if( listener != null ) {
-            listener?.shouldOverrideLoading( view, type, url as String, false )
 
-            LogUtil.d( TAG , "shouldOverrideUrlLoading1 type=" + type + " , url=" + url )
+        LogUtil.d( TAG , "shouldOverrideUrlLoading1 type=" + type + " , url=" + url )
+
+        if( type != DefineCode.URL_TYPE_HTTP ) {
+            listener?.shouldOverrideLoading( view, type, url as String, false )
+            return true
+        }
+
+        if( this.context == null ) {
             return false
         }
+
+        // 네트워크 체크
+        if( !DeviceUtil.checkNetworkConnection( this.context as Context ) ) {
+            if( url != null && !url.startsWith( DefineCode.ERROR_PAGE ) ) {
+                val msg = (context as Context).resources.getString( R.string.webview_error_network )
+                listener?.onReceivedError( view , msg, url )
+            }
+            return true
+        }
+
+        startUrl = url ?: ""
 
         return false
     }
@@ -69,13 +110,28 @@ class CustomWebViewClient : WebViewClient {
 
         // url 타입 체크
         val type = checkCatchUrlType( url )
-        if( listener != null ) {
-            listener?.shouldOverrideLoading( view, type, url, request.isRedirect )  // isRedirect : 요청이 서버측 리다이렉션의 결과인지 여부
 
-            LogUtil.d( TAG , "shouldOverrideUrlLoading2 type=" + type + " , url=" + url + " , isRedirect=" + request.isRedirect )
+        LogUtil.d( TAG , "shouldOverrideUrlLoading2 type=" + type + " , url=" + url + " , isRedirect=" + request.isRedirect )
+
+        if( type != DefineCode.URL_TYPE_HTTP ) {
+            listener?.shouldOverrideLoading( view, type, url, request.isRedirect )  // isRedirect : 요청이 서버측 리다이렉션의 결과인지 여부
+            return true
         }
 
-        return type != DefineCode.URL_TYPE_HTTP
+        if( this.context == null ) {
+            return false
+        }
+
+        // 네트워크 체크
+        if( !DeviceUtil.checkNetworkConnection( this.context as Context ) ) {
+            if( !url.startsWith( DefineCode.ERROR_PAGE ) ) {
+                val msg = (context as Context).resources.getString( R.string.webview_error_network )
+                listener?.onReceivedError( view , msg, url )
+            }
+            return true
+        }
+
+        return false
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
@@ -115,7 +171,7 @@ class CustomWebViewClient : WebViewClient {
     override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
         super.onReceivedError(view, errorCode, description, failingUrl)
 
-        if( Build.VERSION.SDK_INT < Build.VERSION_CODES.M ) {
+        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.M ) {
             return
         }
 
@@ -123,7 +179,14 @@ class CustomWebViewClient : WebViewClient {
             return
         }
 
-        listener?.onReceivedError( view, errorCode, view.url, failingUrl ?: "" )
+        if( startUrl.equals( failingUrl ) ) {
+            when ( errorCode ) {
+                ERROR_HOST_LOOKUP, ERROR_CONNECT, ERROR_TIMEOUT, ERROR_UNSUPPORTED_SCHEME -> {
+                    val msg = (context as Context).resources.getString( R.string.webview_error_code )
+                    listener?.onReceivedError( view , msg.format( errorCode), failingUrl )
+                }
+            }
+        }
 
         LogUtil.d( TAG , "onReceivedError1 errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
     }
@@ -137,8 +200,17 @@ class CustomWebViewClient : WebViewClient {
         }
 
         val errorCode = error?.errorCode ?: WebViewClient.ERROR_UNKNOWN
+        error?.description
         val failingUrl = request?.url.toString()
-        listener?.onReceivedError( view, errorCode, view.url, failingUrl )
+
+        if( startUrl.equals( failingUrl ) ) {
+            when ( errorCode ) {
+                ERROR_HOST_LOOKUP, ERROR_CONNECT, ERROR_TIMEOUT, ERROR_UNSUPPORTED_SCHEME, ERROR_FAILED_SSL_HANDSHAKE -> {
+                    val msg = (context as Context).resources.getString( R.string.webview_error_code )
+                    listener?.onReceivedError( view , msg.format( errorCode), failingUrl )
+                }
+            }
+        }
 
         LogUtil.d( TAG , "onReceivedError2 errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
     }
@@ -153,7 +225,15 @@ class CustomWebViewClient : WebViewClient {
 
         val errorCode = errorResponse?.statusCode ?: -1
         val failingUrl = request?.url.toString()
-        listener?.onReceivedHttpError( view, errorCode, view.url, failingUrl )
+
+        if( view.url.equals( failingUrl ) ) {
+            when ( errorCode ) {
+                403, 404, 500, 503, 504 -> {
+                    val msg = (context as Context).resources.getString( R.string.webview_error_http )
+                    listener?.onReceivedError( view , msg.format( errorCode), failingUrl )
+                }
+            }
+        }
 
         LogUtil.d( TAG , "onReceivedHttpError errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
     }
@@ -172,6 +252,7 @@ class CustomWebViewClient : WebViewClient {
 
         val errorCode = error?.primaryError ?: SslError.SSL_INVALID
         val failingUrl = error?.url ?: ""
+
         listener?.onReceivedSslError( view, handler, errorCode, view.url, failingUrl )
 
         LogUtil.d( TAG , "onReceivedSslError errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )

@@ -4,6 +4,7 @@
     package="com.ghj.browser">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- 위치권한 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  <!-- 정확한 위치에 액세스 -->

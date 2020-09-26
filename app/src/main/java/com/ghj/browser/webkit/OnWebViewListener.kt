@@ -9,8 +9,8 @@ interface OnWebViewListener {
     fun onPageStarted( _webView: WebView , urlType: Int , url: String )
     fun shouldOverrideLoading( _webView: WebView , urlType: Int , url: String , isRedirect: Boolean )
     fun onPageFinished( _webView: WebView, url: String )
-    fun onReceivedError( _webView: WebView, errorCode: Int, url: String, failUrl: String )
-    fun onReceivedHttpError( _webView: WebView, errorCode: Int, url: String, failUrl: String)
+    fun onReceivedError( _webView: WebView, errorMsg: String, url: String? )
+//    fun onReceivedHttpError( _webView: WebView, errorCode: Int, url: String, failUrl: String)
     fun onReceivedSslError( _webView: WebView, handler: SslErrorHandler, errorCode: Int, url: String, failUrl: String)
 
     // WebChromeClient

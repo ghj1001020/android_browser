@@ -6,6 +6,8 @@ object DefineCode {
 
     // 기본페이지 - 네이버
     val DEFAULT_PAGE = "https://www.naver.com"
+    private val BASE_LOCAL_PAGE = "file:///android_asset/www/"
+    val ERROR_PAGE = BASE_LOCAL_PAGE + "ErrorPage.html"
 
     // 인텐트 스키마
     val SCHEME_APP_MARKET = "market://details?id="

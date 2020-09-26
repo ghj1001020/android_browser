@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
 import android.webkit.ValueCallback
+import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
@@ -113,6 +114,39 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
                     wv_main?.onWriteExternalStoragePermissionResult( true )
                 }
             }
+        }
+    }
+
+    // 뒤로/앞으로 갈 경우의 인덱스를 리턴
+    fun getWillMovePageStep( _webView: WebView? , isBack : Boolean ) : Int? {
+        val historyList : WebBackForwardList? = _webView?.copyBackForwardList()
+        if( historyList == null || historyList.size <= 1 ) {
+            return null
+        }
+        else {
+            var move : Int? = null
+            if( isBack ) {
+                for( i in historyList.currentIndex..0 ) {
+                    val history = historyList.getItemAtIndex( i ).url
+
+                    if( !DefineCode.ERROR_PAGE.equals( history ) ) {
+                        move = i
+                        break
+                    }
+                }
+            }
+            else {
+                for( i in historyList.currentIndex until historyList.size) {
+                    val history = historyList.getItemAtIndex( i ).url
+
+                    if( !DefineCode.ERROR_PAGE.equals( history ) ) {
+                        move = i
+                        break
+                    }
+                }
+            }
+
+            return move
         }
     }
 

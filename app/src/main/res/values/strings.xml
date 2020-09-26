@@ -11,6 +11,12 @@
     <!-- 메인 -->
     <string name="url_hint">검색어 또는 URL 입력</string>
 
+    <!-- 웹뷰 에러메지시 -->
+    <string name="webview_error_network">네트워크 상태가 원할하지 않습니다.</string>
+    <string name="webview_error_code">에러가 발생하였습니다. (에러코드 : %s)</string>
+    <string name="webview_error_http">에러가 발생하였습니다. (상태코드 : %s)</string>
+    <string name="webview_error_ssl">SSL 인증서 오류가 발생하였습니다.\n계속 진행 하시겠습니까?</string>
+
     <!-- 권한 -->
     <string name="perm_deny_setting_desc">단말의 설정 화면에서 권한을 다시 설정하시겠습니까?</string>
 

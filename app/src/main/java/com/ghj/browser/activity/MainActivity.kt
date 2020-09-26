@@ -16,6 +16,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.webkit.SslErrorHandler
+import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.dialog.AlertDialogFragment
+import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.dialog.ToolbarMoreDialog
 import com.ghj.browser.util.JsonUtil
 import com.ghj.browser.util.LogUtil
@@ -238,16 +240,32 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         changePageMoveButton()
     }
 
-    override fun onReceivedError(_webView: WebView, errorCode: Int, url: String, failUrl: String) {
-        LogUtil.d( TAG , "onReceivedError errorCode=" + errorCode + " , url=" + url + " , failUrl=" + failUrl )
-    }
 
-    override fun onReceivedHttpError(_webView: WebView, errorCode: Int, url: String, failUrl: String) {
-        LogUtil.d( TAG , "onReceivedHttpError errorCode=" + errorCode + " , url=" + url + " , failUrl=" + failUrl )
+    override fun onReceivedError(_webView: WebView, errorMsg: String, url: String?) {
+        _webView.stopLoading()
+        _webView.loadUrl( DefineCode.ERROR_PAGE + "?errorMsg=" + errorMsg )
+
+        showWebViewLoadingBar( false , 0 )
+        changePageMoveButton()
     }
 
     override fun onReceivedSslError(_webView: WebView, handler: SslErrorHandler, errorCode: Int, url: String, failUrl: String) {
         LogUtil.d( TAG , "onReceivedSslError errorCode=" + errorCode + " , url=" + url + " , failUrl=" + failUrl )
+
+        dialog?.dismiss()
+
+        val message = getString( R.string.webview_error_ssl )
+        val buttons = arrayOf( getString( R.string.common_cancel) , getString( R.string.common_ok) )
+        dialog = CommonDialog( this , 0 , message , buttons , true, TAG ){ dialog, dialogId, selected, data ->
+            if( selected == DefineCode.BTN_RIGHT ) {
+                handler.proceed()
+            }
+            else {
+                handler.cancel()
+            }
+        }
+
+        dialog?.show()
     }
 
     override fun onReceivedTitle(_webView: WebView, title: String) {
@@ -255,8 +273,6 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onProgressChanged(_webView: WebView, newProgress: Int) {
-        LogUtil.d( TAG , "onProgressChanged newProgress=" + newProgress )
-
         if( newProgress >= 100 ) {
             showEditMode( false )
         }
@@ -473,7 +489,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     override fun onBackPressed() {
         if( wv_main?.canGoBack() ?: false ) {
-            wv_main?.goBack()
+            moveToBackPage()
         }
         else {
             finish()
@@ -482,18 +498,46 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // 웹뷰 페이지 뒤로가기
     fun moveToBackPage() {
+        val step = getWillMovePageStep( wv_main, true )
+
         wv_main?.let {
-            if( it.canGoBack() ) {
-                it.goBack()
+            if( step == null || step > 0 ) {
+                it.loadUrl( DefineCode.DEFAULT_PAGE )
+            }
+            else {
+                if( step == 1 ) {
+                    if( it.canGoBack() ) {
+                        it.goBack()
+                    }
+                }
+                else {
+                    if( it.canGoBackOrForward( step ) ) {
+                        it.goBackOrForward( step )
+                    }
+                }
             }
         }
     }
 
     // 웹뷰 페이지 앞으로가기
     fun moveToNextPage() {
+        val step = getWillMovePageStep( wv_main, false )
+
         wv_main?.let {
-            if( it.canGoForward() ) {
-                it.goForward()
+            if( step == null || step < 0 ) {
+                it.reload()
+            }
+            else {
+                if( step == 1 ) {
+                    if( it.canGoForward() ) {
+                        it.goForward()
+                    }
+                }
+                else {
+                    if( it.canGoBackOrForward( step ) ) {
+                        it.goBackOrForward( step )
+                    }
+                }
             }
         }
     }
