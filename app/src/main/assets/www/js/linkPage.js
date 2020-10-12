@@ -24,6 +24,11 @@ var pages = {
 				location.href = "sms:01012345678&body=" + $("#txt_sms_body").text();				
 			}
 		});
+		
+		$("#btn_tel").click( function() {
+			console.log("tel = " + $(this).text() );
+			location.href = $(this).text();
+		});
 	} ,
 	
 	// 안드로이드/IOS 구분

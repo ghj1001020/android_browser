@@ -190,6 +190,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         btn_test?.setOnClickListener(){
 //            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
 //            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
+//            wv_main?.loadUrl( "http://m.my.kt.com" )
             wv_main?.loadUrl( "file:///android_asset/www/LinkPage.html" )
         }
         btn_appcall?.setOnClickListener() { view ->
@@ -204,14 +205,20 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 //        wv_main?.loadUrl( "https://1boon.daum.net/theable/novel3" )
     }
 
+    // URL 로딩시작
     override fun onPageStarted( _webView: WebView, urlType: Int, url: String ) {
         LogUtil.d( TAG , "onPageStarted urlType=" + urlType + " , url=" + url )
 
-        showEditMode( true )
+        if( urlType == DefineCode.URL_TYPE_HTTP ) {
+            showEditMode( true )
 
-        txt_title?.text = url
-        edit_url?.setText( url )
-        showWebViewLoadingBar( true , 0 )
+            txt_title?.text = url
+            edit_url?.setText( url )
+            showWebViewLoadingBar( true , 0 )
+        }
+        else {
+            super.onPageStarted( _webView , urlType , url )
+        }
     }
 
     // URL 리다이렉트

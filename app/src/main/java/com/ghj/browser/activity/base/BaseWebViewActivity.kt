@@ -222,6 +222,19 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
         }
     }
 
+    // URL 로딩시작
+    override fun onPageStarted(_webView: WebView, urlType: Int, url: String) {
+        if( urlType == DefineCode.URL_TYPE_INTENT ) {
+            moveToIntentUrl( url )
+        }
+        else if( urlType == DefineCode.URL_TYPE_SMS ) {
+            moveToSms( url )
+        }
+        else if( urlType == DefineCode.URL_TYPE_TEL ) {
+            moveToTel( url )
+        }
+    }
+
     // URL 리다이렉트 - URL 타입별 처리
     override fun shouldOverrideLoading( _webView: WebView , urlType: Int , url: String , isRedirect: Boolean ) {
         // intent: 스키마
@@ -231,6 +244,10 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
         // sms: smsto:
         else if( urlType == DefineCode.URL_TYPE_SMS ) {
             moveToSms( url )
+        }
+        // tel:
+        else if( urlType == DefineCode.URL_TYPE_TEL ) {
+            moveToTel( url )
         }
     }
 
@@ -284,6 +301,18 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
                 }
             }
 
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity( intent )
+        }
+        catch ( e : Exception ) {
+            LogUtil.e( TAG , "err=${e.localizedMessage}" )
+        }
+    }
+
+    // 전화앱으로 이동
+    fun moveToTel( url : String ) {
+        try {
+            val intent : Intent = Intent( Intent.ACTION_DIAL, Uri.parse( url ) )
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity( intent )
         }
