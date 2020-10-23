@@ -9,6 +9,9 @@ ext {
     isLogBlock = 'false' // 운영 - true , 개발 - false
 }
 
+// 빌드 카운트 기록
+def buildCnt = ''
+
 android {
     compileSdkVersion 29
 
@@ -18,7 +21,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 10000
-        versionName "01.00.00"
+        versionName "1.0.0"
 
         multiDexEnabled true
 
@@ -27,15 +30,42 @@ android {
 
     buildTypes {
         all {
+            buildConfigField('String', 'BUILD_CONFIG_APP_MODE', project.ext.appMode)
             buildConfigField('boolean', 'BUILD_CONFIG_IS_LOG_BLOCK', project.ext.isLogBlock)
         }
 
         release {
-            minifyEnabled false
+            if( project.ext.appMode == '"release"')
+            {
+                def file = file('version.properties');
+                if( file.canRead() )
+                {
+                    def Properties versionProp = new Properties();
+                    versionProp.load( new FileInputStream(file) )
+                    def count = versionProp['BUILD_COUNT'].toInteger() + 1
+                    buildCnt = '(' + count.toString() + ')'
+
+                    versionProp['BUILD_COUNT'] = count.toString()
+                    versionProp.store(file.newWriter() , null)
+                }
+            }
+
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def filename = "${outputFileName}".replace("app-release", "browser").replace(".apk", "");
+            def date = new Date();
+            def formattedDate = date.format('yyyyMMdd')
+
+            outputFileName = "${filename}_v${variant.versionCode}_${formattedDate}${buildCnt}.apk"
+
+            println "outputFileName = " + outputFileName
+        }
+    }
 }
 
 dependencies {
