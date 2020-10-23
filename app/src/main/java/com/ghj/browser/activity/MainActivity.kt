@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.webkit.SslErrorHandler
 import android.webkit.WebBackForwardList
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -65,6 +66,10 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // dialog
     var moreDialog : Dialog? = null
+
+    // full screen
+    var wvCustomView : View? = null
+    var wvCustomViewCallback : WebChromeClient.CustomViewCallback? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -674,5 +679,22 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                 dialog.show( supportFragmentManager , TAG)
             }
         }
+    }
+
+    override fun onShowCustomView(_view: View, callback: WebChromeClient.CustomViewCallback?) {
+        if( custom_view_container.visibility == View.VISIBLE ) {
+            return
+        }
+        wvCustomView = _view
+
+        custom_view_container.addView( wvCustomView )
+        custom_view_container.visibility = View.VISIBLE
+        wvCustomViewCallback = callback
+    }
+
+    override fun onHideCustomView() {
+        custom_view_container.visibility = View.GONE
+        custom_view_container.removeView( wvCustomView )
+        wvCustomViewCallback?.onCustomViewHidden()
     }
 }

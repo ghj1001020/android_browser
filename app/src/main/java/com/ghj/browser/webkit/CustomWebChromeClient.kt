@@ -2,7 +2,9 @@ package com.ghj.browser.webkit
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.text.TextUtils
+import android.view.View
 import android.webkit.GeolocationPermissions
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -187,4 +189,34 @@ class CustomWebChromeClient : WebChromeClient {
             geolocationCallback?.invoke( geolocationOrigin , false , false )
         }
     }
+
+    override fun onShowCustomView(view: View?, requestedOrientation: Int, callback: CustomViewCallback?) {
+        super.onShowCustomView(view, requestedOrientation, callback)
+        onShowCustomView(view, callback)
+    }
+
+    // 동영상 풀스크린 보이기
+    override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+        super.onShowCustomView(view, callback)
+        LogUtil.d( TAG , "onShowCustomView" )
+
+        view?.let {
+            listener?.onShowCustomView( it, callback )
+        }
+    }
+
+    // 동영상 풀스크린 숨기기
+    override fun onHideCustomView() {
+        super.onHideCustomView()
+        LogUtil.d( TAG , "onHideCustomView" )
+
+        listener?.onHideCustomView()
+    }
+
+    override fun getVideoLoadingProgressView(): View? {
+        LogUtil.d( TAG , "getVideoLoadingProgressView" )
+        return super.getVideoLoadingProgressView()
+    }
+
+
 }

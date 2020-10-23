@@ -1,6 +1,8 @@
 package com.ghj.browser.webkit
 
+import android.view.View
 import android.webkit.SslErrorHandler
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 
 interface OnWebViewListener {
@@ -17,6 +19,8 @@ interface OnWebViewListener {
     fun onReceivedTitle( _webView: WebView, title: String )
     fun onProgressChanged( _webView: WebView, newProgress: Int )
     fun onRequestPermissions( requestCode : Int , permissionResult : Int , permissions : Array<String> )
+    fun onShowCustomView( _view: View, callback: WebChromeClient.CustomViewCallback? )
+    fun onHideCustomView()
 
     // WebView
     fun onScrollChanged( t: Int , oldt: Int )
