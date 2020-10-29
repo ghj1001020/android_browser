@@ -54,6 +54,7 @@ object DefineCode {
     val MORE_MENU_COOKIE = BASE_MORE_MENU + 1
     val MORE_MENU_PRINTER = BASE_MORE_MENU + 2
     val MORE_MENU_PCM_MODE = BASE_MORE_MENU + 3
+    val MORE_MENU_HISTORY = BASE_MORE_MENU + 4
 
     // JS브릿지 타입
     private val BASE_JS_ID = 3000

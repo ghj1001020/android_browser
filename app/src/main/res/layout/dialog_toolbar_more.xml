@@ -54,7 +54,7 @@
         android:focusable="true"
         android:layout_marginLeft="4dp"
         android:background="@drawable/toolbar_more_menu"
-        app:layout_constraintRight_toRightOf="@id/btn_more_pcm_mode"
+        app:layout_constraintRight_toLeftOf="@id/btn_more_pcm_mode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btn_more_cookie"
         android:layout_width="72dp"
@@ -94,7 +94,7 @@
         android:focusable="true"
         android:layout_marginLeft="4dp"
         android:background="@drawable/toolbar_more_menu"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_more_history"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btn_more_printer"
         android:layout_width="72dp"
@@ -116,6 +116,48 @@
             <TextView
                 android:id="@+id/txt_more_pcm_mode"
                 android:text="@string/toolbar_more_mobile_mode"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:textColor="@color/txt_toolbar_menu"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <!-- 방문한 페이지 -->
+    <RelativeLayout
+        android:id="@+id/btn_more_history"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginLeft="4dp"
+        android:background="@drawable/toolbar_more_menu"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btn_more_pcm_mode"
+        android:layout_width="72dp"
+        android:layout_height="72dp">
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_more_history"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_toolbar_history"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:id="@+id/txt_more_history"
+                android:text="@string/toolbar_more_history"
                 android:layout_marginTop="2dp"
                 android:textSize="13dp"
                 android:textColor="@color/txt_toolbar_menu"

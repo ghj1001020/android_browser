@@ -101,11 +101,12 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         setSupportActionBar( appbar )
         actionBar = supportActionBar
         actionBar?.let {
-            it.setDisplayShowCustomEnabled( true )  // 커스터마이징 하기 위해 필요
-            it.setDisplayHomeAsUpEnabled( false )  // 뒤로가기 버튼 표시여부, 디폴트로 true만 해도 백버튼이 생김
-            it.setDisplayShowTitleEnabled( false )   // 액션바에 표시되는 제목의 표시여부
-            it.setDisplayShowHomeEnabled( false )   // 홈 아이콘 표시여부
+            it.setDisplayShowCustomEnabled(true)  // 커스터마이징 하기 위해 필요
+            it.setDisplayHomeAsUpEnabled(false)  // 뒤로가기 버튼 표시여부, 디폴트로 true만 해도 백버튼이 생김
+            it.setDisplayShowTitleEnabled(false)   // 액션바에 표시되는 제목의 표시여부
+            it.setDisplayShowHomeEnabled(false)   // 홈 아이콘 표시여부
         }
+//        appbar.setContentInsetsAbsolute( 0, 0 )
 
         // 웹뷰
         wv_main?.initWebView( this ,this, true )
@@ -359,6 +360,9 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                         DefineCode.MORE_MENU_PCM_MODE -> {
                             chnagePcMobileMode()
                         }
+                        DefineCode.MORE_MENU_HISTORY -> {
+                            moveToHistory()
+                        }
                     }
                 }
                 moreDialog?.show()
@@ -419,6 +423,12 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
             BrowserApp.isMobile = !BrowserApp.isMobile
         }
+    }
+
+    // 방문기록 페이지로 이동
+    fun moveToHistory() {
+        val intent : Intent = Intent( this , HistoryActivity::class.java )
+        startActivity( intent )
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {

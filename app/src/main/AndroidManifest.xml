@@ -50,6 +50,10 @@
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <activity android:name=".activity.HistoryActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
     </application>
 
 </manifest>

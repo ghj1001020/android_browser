@@ -25,6 +25,7 @@
     <string name="toolbar_more_printer">인쇄</string>
     <string name="toolbar_more_pc_mode">데스크톱 버전</string>
     <string name="toolbar_more_mobile_mode">모바일 버전</string>
+    <string name="toolbar_more_history">방문한 페이지</string>
     <string name="toolbar_more_cookie_desc">저장된 쿠키 %d개</string>
 
     <!-- 쿠키 -->

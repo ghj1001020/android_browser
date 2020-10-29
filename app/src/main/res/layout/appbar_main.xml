@@ -18,12 +18,16 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
+        android:padding="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetRight="0dp"
-        app:contentInsetStartWithNavigation="0dp"
-        >
+        app:contentInsetStartWithNavigation="0dp">
 
         <RelativeLayout
             android:gravity="center"

@@ -50,6 +50,7 @@ class ToolbarMoreDialog( var mContext: Context,
         btn_more_cookie.setOnClickListener( this )
         btn_more_printer.setOnClickListener( this )
         btn_more_pcm_mode.setOnClickListener( this )
+        btn_more_history.setOnClickListener( this )
 
         if( BrowserApp.isMobile ) {
             txt_more_pcm_mode.text = mContext.getString( R.string.toolbar_more_pc_mode )
@@ -75,6 +76,10 @@ class ToolbarMoreDialog( var mContext: Context,
 
             R.id.btn_more_pcm_mode -> {
                 callback?.invoke( this , dialogId , DefineCode.MORE_MENU_PCM_MODE )
+            }
+
+            R.id.btn_more_history -> {
+                callback?.invoke( this , dialogId , DefineCode.MORE_MENU_HISTORY )
             }
         }
     }
