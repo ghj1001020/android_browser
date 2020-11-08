@@ -218,5 +218,13 @@ class CustomWebChromeClient : WebChromeClient {
         return super.getVideoLoadingProgressView()
     }
 
+    override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+        super.onReceivedIcon(view, icon)
+        LogUtil.d( TAG , "onReceivedIcon" )
+
+        if( view != null ) {
+            listener?.onReceivedIcon( view, icon )
+        }
+    }
 
 }

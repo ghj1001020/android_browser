@@ -3,6 +3,7 @@ package com.ghj.browser.activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.*
 import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
@@ -23,15 +24,13 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
+import com.ghj.browser.activity.adapter.data.HistoryData
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.dialog.ToolbarMoreDialog
-import com.ghj.browser.util.JsonUtil
-import com.ghj.browser.util.LogUtil
-import com.ghj.browser.util.PreferenceUtil
-import com.ghj.browser.util.StringUtil
+import com.ghj.browser.util.*
 import com.ghj.browser.webkit.JsAlertPopupData
 import com.ghj.browser.webkit.JsBridge
 import com.ghj.browser.webkit.JsGetMessageData
@@ -39,6 +38,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
@@ -62,6 +64,8 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     var isEditMode : Boolean = false
     var scrollSum = 0
     var jsReturnHandler = JsReturnHandler()
+    var historyList : ArrayList<String>? = null
+    var historyData : HistoryData = HistoryData( "" , "" , "" , "" )
 
 
     // dialog
@@ -81,6 +85,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             wv_main.restoreState( savedInstanceState )
         }
 
+        initData()
         initLayout()
     }
 
@@ -91,10 +96,18 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         wv_main?.onResume()
     }
 
+    override fun onPause() {
+        super.onPause()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         wv_main?.saveState( outState )
+    }
+
+    fun initData() {
+        historyList = PreferenceHistoryUtil.getInstance( this ).getWebPageHistory()
     }
 
     fun initLayout() {
@@ -251,6 +264,29 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         edit_url?.setText( url )
         showWebViewLoadingBar( false , 0 )
         changePageMoveButton()
+
+
+        _webView.copyBackForwardList().currentItem?.run {
+            val date : String = SimpleDateFormat( "yyyyMMdd" , Locale.getDefault() ).format( Date() )
+            val history = HistoryData( date , CommonUtil.bitmapToString( this.favicon ) , this.title , this.url )
+
+            PreferenceHistoryUtil.getInstance(applicationContext).saveWebPageHistory( history )
+        }
+
+
+    }
+
+    override fun onReceivedIcon(_webView: WebView, icon: Bitmap?) {
+        val historyList = PreferenceHistoryUtil.getInstance( applicationContext ).getWebPageHistory()
+        if( historyList.size > 0 ) {
+            val historyData : HistoryData? = JsonUtil.parseJson( historyList[ historyList.size-1 ] , HistoryData::class.java )
+
+            if( historyData != null ) {
+                historyData.icon = CommonUtil.bitmapToString( icon )
+                historyList[ historyList.size-1 ] = JsonUtil.dtoToJsonString( historyData )
+                PreferenceHistoryUtil.getInstance( this).saveWebPageHistory( historyList )
+            }
+        }
     }
 
 
@@ -427,8 +463,10 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // 방문기록 페이지로 이동
     fun moveToHistory() {
-        val intent : Intent = Intent( this , HistoryActivity::class.java )
-        startActivity( intent )
+        wv_main?.let {
+            val intent : Intent = Intent( this , HistoryActivity::class.java )
+            startActivity( intent )
+        }
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {

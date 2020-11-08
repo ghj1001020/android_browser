@@ -36,4 +36,8 @@
     <color name="txt_cookie_value">#000000</color>
     <color name="btn_cookie_add">#477dba</color>
 
+    <!-- 더보기 > 방문기록 -->
+    <color name="txt_history_title">#000000</color>
+    <color name="txt_history_url">#888888</color>
+
 </resources>

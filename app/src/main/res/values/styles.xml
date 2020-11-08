@@ -12,6 +12,8 @@
         <!-- 툴바 아래 그림자 삭제 -->
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowActionModeOverlay">@null</item>
+
+
     </style>
 
 

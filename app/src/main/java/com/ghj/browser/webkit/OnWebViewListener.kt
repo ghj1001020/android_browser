@@ -1,5 +1,6 @@
 package com.ghj.browser.webkit
 
+import android.graphics.Bitmap
 import android.view.View
 import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
@@ -21,6 +22,7 @@ interface OnWebViewListener {
     fun onRequestPermissions( requestCode : Int , permissionResult : Int , permissions : Array<String> )
     fun onShowCustomView( _view: View, callback: WebChromeClient.CustomViewCallback? )
     fun onHideCustomView()
+    fun onReceivedIcon( _webView: WebView, icon: Bitmap? )
 
     // WebView
     fun onScrollChanged( t: Int , oldt: Int )

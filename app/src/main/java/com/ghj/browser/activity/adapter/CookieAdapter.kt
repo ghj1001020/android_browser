@@ -17,7 +17,7 @@ class CookieAdapter( var mContext: Context , var cookieData : ArrayList<CookieDa
 
         if( convertView == null ) {
             val inflater : LayoutInflater = mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE ) as LayoutInflater
-            convertView = inflater.inflate( R.layout.adapter_cookie , parent , false )
+            convertView = inflater.inflate( R.layout.item_cookie , parent , false )
         }
 
         val cookieKey = convertView?.findViewById<TextView>( R.id.txt_cookie_key )
