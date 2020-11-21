@@ -31,13 +31,13 @@
 
         <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing" android:value="true" />
 
-        <activity android:name=".activity.MainActivity"
+        <activity android:name=".activity.IndexActivity"
             android:exported="true"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <activity-alias
             android:name="Main"
-            android:targetActivity=".activity.MainActivity">
+            android:targetActivity=".activity.IndexActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -45,6 +45,9 @@
             </intent-filter>
         </activity-alias>
 
+        <activity android:name=".activity.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <activity android:name=".activity.CookieActivity"
             android:exported="false"

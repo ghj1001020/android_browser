@@ -34,4 +34,7 @@
     <!-- 쿠키 -->
     <string name="cookie_add">쿠키 추가</string>
 
+    <!-- 인덱스 페이지 -->
+    <string name="index_hint">웹사이트 입력</string>
+
 </resources>

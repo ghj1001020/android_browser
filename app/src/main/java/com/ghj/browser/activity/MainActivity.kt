@@ -17,11 +17,10 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.webkit.SslErrorHandler
-import android.webkit.WebBackForwardList
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.widget.EditText
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.data.HistoryData
@@ -40,7 +39,6 @@ import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
@@ -64,9 +62,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     var isEditMode : Boolean = false
     var scrollSum = 0
     var jsReturnHandler = JsReturnHandler()
-    var historyList : ArrayList<String>? = null
-    var historyData : HistoryData = HistoryData( "" , "" , "" , "" )
-
+    var indexSearch = DefineCode.DEFAULT_PAGE
 
     // dialog
     var moreDialog : Dialog? = null
@@ -80,7 +76,6 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         super.onCreate(savedInstanceState)
         setContentView( R.layout.activity_main )
 
-        LogUtil.d( TAG , "onCreate " + savedInstanceState?.toString())
         if( savedInstanceState != null ) {
             wv_main.restoreState( savedInstanceState )
         }
@@ -100,6 +95,11 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         super.onPause()
     }
 
+    override fun onDestroy() {
+        destroyWebView()
+        super.onDestroy()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -107,7 +107,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     fun initData() {
-        historyList = PreferenceHistoryUtil.getInstance( this ).getWebPageHistory()
+        indexSearch = intent.getStringExtra( DefineCode.IT_PARAM_INDEX_URL )
     }
 
     fun initLayout() {
@@ -219,9 +219,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onCreateAfter() {
-        moveToDefaultPage()
-        // 스크롤
-//        wv_main?.loadUrl( "https://1boon.daum.net/theable/novel3" )
+        loadUrl( indexSearch )
     }
 
     // URL 로딩시작
@@ -291,6 +289,8 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
 
     override fun onReceivedError(_webView: WebView, errorMsg: String, url: String?) {
+        LogUtil.d( TAG , "onReceivedError" )
+
         _webView.stopLoading()
         _webView.loadUrl( DefineCode.ERROR_PAGE + "?errorMsg=" + errorMsg )
 
@@ -504,7 +504,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
             edit_url?.isFocusableInTouchMode = true
             edit_url?.requestFocus()
-            showKeyboard( true )
+            showKeyboard( edit_url , true )
         }
         else {
             layout_url_edit_mode.visibility = View.GONE
@@ -513,22 +513,24 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             edit_url?.isFocusableInTouchMode = false
             edit_url?.clearFocus()
             edit_url?.setText( wv_main?.url )
-            showKeyboard( false )
+            showKeyboard( edit_url , false )
         }
         isEditMode = isEdit
     }
 
     // show / hide keyboard
-    fun showKeyboard( isShow : Boolean ) {
+    fun showKeyboard( edit_text : EditText , isShow : Boolean ) {
         val imm : InputMethodManager? = getSystemService( Context.INPUT_METHOD_SERVICE ) as? InputMethodManager
         if( isShow ) {
+            edit_text.requestFocus()
             imm?.let {
-                it.showSoftInput( edit_url , InputMethodManager.SHOW_IMPLICIT )
+                it.showSoftInput( edit_text , InputMethodManager.SHOW_IMPLICIT )
             }
         }
         else {
+            edit_text.clearFocus()
             imm?.let {
-                it.hideSoftInputFromWindow( edit_url?.windowToken , 0 )
+                it.hideSoftInputFromWindow( edit_text.windowToken , 0 )
             }
         }
     }
@@ -561,18 +563,24 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         val step = getWillMovePageStep( wv_main, true )
 
         wv_main?.let {
-            if( step == null || step > 0 ) {
-                it.loadUrl( DefineCode.DEFAULT_PAGE )
+            if( step == null || step >= 0 ) {
+                finish()
             }
             else {
-                if( step == 1 ) {
+                if( step == -1 ) {
                     if( it.canGoBack() ) {
                         it.goBack()
+                    }
+                    else {
+                        finish()
                     }
                 }
                 else {
                     if( it.canGoBackOrForward( step ) ) {
                         it.goBackOrForward( step )
+                    }
+                    else {
+                        finish()
                     }
                 }
             }
@@ -584,7 +592,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         val step = getWillMovePageStep( wv_main, false )
 
         wv_main?.let {
-            if( step == null || step < 0 ) {
+            if( step == null || step <= 0 ) {
                 it.reload()
             }
             else {
@@ -744,5 +752,18 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         custom_view_container.visibility = View.GONE
         custom_view_container.removeView( wvCustomView )
         wvCustomViewCallback?.onCustomViewHidden()
+    }
+
+    // 웹뷰 show/hide
+    fun destroyWebView() {
+        wv_main?.clearCache(true)
+        wv_main?.clearView()
+        wv_main?.removeAllViews()
+//            wv_main?.clearHistory()   // onPageFinished() 에서만 동작
+        wv_main?.clearFocus()
+        wv_main?.clearFormData()
+        wv_main?.clearSslPreferences()
+        wv_main?.onPause()
+        wv_main?.destroy()
     }
 }

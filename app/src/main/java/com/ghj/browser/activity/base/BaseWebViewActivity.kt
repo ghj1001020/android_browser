@@ -124,23 +124,28 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
             return null
         }
         else {
-            var move : Int? = null
+            var move : Int = 0
             if( isBack ) {
-                for( i in historyList.currentIndex..0 ) {
-                    val history = historyList.getItemAtIndex( i ).url
+                for( i in historyList.currentIndex-1 downTo 0 ) {
+                    move--
 
-                    if( !DefineCode.ERROR_PAGE.equals( history ) ) {
-                        move = i
+                    val history = historyList.getItemAtIndex( i ).url
+                    if( !history.startsWith( DefineCode.ERROR_PAGE ) ) {
                         break
                     }
+                }
+
+                // 현재페이지가 에러페이지면 에러URL 이전으로 이동
+                if( historyList.currentItem?.url?.startsWith( DefineCode.ERROR_PAGE ) ?: false ) {
+                    move--
                 }
             }
             else {
                 for( i in historyList.currentIndex until historyList.size) {
-                    val history = historyList.getItemAtIndex( i ).url
+                    move++
 
+                    val history = historyList.getItemAtIndex( i ).url
                     if( !DefineCode.ERROR_PAGE.equals( history ) ) {
-                        move = i
                         break
                     }
                 }
