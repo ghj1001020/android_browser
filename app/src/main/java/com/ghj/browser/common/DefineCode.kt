@@ -15,6 +15,11 @@ object DefineCode {
     // 인텐트 프로토콜
     val INTENT_PROTOCOL = "intent:"
 
+    // 액티비티 ID
+    object ACT_REQ_ID {
+        var FILE_SELECT : Int = 100 // 파일업로드 파일선택 화면
+    }
+
     // 인텐트 파라미터명
     val IT_PARAM_INDEX_URL = "it_param_index_url"
     val IT_PARAM_COOKIE_URL = "it_param_cookie_url"

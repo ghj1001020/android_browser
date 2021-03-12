@@ -13,6 +13,7 @@ import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.util.DeviceUtil
 import com.ghj.browser.util.LogUtil
+import com.ghj.browser.util.StringUtil
 import com.ghj.browser.util.getFileExtension
 import java.util.*
 
@@ -24,6 +25,7 @@ class CustomWebViewClient : WebViewClient {
     private var listener : OnWebViewListener? = null
 
     private var startUrl : String = ""  // 페이지 로딩 url
+    private val FILTER_REOUSRCES_URL = arrayOf("png", "jpg", "jpeg", "gif", "json", "js", "css", "ico", "icon", "woff2")    // URL에
 
 
     constructor( context: Context? , listener: OnWebViewListener? ) : super() {
@@ -131,6 +133,8 @@ class CustomWebViewClient : WebViewClient {
             return true
         }
 
+        startUrl = url ?: ""
+
         return false
     }
 
@@ -164,7 +168,20 @@ class CustomWebViewClient : WebViewClient {
     override fun onLoadResource(view: WebView?, url: String?) {
         super.onLoadResource(view, url)
 
-//        LogUtil.d( TAG , "onLoadResource url=" + url )
+        if( view == null || TextUtils.isEmpty(url) ) {
+            return
+        }
+
+        if( !url!!.startsWith("https://") && !url.startsWith("http://") ) {
+            return
+        }
+
+        val pureUrl = StringUtil.removeParameterFromUrl(url)
+        val pureUrlExt = StringUtil.getUrlExtension(pureUrl)
+        if( !FILTER_REOUSRCES_URL.contains(pureUrlExt.toLowerCase(Locale.getDefault())) ) {
+//            LogUtil.d( TAG , "onLoadResource ext=$pureUrlExt, url=$url")
+            listener?.onLoadResource(view, url!!)
+        }
     }
 
     @SuppressWarnings("deprecation")

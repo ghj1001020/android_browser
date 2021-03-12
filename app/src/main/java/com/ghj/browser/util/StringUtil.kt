@@ -21,6 +21,40 @@ object StringUtil {
         }
     }
 
+    // Url에서 파라미터 해시태그 제외한 Url만 반환
+    fun removeParameterFromUrl( _url : String? ) : String {
+        if( TextUtils.isEmpty( _url ) ) {
+            return ""
+        }
+
+        var url = _url!!
+        var index = _url.lastIndexOf("#")
+        if( index > -1 ) {
+            url = url.substring(0, index)
+        }
+
+        index = url.lastIndexOf("?")
+        if( index > -1 ) {
+            url = url.substring(0, index)
+        }
+        return url
+    }
+
+    // Url에서 확장자 반환
+    fun getUrlExtension( _url : String? ) : String {
+        if( TextUtils.isEmpty( _url ) ) {
+            return ""
+        }
+
+        val url = _url!!.removeSuffix("/")
+        var ext = ""
+        val index = url.lastIndexOf(".")
+        if( index > -1 && url.length > 1) {
+            ext = url.substring(index+1)
+        }
+        return ext
+    }
+
     // Url에서 파일명 구하기
     fun getFilenameFromUrl( _url: String? ) : String {
         if( TextUtils.isEmpty( _url ) ) {

@@ -37,4 +37,7 @@
     <!-- 인덱스 페이지 -->
     <string name="index_hint">웹사이트 입력</string>
 
+    <!-- 메인 페이지 -->
+    <string name="file_select_title">파일선택</string>
+
 </resources>

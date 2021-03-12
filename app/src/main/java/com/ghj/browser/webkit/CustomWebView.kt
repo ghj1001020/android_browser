@@ -176,9 +176,9 @@ class CustomWebView : WebView {
         settings.loadWithOverviewMode = true
 
         // 확대 축소 지원
-        settings.builtInZoomControls = false    // 안드로이드에서 제공하는 줌 아이콘을 사용할 수 있도록 설정
+        settings.builtInZoomControls = true
         settings.setSupportZoom( true )
-        settings.displayZoomControls = true
+        settings.displayZoomControls = false    // 안드로이드에서 제공하는 줌 아이콘을 사용할 수 있도록 설정
 
         // HTML "viewport" 메타태그 지원 여부
         settings.useWideViewPort = true

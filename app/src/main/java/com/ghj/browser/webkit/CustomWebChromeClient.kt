@@ -1,14 +1,14 @@
 package com.ghj.browser.webkit
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
 import android.text.TextUtils
 import android.view.View
-import android.webkit.GeolocationPermissions
-import android.webkit.JsResult
-import android.webkit.WebChromeClient
-import android.webkit.WebView
+import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
@@ -227,4 +227,19 @@ class CustomWebChromeClient : WebChromeClient {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onShowFileChooser(view: WebView?, callback: ValueCallback<Array<Uri>>?, params: FileChooserParams?) : Boolean {
+        if( view == null || callback == null ) {
+            return false
+        }
+        else {
+            listener?.onShowFileChooser( view, callback, params)
+            return true
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    fun openFileChooser(callback: ValueCallback<Uri?>, acceptType: String?, capture: String?) {
+        listener?.onShowFileChooser(callback)
+    }
 }

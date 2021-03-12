@@ -1,9 +1,11 @@
 package com.ghj.browser.activity
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.*
 import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
@@ -17,9 +19,11 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.webkit.SslErrorHandler
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
@@ -70,6 +74,10 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     // full screen
     var wvCustomView : View? = null
     var wvCustomViewCallback : WebChromeClient.CustomViewCallback? = null
+
+    // 파일업로드
+    var fileChooserCallback: ValueCallback<Array<Uri>>? = null
+    var fileChooserCallbackOld: ValueCallback<Uri?>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -210,7 +218,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 //            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
 //            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
 //            wv_main?.loadUrl( "http://m.my.kt.com" )
-            wv_main?.loadUrl( "file:///android_asset/www/LinkPage.html" )
+            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
         }
         btn_appcall?.setOnClickListener() { view ->
             onWebMessage()
@@ -765,5 +773,77 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         wv_main?.clearSslPreferences()
         wv_main?.onPause()
         wv_main?.destroy()
+    }
+
+    // 파일업로드 - 롤리팝이후
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onShowFileChooser(_webView: WebView, callback: ValueCallback<Array<Uri>>, params: WebChromeClient.FileChooserParams?) {
+        try {
+            if (fileChooserCallback != null) {
+                fileChooserCallback?.onReceiveValue(null)
+                fileChooserCallback = null
+            }
+
+            fileChooserCallback = callback
+
+            val intent = params?.createIntent();
+            startActivityForResult(intent, DefineCode.ACT_REQ_ID.FILE_SELECT)
+        }
+        catch ( e: Exception ) {
+            try {
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.setType("*/*")
+                startActivityForResult(Intent.createChooser(intent, getString(R.string.file_select_title)), DefineCode.ACT_REQ_ID.FILE_SELECT)
+            }
+            catch ( e1: Exception ) { }
+        }
+    }
+
+    // 파일업로드 - 롤리팝이전
+    override fun onShowFileChooser(callback: ValueCallback<Uri?>) {
+        try {
+            if( fileChooserCallbackOld != null ) {
+                fileChooserCallbackOld?.onReceiveValue(null)
+                fileChooserCallbackOld = null
+            }
+
+            fileChooserCallbackOld = callback
+
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.setType("*/*")
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.file_select_title)), DefineCode.ACT_REQ_ID.FILE_SELECT)
+        }
+        catch ( e: Exception ) { }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when(requestCode) {
+            // 파일선택 후 콜백
+            DefineCode.ACT_REQ_ID.FILE_SELECT -> {
+                if( resultCode == Activity.RESULT_OK ) {
+                    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+                        if( data != null ) {
+                            fileChooserCallback?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data))
+                            fileChooserCallback = null
+                        }
+                    }
+                    else {
+                        if( data != null ) {
+                            fileChooserCallbackOld?.onReceiveValue(data.data)
+                            fileChooserCallbackOld = null
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onLoadResource(_webView: WebView, url: String) {
+        // 확대/축소 안되는 페이지에 viewport 변경
+        wv_main.loadUrl("javascript:document.getElementsByName(\"viewport\")[0].setAttribute(\"content\", \"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes\");");
     }
 }
