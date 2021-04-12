@@ -27,9 +27,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
-import com.ghj.browser.activity.adapter.data.HistoryData
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.dialog.ToolbarMoreDialog
@@ -271,28 +271,16 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         showWebViewLoadingBar( false , 0 )
         changePageMoveButton()
 
-
-        _webView.copyBackForwardList().currentItem?.run {
-            val date : String = SimpleDateFormat( "yyyyMMdd" , Locale.getDefault() ).format( Date() )
-            val history = HistoryData( date , CommonUtil.bitmapToString( this.favicon ) , this.title , this.url )
-
-            PreferenceHistoryUtil.getInstance(applicationContext).saveWebPageHistory( history )
+        // 히스토리 데이터 입력
+        _webView.copyBackForwardList().currentItem?.let {
+            val date : String = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
+            val params: Array<String> = arrayOf( date, it.title, it.url, Util.bitmapToString(it.favicon) )
+            SQLiteService.insertHistoryData(this, params)
         }
-
-
     }
 
     override fun onReceivedIcon(_webView: WebView, icon: Bitmap?) {
-        val historyList = PreferenceHistoryUtil.getInstance( applicationContext ).getWebPageHistory()
-        if( historyList.size > 0 ) {
-            val historyData : HistoryData? = JsonUtil.parseJson( historyList[ historyList.size-1 ] , HistoryData::class.java )
-
-            if( historyData != null ) {
-                historyData.icon = CommonUtil.bitmapToString( icon )
-                historyList[ historyList.size-1 ] = JsonUtil.dtoToJsonString( historyData )
-                PreferenceHistoryUtil.getInstance( this).saveWebPageHistory( historyList )
-            }
-        }
+        SQLiteService.updateHistoryFavIcon(this, arrayOf(Util.bitmapToString( icon ), _webView.url))
     }
 
 
@@ -473,7 +461,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     fun moveToHistory() {
         wv_main?.let {
             val intent : Intent = Intent( this , HistoryActivity::class.java )
-            startActivity( intent )
+            startActivityForResult( intent , DefineCode.ACT_REQ_ID.HISTORY )
         }
     }
 
@@ -621,14 +609,6 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     // 웹뷰 앞으로/뒤로가기 버튼 UI
     fun changePageMoveButton() {
         wv_main?.let {
-            // 뒤로가기 버튼
-            if( it.canGoBack() ) {
-                btn_toolbar_back?.visibility = View.VISIBLE
-            }
-            else {
-                btn_toolbar_back?.visibility = View.INVISIBLE
-            }
-
             // 앞으로가기 버튼
             if( it.canGoForward() ) {
                 btn_toolbar_next?.visibility = View.VISIBLE
@@ -836,6 +816,17 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                             fileChooserCallbackOld?.onReceiveValue(data.data)
                             fileChooserCallbackOld = null
                         }
+                    }
+                }
+            }
+
+            // 히스토리 액티비티
+            DefineCode.ACT_REQ_ID.HISTORY -> {
+                if( resultCode == Activity.RESULT_OK ) {
+                    // 클릭한 사이트로 이동
+                    val url = data?.getStringExtra( DefineCode.IT_PARAM.HISTORY_URL )
+                    if( !TextUtils.isEmpty(url) ) {
+                        loadUrl( url )
                     }
                 }
             }

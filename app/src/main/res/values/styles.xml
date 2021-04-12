@@ -13,7 +13,6 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowActionModeOverlay">@null</item>
 
-
     </style>
 
 
@@ -22,7 +21,7 @@
         <item name="buttonBarNegativeButtonStyle">@style/buttonBarButtonStyle.Negative</item>
     </style>
 
-    <style name="buttonBarButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored"></style>
+    <style name="buttonBarButtonStyle" parent="Widget.AppCompat.Button.Borderless.Colored" />
     <style name="buttonBarButtonStyle.Positive">
         <item name="android:textColor">@color/btn_alert_dialog_ok</item>
         <item name="android:textSize">16dp</item>
@@ -31,5 +30,13 @@
         <item name="android:textColor">@color/btn_alert_dialog_cancel</item>
         <item name="android:textSize">16dp</item>
     </style>
+
+
+    <!-- 공통 텍스트뷰 -->
+    <style name="TextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/txt_black</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
 
 </resources>

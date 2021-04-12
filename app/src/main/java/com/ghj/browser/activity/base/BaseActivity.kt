@@ -46,7 +46,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    abstract fun onCreateAfter();   // 앱 실행 후 기본적인 체크 후 액티비티 로직 실행
+    abstract fun onCreateAfter()   // 앱 실행 후 기본적인 체크 후 액티비티 로직 실행\
 
 
     // 설정 > 권한화면으로 이동

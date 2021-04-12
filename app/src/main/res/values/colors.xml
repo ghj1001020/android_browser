@@ -4,8 +4,17 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
+    <!-- 일반 -->
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+
+    <!-- 글자색 -->
+    <color name="txt_black">#1f1f1f</color>
+
+    <!-- 배경색 -->
+    <color name="bg_rip">#e0e0e0</color>
+
+
     <color name="bgcolor">#EEEEEE</color>
     <color name="divider">#f5f5f5</color>
     <color name="txtcolor">#1f1f1f</color>

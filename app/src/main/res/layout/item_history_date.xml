@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/btnHistoryDate"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <TextView
+        android:id="@+id/txtHistoryDate"
+        android:textSize="16dp"
+        android:textColor="@color/txt_black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:paddingLeft="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2021-04-02"/>
+
+    <ImageView
+        android:id="@+id/imgOpen"
+        app:layout_constraintTop_toTopOf="@id/txtHistoryDate"
+        app:layout_constraintBottom_toBottomOf="@id/txtHistoryDate"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/ic_arrow_u"
+        android:layout_marginRight="26dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

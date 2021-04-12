@@ -16,8 +16,7 @@
         app:layout_constraintRight_toLeftOf="@id/btn_toolbar_next"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="@dimen/toolbar_height"
-        android:layout_height="@dimen/toolbar_height"
-        android:visibility="invisible" />
+        android:layout_height="@dimen/toolbar_height" />
 
     <ImageButton
         android:id="@+id/btn_toolbar_next"

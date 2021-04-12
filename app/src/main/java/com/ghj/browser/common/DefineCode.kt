@@ -2,7 +2,11 @@ package com.ghj.browser.common
 
 import android.app.Dialog
 
+
+
 object DefineCode {
+
+
 
     // 기본페이지 - 네이버
     val DEFAULT_PAGE = "https://www.naver.com"
@@ -17,8 +21,17 @@ object DefineCode {
 
     // 액티비티 ID
     object ACT_REQ_ID {
-        var FILE_SELECT : Int = 100 // 파일업로드 파일선택 화면
+        const val FILE_SELECT : Int = 100 // 파일업로드 파일선택 화면
+        const val HISTORY : Int = 101 // 히스토리 액티비티
     }
+
+    // 인텐트 파라미터
+    object IT_PARAM {
+        const val HISTORY_URL = "it_param_history_url"  // 이동할 사이트
+    }
+
+
+
 
     // 인텐트 파라미터명
     val IT_PARAM_INDEX_URL = "it_param_index_url"
@@ -66,7 +79,3 @@ object DefineCode {
     private val BASE_JS_ID = 3000
     val JS_ALERT_POPUP = BASE_JS_ID + 1
 }
-
-public typealias CommonDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int, data : String?)->Unit
-public typealias ToolbarMoreDialogCallback = (dialog : Dialog , dialogId : Int , selected : Int )->Unit
-public typealias CookieAddDialogCallback = (dialog : Dialog , selected : Int , data : String? )->Unit

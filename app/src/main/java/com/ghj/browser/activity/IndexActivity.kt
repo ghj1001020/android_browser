@@ -50,6 +50,7 @@ public class IndexActivity : BaseActivity() , View.OnClickListener {
         var search = edit_index_url.text.toString()
         if( TextUtils.isEmpty( search ) ) {
             search = DefineCode.DEFAULT_PAGE
+            edit_index_url.setText(search)
         }
 
         val intent = Intent( this , MainActivity::class.java )

@@ -5,9 +5,14 @@ import android.graphics.BitmapFactory
 import android.text.TextUtils
 import android.util.Base64
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
-object CommonUtil {
+object Util {
 
     // bitmap -> string 변환
     fun bitmapToString( bitmap : Bitmap? ) : String {
@@ -37,5 +42,35 @@ object CommonUtil {
 
         calendar.add( field , amount )  // Calendar.DATE : 날짜
         return calendar.time
+    }
+
+    // date string을 from format -> to format 으로 변환
+    fun convertDateFormat( date: String, fromFormat: String, toFormat: String ) : String {
+        val from = SimpleDateFormat(fromFormat, Locale.getDefault())
+        val to = SimpleDateFormat(toFormat, Locale.getDefault())
+
+        try {
+            return to.format(from.parse(date)!!)
+        }
+        catch ( e: Exception ) {
+            return ""
+        }
+    }
+
+    // date string에서 요일 구하기 (1-일요일 ~ 7-토요일, 0-에러)
+    fun getDayOfWeekFromDateString( date: String, format: String ) : Int {
+        val sdf = SimpleDateFormat(format, Locale.getDefault() )
+
+        var dayOfWeek = 0
+        try {
+            sdf.parse(date)?.let {
+                val calendar = Calendar.getInstance()
+                calendar.time = it
+                dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            }
+        }
+        catch ( e: Exception ) { }
+
+        return dayOfWeek
     }
 }

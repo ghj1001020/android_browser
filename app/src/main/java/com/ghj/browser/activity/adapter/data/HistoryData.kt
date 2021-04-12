@@ -1,11 +1,14 @@
 package com.ghj.browser.activity.adapter.data
 
-import android.graphics.Bitmap
-import android.os.Parcel
 import android.os.Parcelable
-import android.webkit.WebBackForwardList
-import com.google.gson.annotations.Expose
+import com.ghj.browser.common.HistoryType
 import kotlinx.android.parcel.Parcelize
 
+
 @Parcelize
-data class HistoryData( @Expose var date : String, @Expose var icon : String, @Expose var title : String, @Expose var url : String ) : Parcelable
+data class HistoryData(val type: HistoryType, val date : String, val title : String, val url : String, val icon : String ) : Parcelable {
+
+    var isOpen : Boolean = false
+
+    constructor( type: HistoryType, date: String ) : this(type, date, "", "", "")
+}
