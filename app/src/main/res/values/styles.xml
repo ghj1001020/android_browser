@@ -32,11 +32,33 @@
     </style>
 
 
-    <!-- 공통 텍스트뷰 -->
-    <style name="TextViewStyle" parent="Widget.AppCompat.TextView">
+    <!-- 텍스트뷰 -->
+    <!-- 16 black -->
+    <style name="TextViewStyle_16_black" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/txt_black</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <!-- 13 black -->
+    <style name="TextViewStyle_13_black" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/txt_black</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- 체크박스 -->
+    <!-- 목록선택 -->
+    <style name="CheckBoxStyle_selector" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/check_selector</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+    </style>
 
 </resources>

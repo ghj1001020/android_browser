@@ -57,6 +57,10 @@
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <activity android:name=".activity.SearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysVisible"/>
+
     </application>
 
 </manifest>

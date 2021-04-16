@@ -3,8 +3,7 @@ package com.ghj.browser.util
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.TextUtils
-import com.ghj.browser.activity.adapter.data.HistoryData
-import com.google.gson.JsonArray
+import com.ghj.browser.activity.adapter.data.WebSiteData
 import org.json.JSONArray
 import java.lang.Exception
 
@@ -41,7 +40,7 @@ class PreferenceHistoryUtil private constructor( val context : Context) {
         setPrefArrayList( pref_key , items )
     }
 
-    fun saveWebPageHistory( item : HistoryData ) {
+    fun saveWebPageHistory( item : WebSiteData ) {
         val strItem = JsonUtil.dtoToJsonString( item )
 
         if( !TextUtils.isEmpty( strItem ) ) {

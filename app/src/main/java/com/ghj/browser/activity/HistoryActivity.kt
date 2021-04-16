@@ -1,48 +1,40 @@
 package com.ghj.browser.activity
 
 import android.app.Activity
-import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
+import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.ListPopupWindow
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.ghj.browser.R
-import com.ghj.browser.activity.adapter.HistoryAdapter
-import com.ghj.browser.activity.adapter.data.HistoryData
+import com.ghj.browser.activity.adapter.WebSiteAdapter
+import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.base.BaseViewModelActivity
-import com.ghj.browser.activity.ui.adapter.ListPopupAdapter
 import com.ghj.browser.activity.viewmodel.HistoryViewModel
 import com.ghj.browser.common.DefineCode
-import com.ghj.browser.common.HistoryType
-import com.ghj.browser.common.IClickListener
-import com.ghj.browser.db.SQLite
+import com.ghj.browser.common.WebSiteType
+import com.ghj.browser.common.JobMode
 import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.util.Util
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.appbar_history.*
+import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-public class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickListener {
+class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickListener {
 
-    var actionBar : ActionBar? = null
-    var historyDatas : ArrayList<HistoryData> = ArrayList()
-
-    lateinit var historyAdapter : HistoryAdapter
+    var webSiteDatas : ArrayList<WebSiteData> = ArrayList()
+    lateinit var webSiteAdapter : WebSiteAdapter
 
     // 더보기 > 삭제
     lateinit var popupMenu : PopupMenu
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,19 +52,17 @@ public class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.O
         queryHistoryCnt()
     }
 
-    fun initData() {
-        queryHistoryData()
-    }
-
     fun initLayout() {
         btn_back.setOnClickListener(this)
         btnShare.setOnClickListener(this)
         btnSearch.setOnClickListener(this)
         btnMore.setOnClickListener(this)
+        btnDoDelete.setOnClickListener(this)
+        btnDoShare.setOnClickListener(this)
 
         // 히스토리 목록
-        historyAdapter = HistoryAdapter( this, historyDatas, historyListener )
-        rvHistory.adapter = historyAdapter
+        webSiteAdapter = WebSiteAdapter( this, webSiteDatas, webSiteListener )
+        rvHistory.adapter = webSiteAdapter
 
         // 더보기 > 삭제
         popupMenu = PopupMenu(this, btnMore)
@@ -83,6 +73,7 @@ public class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.O
         popupMenu.setOnMenuItemClickListener { item: MenuItem? ->
             when( item?.itemId ) {
                 R.id.delete-> {
+                    changeJobMode(JobMode.DELETE)
                     true
                 }
                 R.id.deleteAll-> {
@@ -96,26 +87,45 @@ public class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.O
         }
     }
 
+    override fun onBackPressed() {
+        if( webSiteAdapter.jobMode != JobMode.VIEW ) {
+            changeJobMode(JobMode.VIEW)
+            return
+        }
+        super.onBackPressed()
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
-            // 뒤로가기
+            // 앱바 > 뒤로가기
             R.id.btn_back->{
                 finish()
             }
 
-            // 공유
+            // 앱바 > 공유
             R.id.btnShare->{
-
+                changeJobMode(JobMode.SHARE)
             }
 
-            // 검색
+            // 앱바 > 검색
             R.id.btnSearch->{
-
+                val intent: Intent = Intent(this, SearchActivity::class.java)
+                startActivityForResult(intent, DefineCode.ACT_REQ_ID.SEARCH)
             }
 
-            // 더보기
+            // 앱바 > 더보기
             R.id.btnMore->{
                 popupMenu.show()
+            }
+
+            // 항목선택 > 삭제
+            R.id.btnDoDelete->{
+                deleteHistory()
+            }
+
+            // 항목선택 > 공유
+            R.id.btnDoShare->{
+                shareHistory()
             }
         }
     }
@@ -123,10 +133,10 @@ public class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.O
     // 히스토리 목록 데이터 조회
     fun queryHistoryData() {
         // 히스토리 날짜, URL목록
-        historyDatas.clear()
-        val historyData : ArrayList<HistoryData> = SQLiteService.selectHistoryDatesAndUrls(this)
-        historyDatas.addAll(historyData)
-        historyAdapter.notifyDataSetChanged()
+        webSiteDatas.clear()
+        val list : ArrayList<WebSiteData> = SQLiteService.selectHistoryDatesAndUrls(this)
+        webSiteDatas.addAll(list)
+        webSiteAdapter.notifyDataSetChanged()
     }
 
     // 오늘, 어제 히스토리 데이터 개수
@@ -144,35 +154,40 @@ public class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.O
     }
 
     // 히스토리 목록 클릭 리스너
-    val historyListener : HistoryAdapter.IHistoryListener = object : HistoryAdapter.IHistoryListener {
+    val webSiteListener : WebSiteAdapter.IWebSiteListener = object : WebSiteAdapter.IWebSiteListener {
         override fun onDateClick( position: Int ) {
-            val date = historyDatas.get(position).date.substring(0, 8)
-            historyDatas.get(position).isOpen = !historyDatas.get(position).isOpen
+            val date = webSiteDatas.get(position).date.substring(0, 8)
+            webSiteDatas.get(position).isOpen = !webSiteDatas.get(position).isOpen
 
-            if( historyDatas.get(position).isOpen ) {
+            if( webSiteDatas.get(position).isOpen ) {
                 val urls = SQLiteService.selectHistoryUrlsByDate(this@HistoryActivity, date)
-                historyDatas.addAll(position+1, urls)
-                historyAdapter.notifyDataSetChanged()
+                webSiteDatas.addAll(position+1, urls)
+                webSiteAdapter.notifyDataSetChanged()
             }
             else {
-                val removeDatas = arrayListOf<HistoryData>()
-                for( item in historyDatas ) {
-                    if( item.type == HistoryType.URL && item.date.startsWith(date) ) {
+                val removeDatas = arrayListOf<WebSiteData>()
+                for( item in webSiteDatas ) {
+                    if( item.type == WebSiteType.URL && item.date.startsWith(date) ) {
                         removeDatas.add(item)
                     }
                 }
-                historyDatas.removeAll(removeDatas)
-                historyAdapter.notifyDataSetChanged()
+                webSiteDatas.removeAll(removeDatas)
+                webSiteAdapter.notifyDataSetChanged()
             }
         }
 
         override fun onUrlClick( position: Int ) {
-            val url : String = historyDatas.get(position).url
-            val intent = Intent()
-            intent.putExtra( DefineCode.IT_PARAM.HISTORY_URL , url )
-            setResult( Activity.RESULT_OK, intent)
-            finish()
+            val url : String = webSiteDatas.get(position).url
+            moveUrl(url)
         }
+    }
+
+    // 메인에 이동할 URL 전달하고 액티비티 종료
+    fun moveUrl( url: String ) {
+        val intent = Intent()
+        intent.putExtra( DefineCode.IT_PARAM.HISTORY_URL , url )
+        setResult( Activity.RESULT_OK, intent)
+        finish()
     }
 
     // 전체 히스토리 목록 삭제
@@ -180,5 +195,84 @@ public class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.O
         SQLiteService.deleteHistoryDataAll(this)
         queryHistoryData()
         queryHistoryCnt()
+    }
+
+    // 히스토리 목록 삭제
+    fun deleteHistory() {
+        val params : ArrayList<String> = arrayListOf()
+        for( item in webSiteDatas ) {
+            if( item.isSelected ) {
+                params.add(item.date)
+            }
+        }
+
+        SQLiteService.deleteHistoryData(this, params)
+        changeJobMode(JobMode.VIEW)
+        queryHistoryData()
+        queryHistoryCnt()
+    }
+
+    // 히스토리 목록 공유
+    fun shareHistory() {
+        val str : StringBuilder = StringBuilder()
+        for( item in webSiteDatas ) {
+            if( item.isSelected ) {
+                str.append(item.title + "\n")
+                str.append(item.url + "\n")
+            }
+        }
+
+        val intent: Intent = Intent(Intent.ACTION_SEND)
+        intent.flags =Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, str.toString())
+        startActivity(Intent.createChooser(intent, ""))
+    }
+
+    // 작업 타입변경
+    fun changeJobMode( mode: JobMode ) {
+        // 목록조회
+        if( mode == JobMode.VIEW ) {
+            val prevJob = webSiteAdapter.jobMode
+            if( prevJob == JobMode.DELETE ) {
+                layoutDelete.visibility = View.GONE
+                layoutDelete.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_out_bottom)
+            }
+            else if( prevJob == JobMode.SHARE ) {
+                layoutShare.visibility = View.GONE
+                layoutShare.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_out_bottom)
+            }
+
+            webSiteAdapter.jobMode = JobMode.VIEW
+            webSiteAdapter.notifyDataSetChanged()
+        }
+        // 아이템 삭제
+        else if( mode == JobMode.DELETE ) {
+            layoutDelete.visibility = View.VISIBLE
+            layoutDelete.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_in_bottom)
+            webSiteAdapter.jobMode = JobMode.DELETE
+            webSiteAdapter.notifyDataSetChanged()
+        }
+        // 아이템 공유
+        else if( mode == JobMode.SHARE ) {
+            layoutShare.visibility = View.VISIBLE
+            layoutShare.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_in_bottom)
+            webSiteAdapter.jobMode = JobMode.SHARE
+            webSiteAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // 검색
+        if( requestCode == DefineCode.ACT_REQ_ID.SEARCH ) {
+            if( resultCode == Activity.RESULT_OK ) {
+                if( data == null ) return
+
+                val url = data.getStringExtra(DefineCode.IT_PARAM.HISTORY_URL)
+                moveUrl(url)
+            }
+        }
     }
 }

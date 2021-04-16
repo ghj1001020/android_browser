@@ -280,7 +280,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onReceivedIcon(_webView: WebView, icon: Bitmap?) {
-        SQLiteService.updateHistoryFavIcon(this, arrayOf(Util.bitmapToString( icon ), _webView.url))
+        SQLiteService.updateHistoryFavIcon(this, arrayOf(Util.bitmapToString( icon )) )
     }
 
 
@@ -767,14 +767,14 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             fileChooserCallback = callback
 
             val intent = params?.createIntent();
-            startActivityForResult(intent, DefineCode.ACT_REQ_ID.FILE_SELECT)
+            startActivityForResult(intent, DefineCode.ACT_REQ_ID.IT_FILE_SELECT)
         }
         catch ( e: Exception ) {
             try {
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.setType("*/*")
-                startActivityForResult(Intent.createChooser(intent, getString(R.string.file_select_title)), DefineCode.ACT_REQ_ID.FILE_SELECT)
+                startActivityForResult(Intent.createChooser(intent, getString(R.string.file_select_title)), DefineCode.ACT_REQ_ID.IT_FILE_SELECT)
             }
             catch ( e1: Exception ) { }
         }
@@ -793,7 +793,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.addCategory(Intent.CATEGORY_OPENABLE)
             intent.setType("*/*")
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.file_select_title)), DefineCode.ACT_REQ_ID.FILE_SELECT)
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.file_select_title)), DefineCode.ACT_REQ_ID.IT_FILE_SELECT)
         }
         catch ( e: Exception ) { }
     }
@@ -803,7 +803,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
         when(requestCode) {
             // 파일선택 후 콜백
-            DefineCode.ACT_REQ_ID.FILE_SELECT -> {
+            DefineCode.ACT_REQ_ID.IT_FILE_SELECT -> {
                 if( resultCode == Activity.RESULT_OK ) {
                     if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                         if( data != null ) {

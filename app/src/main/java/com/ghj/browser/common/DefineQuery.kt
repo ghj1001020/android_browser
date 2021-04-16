@@ -43,4 +43,17 @@ object DefineQuery {
 
     // 히스토리 테이블의 모든데이터 삭제
     val DELETE_HISTORY_DATA_ALL = "DELETE FROM HISTORY_TBL"
+
+    // 히스토리 테이블의 데이터 삭제
+    val DELETE_HISTORY_DATA = "DELETE FROM HISTORY_TBL " +
+                              "WHERE "
+
+    // 히스토리 테이블의 데이터 검색
+    val SELECT_HISTORY_SEARCH = "SELECT   VISIT_DATE , " +
+                                "         TITLE      , " +
+                                "         URL        , " +
+                                "         FAVICON      " +
+                                "FROM     HISTORY_TBL  " +
+                                "WHERE    TITLE LIKE '%'||?||'%' OR URL LIKE '%'||?||'%' " +
+                                "ORDER BY VISIT_DATE DESC"
 }

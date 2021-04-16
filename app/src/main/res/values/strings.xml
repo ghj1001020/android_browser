@@ -7,6 +7,10 @@
     <string name="common_notice">알림</string>
     <string name="common_key">키</string>
     <string name="common_cookie">쿠키</string>
+    <string name="delete">삭제</string>
+    <string name="share">공유</string>
+    <string name="search">검색</string>
+    <string name="history_record">방문기록</string>
     
     <!-- 메인 -->
     <string name="url_hint">검색어 또는 URL 입력</string>

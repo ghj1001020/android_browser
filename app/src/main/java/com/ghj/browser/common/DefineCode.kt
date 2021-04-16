@@ -6,8 +6,6 @@ import android.app.Dialog
 
 object DefineCode {
 
-
-
     // 기본페이지 - 네이버
     val DEFAULT_PAGE = "https://www.naver.com"
     private val BASE_LOCAL_PAGE = "file:///android_asset/www/"
@@ -21,8 +19,9 @@ object DefineCode {
 
     // 액티비티 ID
     object ACT_REQ_ID {
-        const val FILE_SELECT : Int = 100 // 파일업로드 파일선택 화면
+        const val IT_FILE_SELECT : Int = 100 // 파일업로드 파일선택 화면
         const val HISTORY : Int = 101 // 히스토리 액티비티
+        const val SEARCH : Int = 102  // 검색 액티비티
     }
 
     // 인텐트 파라미터

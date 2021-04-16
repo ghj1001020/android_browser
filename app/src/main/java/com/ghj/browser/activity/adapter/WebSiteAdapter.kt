@@ -4,32 +4,39 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ghj.browser.R
-import com.ghj.browser.activity.adapter.data.HistoryData
-import com.ghj.browser.common.HistoryType
+import com.ghj.browser.activity.adapter.data.WebSiteData
+import com.ghj.browser.common.WebSiteType
+import com.ghj.browser.common.JobMode
 import com.ghj.browser.util.Util
-import com.ghj.browser.util.JsonUtil
 
 
-class HistoryAdapter( val context: Context, val datas : ArrayList<HistoryData>, val listener : IHistoryListener ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WebSiteAdapter(val context: Context, val data : ArrayList<WebSiteData>, val listener : IWebSiteListener ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    interface IHistoryListener {
+    interface IWebSiteListener {
         fun onDateClick( position: Int )
         fun onUrlClick( position: Int )
     }
 
     val mInflater: LayoutInflater = LayoutInflater.from(context)
-
+    var jobMode : JobMode = JobMode.VIEW
+        set(value) {
+            for ( item in data ) {
+                item.isSelected = false
+            }
+            field = value
+        }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         // 날짜
-        if( viewType == HistoryType.DATE.value ) {
+        if( viewType == WebSiteType.DATE.value ) {
             val view : View = mInflater.inflate( R.layout.item_history_date , parent , false )
             return HistoryDateHolder( view )
         }
@@ -41,7 +48,7 @@ class HistoryAdapter( val context: Context, val datas : ArrayList<HistoryData>, 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val data : HistoryData = datas.get(position)
+        val data : WebSiteData = data.get(position)
 
         // 날짜 항목
         if( holder is HistoryDateHolder ) {
@@ -62,26 +69,34 @@ class HistoryAdapter( val context: Context, val datas : ArrayList<HistoryData>, 
         }
         // URL 항목
         else if( holder is HistoryHolder ) {
+            if( jobMode != JobMode.VIEW) {
+                holder.chkSelect.visibility = View.VISIBLE
+                holder.chkSelect.isChecked = data.isSelected
+            }
+            else {
+                holder.chkSelect.visibility = View.GONE
+            }
+
             // 배경
-            val prevType = if( position-1 >= 0 && datas.get(position-1).type == HistoryType.URL ) {
-                HistoryType.URL
+            val prevType = if( position-1 >= 0 && this.data.get(position-1).type == WebSiteType.URL ) {
+                WebSiteType.URL
             }
             else {
-                HistoryType.DATE
+                WebSiteType.DATE
             }
-            val nextType = if( position+1 < itemCount && datas.get(position+1).type == HistoryType.URL ) {
-                HistoryType.URL
+            val nextType = if( position+1 < itemCount && this.data.get(position+1).type == WebSiteType.URL ) {
+                WebSiteType.URL
             }
             else {
-                HistoryType.DATE
+                WebSiteType.DATE
             }
-            if( prevType==HistoryType.DATE && nextType==HistoryType.DATE ) {
+            if( prevType==WebSiteType.DATE && nextType==WebSiteType.DATE ) {
                 holder.layoutItemHistory.setBackgroundResource(R.drawable.rip_bg_r28_fff)
             }
-            else if( prevType==HistoryType.DATE && nextType==HistoryType.URL) {
+            else if( prevType==WebSiteType.DATE && nextType==WebSiteType.URL) {
                 holder.layoutItemHistory.setBackgroundResource(R.drawable.rip_bg_r28_fff_t)
             }
-            else if( prevType==HistoryType.URL && nextType==HistoryType.URL ) {
+            else if( prevType==WebSiteType.URL && nextType==WebSiteType.URL ) {
                 holder.layoutItemHistory.setBackgroundResource(R.drawable.rip_bg_r28_fff_m)
             }
             else {
@@ -89,7 +104,7 @@ class HistoryAdapter( val context: Context, val datas : ArrayList<HistoryData>, 
             }
 
             // 하단 디바이더
-            if( nextType == HistoryType.DATE ) {
+            if( nextType == WebSiteType.DATE ) {
                 holder.divider.visibility = View.GONE
             }
             else {
@@ -102,19 +117,25 @@ class HistoryAdapter( val context: Context, val datas : ArrayList<HistoryData>, 
                 holder.imgHistoryIcon.setImageBitmap( it )
             }
 
-            // 사이트 클릭
+            // 아이템 클릭
             holder.layoutItemHistory.setOnClickListener { v: View? ->
-                listener.onUrlClick( position )
+                if( jobMode == JobMode.VIEW ) {
+                    listener.onUrlClick( position )
+                }
+                else {
+                    data.isSelected = !holder.chkSelect.isChecked
+                    holder.chkSelect.isChecked = data.isSelected
+                }
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return datas.size
+        return data.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return datas.get(position).type.ordinal
+        return data.get(position).type.ordinal
     }
 
     // 날짜 뷰홀더
@@ -131,6 +152,7 @@ class HistoryAdapter( val context: Context, val datas : ArrayList<HistoryData>, 
         val txtHistoryTitle : TextView = view.findViewById(R.id.txtHistoryTitle)
         val txtHistoryUrl : TextView = view.findViewById(R.id.txtHistoryUrl)
         val divider : View = view.findViewById(R.id.divider)
+        val chkSelect : CheckBox = view.findViewById(R.id.chkSelect)
     }
 
     private fun getDisplayDayOfWeek( dayOfWeek: Int ) : String {

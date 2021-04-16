@@ -4,10 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
+    android:gravity="center"
     android:id="@+id/layoutItemHistory"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/chkSelect"
+        style="@style/CheckBoxStyle_selector"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/imgHistoryIcon"
