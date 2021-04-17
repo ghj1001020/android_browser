@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 // 설정변수
 ext {
     appMode = '"release"'   // 운영 - release , 개발 - dev
-    isLogBlock = 'false' // 운영 - true , 개발 - false
+    isLogBlock = 'true' // 운영 - true , 개발 - false
 }
 
 // 빌드 카운트 기록
@@ -20,8 +20,8 @@ android {
         applicationId "com.ghj.browser"
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 10002
-        versionName "1.0.2"
+        versionCode 10003
+        versionName "1.0.3"
 
         multiDexEnabled true
 

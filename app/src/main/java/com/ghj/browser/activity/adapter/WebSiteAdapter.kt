@@ -111,6 +111,7 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<WebSiteData>, va
                 holder.divider.visibility = View.VISIBLE
             }
 
+            holder.txtHistoryDate.setText( Util.convertDateFormat(data.date, "yyyyMMddHHmmss", "yyyy-MM-dd HH:mm:ss") )
             holder.txtHistoryTitle.setText( data.title )
             holder.txtHistoryUrl.setText( data.url )
             Util.stringToBitmap(data.icon)?.let {
@@ -149,6 +150,7 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<WebSiteData>, va
     class HistoryHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val layoutItemHistory : LinearLayout = view.findViewById(R.id.layoutItemHistory)
         val imgHistoryIcon : ImageView = view.findViewById(R.id.imgHistoryIcon)
+        val txtHistoryDate : TextView = view.findViewById(R.id.txtHistoryDate)
         val txtHistoryTitle : TextView = view.findViewById(R.id.txtHistoryTitle)
         val txtHistoryUrl : TextView = view.findViewById(R.id.txtHistoryUrl)
         val divider : View = view.findViewById(R.id.divider)
