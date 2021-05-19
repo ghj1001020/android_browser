@@ -18,7 +18,7 @@ class JsBridge( var callback : JsCallback ) {
     // Js -> Native 호출
     @JavascriptInterface
     fun appAlertPopup( json : String? ) {
-        LogUtil.d( TAG , "appAlertPopup : ${json}" )
+        LogUtil.d("appAlertPopup : ${json}" )
         callback.onRequestFromJs( DefineCode.JS_ALERT_POPUP , json )
     }
 

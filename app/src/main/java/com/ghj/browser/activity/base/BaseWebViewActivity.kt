@@ -170,7 +170,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
 
             script += ");"
 
-            LogUtil.d( TAG , "callJavaScript : ${script}" )
+            LogUtil.d("callJavaScript : ${script}" )
 
             Thread( Runnable {
                 webView?.let {
@@ -182,7 +182,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
         }
         catch ( e : Exception )
         {
-            LogUtil.e( TAG , "callJavaScript err : " + e.message )
+            LogUtil.e("callJavaScript err : " + e.message )
         }
     }
 
@@ -202,7 +202,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
             script += ");"
 
             val javascript = script
-            LogUtil.d( TAG , "callJavaScript : " + javascript )
+            LogUtil.d("callJavaScript : " + javascript )
             val rtnHandler : Handler = handler
             val rtnWhat : Int = what
 
@@ -223,7 +223,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
         }
         catch ( e : Exception )
         {
-            LogUtil.e( TAG , "callJavaScriptReturn err : " + e.message )
+            LogUtil.e("callJavaScriptReturn err : " + e.message )
         }
     }
 
@@ -286,7 +286,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
             }
         }
         catch ( e1 : Exception ) {
-            LogUtil.e( TAG , "err=${e1.localizedMessage}")
+            LogUtil.e("err=${e1.localizedMessage}")
         }
     }
 
@@ -302,7 +302,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
                     intent.putExtra( "sms_body" , body )
                 }
                 catch ( e : Exception ) {
-                    LogUtil.e( TAG , "err=" + e.localizedMessage )
+                    LogUtil.e("err=" + e.localizedMessage )
                 }
             }
 
@@ -310,7 +310,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
             startActivity( intent )
         }
         catch ( e : Exception ) {
-            LogUtil.e( TAG , "err=${e.localizedMessage}" )
+            LogUtil.e("err=${e.localizedMessage}" )
         }
     }
 
@@ -322,7 +322,7 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
             startActivity( intent )
         }
         catch ( e : Exception ) {
-            LogUtil.e( TAG , "err=${e.localizedMessage}" )
+            LogUtil.e("err=${e.localizedMessage}" )
         }
     }
 }

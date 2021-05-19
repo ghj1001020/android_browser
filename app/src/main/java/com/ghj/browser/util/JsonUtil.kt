@@ -25,7 +25,7 @@ object JsonUtil {
             return gson.toJson( dto )
         }
         catch ( e : Exception) {
-            LogUtil.e( TAG , "err = " + e.message )
+            LogUtil.e("err = " + e.message )
             return ""
         }
     }
@@ -46,7 +46,7 @@ object JsonUtil {
             return gson.fromJson( json , dto )
         }
         catch ( e : Exception) {
-            LogUtil.e( TAG , "err = " + e.message )
+            LogUtil.e("err = " + e.message )
             return null
         }
     }

@@ -42,7 +42,7 @@ class CustomWebViewClient : WebViewClient {
         // url 타입 체크
         val type = checkCatchUrlType( url )
 
-        LogUtil.d( TAG , "onPageStarted type=" + type + " , url=" + url )
+        LogUtil.d("onPageStarted type=" + type + " , url=" + url )
 
         if( type != DefineCode.URL_TYPE_HTTP ) {
             listener?.onPageStarted( view, type, url!! )
@@ -77,7 +77,7 @@ class CustomWebViewClient : WebViewClient {
         // url 타입 체크
         val type = checkCatchUrlType( url )
 
-        LogUtil.d( TAG , "shouldOverrideUrlLoading1 type=" + type + " , url=" + url )
+        LogUtil.d("shouldOverrideUrlLoading1 type=" + type + " , url=" + url )
 
         if( type != DefineCode.URL_TYPE_HTTP ) {
             listener?.shouldOverrideLoading( view, type, url as String, false )
@@ -113,7 +113,7 @@ class CustomWebViewClient : WebViewClient {
         // url 타입 체크
         val type = checkCatchUrlType( url )
 
-        LogUtil.d( TAG , "shouldOverrideUrlLoading2 type=" + type + " , url=" + url + " , isRedirect=" + request.isRedirect )
+        LogUtil.d("shouldOverrideUrlLoading2 type=" + type + " , url=" + url + " , isRedirect=" + request.isRedirect )
 
         if( type != DefineCode.URL_TYPE_HTTP ) {
             listener?.shouldOverrideLoading( view, type, url, request.isRedirect )  // isRedirect : 요청이 서버측 리다이렉션의 결과인지 여부
@@ -145,7 +145,7 @@ class CustomWebViewClient : WebViewClient {
 
         listener?.onPageFinished( view, url!! )
 
-        LogUtil.d( TAG , "onPageFinished url=" + url )
+        LogUtil.d("onPageFinished url=" + url )
         super.onPageFinished(view, url)
     }
 
@@ -205,7 +205,7 @@ class CustomWebViewClient : WebViewClient {
             }
         }
 
-        LogUtil.d( TAG , "onReceivedError1 errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
+        LogUtil.d("onReceivedError1 errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -229,7 +229,7 @@ class CustomWebViewClient : WebViewClient {
             }
         }
 
-        LogUtil.d( TAG , "onReceivedError2 errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
+        LogUtil.d("onReceivedError2 errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -252,7 +252,7 @@ class CustomWebViewClient : WebViewClient {
             }
         }
 
-        LogUtil.d( TAG , "onReceivedHttpError errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
+        LogUtil.d("onReceivedHttpError errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
     }
 
     override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
@@ -272,7 +272,7 @@ class CustomWebViewClient : WebViewClient {
 
         listener?.onReceivedSslError( view, handler, errorCode, view.url, failingUrl )
 
-        LogUtil.d( TAG , "onReceivedSslError errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
+        LogUtil.d("onReceivedSslError errorCode=" + errorCode + " , url=" + view.url + " , failingUrl=" + failingUrl )
     }
 
 

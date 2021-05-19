@@ -117,7 +117,7 @@ class CustomWebView : WebView {
                     filename = URLDecoder.decode( filename , "UTF-8" )
                 }
                 catch ( e : Exception ) {
-                    LogUtil.e( TAG , "err=" + e.message )
+                    LogUtil.e("err=" + e.message )
                 }
             }
 

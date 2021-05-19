@@ -116,7 +116,7 @@ class AlertDialogFragment : DialogFragment {
     }
 
     override fun onCancel(dialog: DialogInterface) {
-        LogUtil.d( TAG , "onCancel" )
+        LogUtil.d("onCancel" )
         listener?.onClickListener( this , requestId , BTN_SELECT_CANCEL )
         super.onCancel(dialog)
     }

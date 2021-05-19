@@ -47,7 +47,7 @@ class CookieActivity : BaseActivity() , View.OnClickListener {
 
     fun initData( intent : Intent ) {
         domain = intent.getStringExtra( DefineCode.IT_PARAM_COOKIE_URL ) ?: ""
-        LogUtil.d( TAG , "domain=" + domain )
+        LogUtil.d("domain=" + domain )
     }
 
     fun initLayout() {

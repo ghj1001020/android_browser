@@ -83,7 +83,7 @@ class PreferenceHistoryUtil private constructor( val context : Context) {
                 }
             }
             catch ( e : Exception ) {
-                LogUtil.e( TAG , "err=${e.message}" )
+                LogUtil.e("err=${e.message}" )
             }
         }
 

@@ -232,7 +232,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // URL 로딩시작
     override fun onPageStarted( _webView: WebView, urlType: Int, url: String ) {
-        LogUtil.d( TAG , "onPageStarted urlType=" + urlType + " , url=" + url )
+        LogUtil.d("onPageStarted urlType=" + urlType + " , url=" + url )
 
         if( urlType == DefineCode.URL_TYPE_HTTP ) {
             showEditMode( true )
@@ -248,7 +248,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // URL 리다이렉트
     override fun shouldOverrideLoading( _webView: WebView, urlType: Int, url: String, isRedirect: Boolean ) {
-        LogUtil.d( TAG , "shouldOverrideLoading urlType=" + urlType + " , url=" + url + " , isRedirect=" + isRedirect )
+        LogUtil.d("shouldOverrideLoading urlType=" + urlType + " , url=" + url + " , isRedirect=" + isRedirect )
 
         if( urlType == DefineCode.URL_TYPE_HTTP ) {
             txt_title?.text = url
@@ -262,7 +262,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onPageFinished( _webView: WebView, url: String ) {
-        LogUtil.d( TAG , "onPageFinished url=" + url )
+        LogUtil.d("onPageFinished url=" + url )
 
         showEditMode( false )
 
@@ -285,7 +285,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
 
     override fun onReceivedError(_webView: WebView, errorMsg: String, url: String?) {
-        LogUtil.d( TAG , "onReceivedError" )
+        LogUtil.d("onReceivedError" )
 
         _webView.stopLoading()
         _webView.loadUrl( DefineCode.ERROR_PAGE + "?errorMsg=" + errorMsg )
@@ -295,7 +295,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onReceivedSslError(_webView: WebView, handler: SslErrorHandler, errorCode: Int, url: String, failUrl: String) {
-        LogUtil.d( TAG , "onReceivedSslError errorCode=" + errorCode + " , url=" + url + " , failUrl=" + failUrl )
+        LogUtil.d("onReceivedSslError errorCode=" + errorCode + " , url=" + url + " , failUrl=" + failUrl )
 
         dialog?.dismiss()
 
@@ -314,7 +314,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onReceivedTitle(_webView: WebView, title: String) {
-        LogUtil.d( TAG , "onReceivedTitle title=" + title )
+        LogUtil.d("onReceivedTitle title=" + title )
     }
 
     override fun onProgressChanged(_webView: WebView, newProgress: Int) {

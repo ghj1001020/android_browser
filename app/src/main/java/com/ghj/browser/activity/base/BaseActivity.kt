@@ -63,7 +63,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 startActivityForResult( intent, requestCode )
             }
             catch ( e2 : Exception) {
-                LogUtil.e( TAG , "err = " + e2.message )
+                LogUtil.e("err = " + e2.message )
             }
         }
     }

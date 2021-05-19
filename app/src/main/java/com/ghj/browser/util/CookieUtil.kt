@@ -52,10 +52,10 @@ object CookieUtil {
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
             CookieManager.getInstance().removeSessionCookies(){
                 if( it ) {
-                    LogUtil.d( TAG , "removeSessionCookie success" )
+                    LogUtil.d("removeSessionCookie success" )
                 }
                 else {
-                    LogUtil.d( TAG , "removeSessionCookie fail" )
+                    LogUtil.d("removeSessionCookie fail" )
                 }
             }
         }
@@ -70,10 +70,10 @@ object CookieUtil {
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
             cookieManager.removeAllCookies(){
                 if( it ) {
-                    LogUtil.d( TAG , "removeCookie success" )
+                    LogUtil.d("removeCookie success" )
                 }
                 else {
-                    LogUtil.d( TAG , "removeCookie fail" )
+                    LogUtil.d("removeCookie fail" )
                 }
             }
         }

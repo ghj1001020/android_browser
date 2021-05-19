@@ -63,7 +63,7 @@ class CustomWebChromeClient : WebChromeClient {
 
     // alert
     override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-        LogUtil.d( TAG , "onJsAlert message=" + message )
+        LogUtil.d("onJsAlert message=" + message )
 
         if( context == null || (context is Activity && (context as Activity).isFinishing) ) {
             dialog?.dismiss()
@@ -96,7 +96,7 @@ class CustomWebChromeClient : WebChromeClient {
 
     // confirm
     override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-        LogUtil.d( TAG , "onJsConfirm message=" + message )
+        LogUtil.d("onJsConfirm message=" + message )
 
         if( context == null || (context is Activity && (context as Activity).isFinishing) ) {
             dialog?.dismiss()
@@ -134,7 +134,7 @@ class CustomWebChromeClient : WebChromeClient {
     {
         super.onGeolocationPermissionsShowPrompt(origin, callback)
 
-        LogUtil.d(TAG , "onGeolocationPermissionsShowPrompt" )
+        LogUtil.d("onGeolocationPermissionsShowPrompt" )
 
         context?.let {
             val permissions = PermissionUtil.LOCATION_PERMISSION
@@ -165,13 +165,13 @@ class CustomWebChromeClient : WebChromeClient {
     override fun onGeolocationPermissionsHidePrompt()
     {
         super.onGeolocationPermissionsHidePrompt()
-        LogUtil.d( TAG , "onGeolocationPermissionsHidePrompt" )
+        LogUtil.d("onGeolocationPermissionsHidePrompt" )
     }
 
     // 위치 권한 사용자 선택 후 결과
     fun onLocationPermissionResult( isGranted : Boolean )
     {
-        LogUtil.d( TAG , "onLocationPermissionResult isGranted=" + isGranted )
+        LogUtil.d("onLocationPermissionResult isGranted=" + isGranted )
 
         if( geolocationCallback == null || TextUtils.isEmpty( geolocationOrigin ) ) {
             return
@@ -198,7 +198,7 @@ class CustomWebChromeClient : WebChromeClient {
     // 동영상 풀스크린 보이기
     override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
         super.onShowCustomView(view, callback)
-        LogUtil.d( TAG , "onShowCustomView" )
+        LogUtil.d("onShowCustomView" )
 
         view?.let {
             listener?.onShowCustomView( it, callback )
@@ -208,19 +208,19 @@ class CustomWebChromeClient : WebChromeClient {
     // 동영상 풀스크린 숨기기
     override fun onHideCustomView() {
         super.onHideCustomView()
-        LogUtil.d( TAG , "onHideCustomView" )
+        LogUtil.d("onHideCustomView" )
 
         listener?.onHideCustomView()
     }
 
     override fun getVideoLoadingProgressView(): View? {
-        LogUtil.d( TAG , "getVideoLoadingProgressView" )
+        LogUtil.d("getVideoLoadingProgressView" )
         return super.getVideoLoadingProgressView()
     }
 
     override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
         super.onReceivedIcon(view, icon)
-        LogUtil.d( TAG , "onReceivedIcon" )
+        LogUtil.d("onReceivedIcon" )
 
         if( view != null ) {
             listener?.onReceivedIcon( view, icon )

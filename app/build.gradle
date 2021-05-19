@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 // 설정변수
 ext {
     appMode = '"release"'   // 운영 - release , 개발 - dev
-    isLogBlock = 'true' // 운영 - true , 개발 - false
+    isLogBlock = 'false' // 운영 - true , 개발 - false
 }
 
 // 빌드 카운트 기록
