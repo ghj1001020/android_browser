@@ -56,4 +56,29 @@ object DefineQuery {
                                 "FROM     HISTORY_TBL  " +
                                 "WHERE    TITLE LIKE '%'||?||'%' OR URL LIKE '%'||?||'%' " +
                                 "ORDER BY VISIT_DATE DESC"
+
+
+    // 콘솔로그 테이블 생성
+    val CREATE_CONSOLE_LOG_TABLE = "CREATE TABLE IF NOT EXISTS CONSOLE_LOG_TBL ( " +
+                                   "      LOG_DATE VARCHAR(14)  NOT NULL , " +
+                                   "      URL      VARCHAR(200) NOT NULL , " +
+                                   "      LOG      VARCHAR(5000)           " +
+                                   ");"
+
+    // 콘솔로그 테이블 삭제
+    val DROP_CONSOLE_LOG_TABLE = "DROP TABLE IF EXISTS CONSOLE_LOG_TBL"
+
+    // 콘솔로그 데이터 입력
+    val INSERT_CONSOLE_LOG = "INSERT INTO CONSOLE_LOG_TBL(LOG_DATE, URL, LOG) VALUES(?, ?, ?)"
+
+    // 콘솔로그 데이터 조회
+    val SELECT_CONSOLE_LOG = "SELECT   LOG_DATE , " +
+                             "         URL ,      " +
+                             "         LOG        " +
+                             "FROM     CONSOLE_LOG_TBL " +
+                             "ORDER BY LOG_DATE DESC"
+
+    // 콘솔로그 전체 데이터 삭제
+    val DELETE_CONSOLE_LOG_DATA_ALL = "DELETE FROM CONSOLE_LOG_TBL"
+
 }

@@ -1,9 +1,11 @@
 package com.ghj.browser.util
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.TextUtils
 import android.util.Base64
+import android.util.DisplayMetrics
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -72,5 +74,10 @@ object Util {
         catch ( e: Exception ) { }
 
         return dayOfWeek
+    }
+
+    // dp -> px로변환
+    fun convertDpToPixcel(context: Context, dp: Float) : Int {
+        return (dp * (context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)).toInt()
     }
 }

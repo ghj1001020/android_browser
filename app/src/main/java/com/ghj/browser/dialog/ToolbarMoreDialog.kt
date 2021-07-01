@@ -51,6 +51,10 @@ class ToolbarMoreDialog( var mContext: Context,
         btn_more_printer.setOnClickListener( this )
         btn_more_pcm_mode.setOnClickListener( this )
         btn_more_history.setOnClickListener( this )
+        btn_more_console.setOnClickListener( this )
+        btn_more_webview_log.setOnClickListener( this )
+        btn_more_js_execute.setOnClickListener( this )
+        btn_more_html_element.setOnClickListener( this )
 
         if( BrowserApp.isMobile ) {
             txt_more_pcm_mode.text = mContext.getString( R.string.toolbar_more_pc_mode )
@@ -80,6 +84,22 @@ class ToolbarMoreDialog( var mContext: Context,
 
             R.id.btn_more_history -> {
                 callback?.invoke( this , dialogId , DefineCode.MORE_MENU_HISTORY )
+            }
+
+            R.id.btn_more_console -> {
+                callback?.invoke(this, dialogId, DefineCode.MORE_MENU_CONSOLE)
+            }
+
+            R.id.btn_more_webview_log -> {
+                callback?.invoke(this, dialogId, DefineCode.MORE_MENU_WEBVIEW_LOG)
+            }
+
+            R.id.btn_more_js_execute -> {
+                callback?.invoke(this, dialogId, DefineCode.MORE_MENU_JS_EXECUTE)
+            }
+
+            R.id.btn_more_html_element -> {
+                callback?.invoke(this, dialogId, DefineCode.MORE_MENU_HTML_ELEMENT)
             }
         }
     }

@@ -7,11 +7,13 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.util.DeviceUtil
 import com.ghj.browser.util.LogUtil
@@ -241,5 +243,13 @@ class CustomWebChromeClient : WebChromeClient {
     @SuppressWarnings("deprecation")
     fun openFileChooser(callback: ValueCallback<Uri?>, acceptType: String?, capture: String?) {
         listener?.onShowFileChooser(callback)
+    }
+
+    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+        if( consoleMessage != null ) {
+            val log : String = "[${consoleMessage.messageLevel()}:${consoleMessage.lineNumber()}] ${consoleMessage.message()}"
+            listener?.onConsoleMessage(log)
+        }
+        return super.onConsoleMessage(consoleMessage)
     }
 }

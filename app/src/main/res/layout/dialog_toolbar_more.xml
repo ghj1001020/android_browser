@@ -16,7 +16,7 @@
         android:focusable="true"
         android:background="@drawable/toolbar_more_menu"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/btn_more_printer"
         android:layout_width="72dp"
         android:layout_height="72dp">
@@ -52,10 +52,9 @@
         android:id="@+id/btn_more_printer"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginLeft="4dp"
         android:background="@drawable/toolbar_more_menu"
         app:layout_constraintRight_toLeftOf="@id/btn_more_pcm_mode"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btn_more_cookie"
         app:layout_constraintLeft_toRightOf="@id/btn_more_cookie"
         android:layout_width="72dp"
         android:layout_height="72dp">
@@ -92,10 +91,9 @@
         android:id="@+id/btn_more_pcm_mode"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginLeft="4dp"
         android:background="@drawable/toolbar_more_menu"
         app:layout_constraintRight_toLeftOf="@id/btn_more_history"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btn_more_cookie"
         app:layout_constraintLeft_toRightOf="@id/btn_more_printer"
         android:layout_width="72dp"
         android:layout_height="72dp">
@@ -134,10 +132,9 @@
         android:id="@+id/btn_more_history"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginLeft="4dp"
         android:background="@drawable/toolbar_more_menu"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btn_more_cookie"
         app:layout_constraintLeft_toRightOf="@id/btn_more_pcm_mode"
         android:layout_width="72dp"
         android:layout_height="72dp">
@@ -158,6 +155,172 @@
             <TextView
                 android:id="@+id/txt_more_history"
                 android:text="@string/toolbar_more_history"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:textColor="@color/txt_toolbar_menu"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <!-- 콘솔로그 -->
+    <RelativeLayout
+        android:id="@+id/btn_more_console"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/toolbar_more_menu"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_more_webview_log"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_more_cookie"
+        android:layout_marginBottom="4dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp">
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_more_console"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_toolbar_log"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:id="@+id/txt_more_console"
+                android:text="@string/toolbar_more_console"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:textColor="@color/txt_toolbar_menu"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <!-- 웹뷰로그 -->
+    <RelativeLayout
+        android:id="@+id/btn_more_webview_log"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/toolbar_more_menu"
+        app:layout_constraintLeft_toRightOf="@id/btn_more_console"
+        app:layout_constraintTop_toTopOf="@id/btn_more_console"
+        app:layout_constraintRight_toLeftOf="@id/btn_more_js_execute"
+        android:layout_width="72dp"
+        android:layout_height="72dp">
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_more_webview_log"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_toolbar_webkit_log"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:id="@+id/txt_more_webview_log"
+                android:text="@string/toolbar_more_webview"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:textColor="@color/txt_toolbar_menu"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <!-- 자바스크립트실행 -->
+    <RelativeLayout
+        android:id="@+id/btn_more_js_execute"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/toolbar_more_menu"
+        app:layout_constraintLeft_toRightOf="@id/btn_more_webview_log"
+        app:layout_constraintRight_toLeftOf="@id/btn_more_html_element"
+        app:layout_constraintTop_toTopOf="@id/btn_more_console"
+        android:layout_width="72dp"
+        android:layout_height="72dp">
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_more_js_execute"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_toolbar_exe"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:id="@+id/txt_more_js_execute"
+                android:text="@string/toolbar_more_js_execute"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:textColor="@color/txt_toolbar_menu"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <!-- HTML보기 -->
+    <RelativeLayout
+        android:id="@+id/btn_more_html_element"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/toolbar_more_menu"
+        app:layout_constraintLeft_toRightOf="@id/btn_more_js_execute"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_more_console"
+        android:layout_width="72dp"
+        android:layout_height="72dp">
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_more_html_element"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_toolbar_source"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:id="@+id/txt_more_element"
+                android:text="@string/toolbar_more_html_element"
                 android:layout_marginTop="2dp"
                 android:textSize="13dp"
                 android:textColor="@color/txt_toolbar_menu"

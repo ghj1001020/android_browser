@@ -7,7 +7,7 @@ import java.lang.Exception
 
 object SQLite {
     val DB_FILE_NAME = "browser.db"
-    val DB_VERSION = 4
+    val DB_VERSION = 5
 
     private var isLocked = false    // true-다른곳에서 사용, false-사용안함
     private var helper : SQLiteHelper? = null
@@ -47,12 +47,12 @@ object SQLite {
     }
 
     // INSERT, UPDATE, DELETE
-    fun execSQL( sql: String, params: Array<String>?=null ) {
+    fun execSQL( sql: String, params: Array<String>?=null ) : Boolean {
         synchronized(this) {
             writeDB?.beginTransaction()
 
             try {
-                if( writeDB == null ) return
+                if( writeDB == null ) return false
 
                 if( params == null ) {
                     writeDB!!.execSQL(sql)
@@ -60,9 +60,11 @@ object SQLite {
                 else {
                     writeDB!!.execSQL(sql, params)
                 }
+                return true
             }
             catch( e: Exception ) {
                 e.printStackTrace()
+                return false
             }
             finally {
                 writeDB?.setTransactionSuccessful()

@@ -61,6 +61,14 @@
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysVisible"/>
 
+        <activity android:name=".activity.ConsoleActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <activity android:name=".activity.WebViewLogActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
     </application>
 
 </manifest>

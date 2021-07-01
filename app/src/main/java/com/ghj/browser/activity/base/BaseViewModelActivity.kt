@@ -6,11 +6,11 @@ import com.ghj.browser.activity.viewmodel.BaseViewModel
 
 abstract class BaseViewModelActivity<VM: BaseViewModel> : BaseActivity() {
 
-    lateinit var mViewModel : VM
+    var mViewModel : VM? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setViewModel()
+        newViewModel()
         registBaseObserver()
     }
 
@@ -19,16 +19,24 @@ abstract class BaseViewModelActivity<VM: BaseViewModel> : BaseActivity() {
         removeBaseObserver()
     }
 
-    abstract fun setViewModel()
+    abstract fun newViewModel() : VM?
+
+    fun getViewModel() : VM? {
+        if(mViewModel==null) {
+            mViewModel = newViewModel()
+        }
+        return mViewModel
+    }
+
     open fun setNetworkObserver(data: Any) {}    // 네트워크 통신 후 데이터변경 옵저버
 
 
     private fun registBaseObserver() {
-        mViewModel.networkLiveData.observe(this, baseNetworkObserver)
+        mViewModel?.networkLiveData?.observe(this, baseNetworkObserver)
     }
 
     private fun removeBaseObserver() {
-        mViewModel.networkLiveData.removeObserver(baseNetworkObserver)
+        mViewModel?.networkLiveData?.removeObserver(baseNetworkObserver)
     }
 
     val baseNetworkObserver : Observer<Any> = Observer {

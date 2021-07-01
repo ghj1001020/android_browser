@@ -28,6 +28,7 @@ interface OnWebViewListener {
     fun onReceivedIcon( _webView: WebView, icon: Bitmap? )
     fun onShowFileChooser( _webView: WebView, callback: ValueCallback<Array<Uri>>, params: WebChromeClient.FileChooserParams?)
     fun onShowFileChooser( callback: ValueCallback<Uri?>)
+    fun onConsoleMessage( log: String )
 
     // WebView
     fun onScrollChanged( t: Int , oldt: Int )

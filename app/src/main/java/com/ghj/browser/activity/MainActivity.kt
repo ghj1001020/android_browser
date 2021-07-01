@@ -395,6 +395,18 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                         DefineCode.MORE_MENU_HISTORY -> {
                             moveToHistory()
                         }
+                        DefineCode.MORE_MENU_CONSOLE -> {
+                            moveToConsoleLog()
+                        }
+                        DefineCode.MORE_MENU_WEBVIEW_LOG -> {
+
+                        }
+                        DefineCode.MORE_MENU_JS_EXECUTE -> {
+
+                        }
+                        DefineCode.MORE_MENU_HTML_ELEMENT -> {
+
+                        }
                     }
                 }
                 moreDialog?.show()
@@ -459,10 +471,14 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     // 방문기록 페이지로 이동
     fun moveToHistory() {
-        wv_main?.let {
-            val intent : Intent = Intent( this , HistoryActivity::class.java )
-            startActivityForResult( intent , DefineCode.ACT_REQ_ID.HISTORY )
-        }
+        val intent : Intent = Intent( this , HistoryActivity::class.java )
+        startActivityForResult( intent , DefineCode.ACT_REQ_ID.HISTORY )
+    }
+
+    // 콘솔로그 페이지로 이동
+    fun moveToConsoleLog() {
+        val intent : Intent = Intent(this, ConsoleActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
@@ -796,6 +812,12 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             startActivityForResult(Intent.createChooser(intent, getString(R.string.file_select_title)), DefineCode.ACT_REQ_ID.IT_FILE_SELECT)
         }
         catch ( e: Exception ) { }
+    }
+
+    override fun onConsoleMessage(log: String) {
+        val date : String = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
+        val url : String = wv_main?.url ?: ""
+        SQLiteService.insertConsoleLogData(this, arrayOf(date, url, log))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

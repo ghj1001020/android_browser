@@ -30,6 +30,10 @@
     <string name="toolbar_more_pc_mode">데스크톱 버전</string>
     <string name="toolbar_more_mobile_mode">모바일 버전</string>
     <string name="toolbar_more_history">방문한 페이지</string>
+    <string name="toolbar_more_console">콘솔로그</string>
+    <string name="toolbar_more_webview">웹뷰로그</string>
+    <string name="toolbar_more_js_execute">자바스크립트 실행</string>
+    <string name="toolbar_more_html_element">HTML 소스</string>
 
     <string name="toolbar_more_cookie_desc">저장된 쿠키 %d개</string>
     <string name="toolbar_more_history_desc1">오늘 웹페이지 %d개 방문함</string>

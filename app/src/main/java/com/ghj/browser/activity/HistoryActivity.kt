@@ -43,8 +43,8 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
         initLayout()
     }
 
-    override fun setViewModel() {
-        mViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
+    override fun newViewModel() : HistoryViewModel {
+        return ViewModelProvider(this).get(HistoryViewModel::class.java)
     }
 
     override fun onCreateAfter() {

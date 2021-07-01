@@ -3,6 +3,7 @@ package com.ghj.browser.db
 import android.content.Context
 import android.database.Cursor
 import android.text.TextUtils
+import com.ghj.browser.activity.adapter.data.ConsoleData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.common.DefineQuery
 import com.ghj.browser.common.WebSiteType
@@ -140,5 +141,38 @@ object SQLiteService {
         SQLite.close()
 
         return webSiteList
+    }
+
+    // CONSOLE_LOG_TBL에 데이터 입력
+    fun insertConsoleLogData(context: Context, params: Array<String>) {
+        SQLite.init(context)
+        SQLite.execSQL(DefineQuery.INSERT_CONSOLE_LOG, params)
+        SQLite.close()
+    }
+
+    // CONSOLE_LOG_TBL의 목록 조회
+    fun selectConsoleLogData(context: Context) : ArrayList<ConsoleData> {
+        val list : ArrayList<ConsoleData> = arrayListOf()
+
+        SQLite.init(context)
+        SQLite.select(DefineQuery.SELECT_CONSOLE_LOG) {cursor: Cursor ->
+            while(cursor.moveToNext()) {
+                val date : String = cursor.getString( cursor.getColumnIndex("LOG_DATE") )
+                val url : String = cursor.getString( cursor.getColumnIndex("URL") )
+                val log : String = cursor.getString( cursor.getColumnIndex("LOG") )
+                list.add( ConsoleData(date, url, log))
+            }
+        }
+        SQLite.close()
+
+        return list
+    }
+
+    fun deleteConsoleLogDataAll(context: Context) : Boolean {
+        SQLite.init(context)
+        val result = SQLite.execSQL(DefineQuery.DELETE_CONSOLE_LOG_DATA_ALL)
+        SQLite.close()
+
+        return result
     }
 }
