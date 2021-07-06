@@ -4,7 +4,10 @@ import android.text.TextUtils
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.util.LogUtil
+import java.text.SimpleDateFormat
+import java.util.*
 
 class JsBridge( var callback : JsCallback ) {
 
@@ -18,7 +21,6 @@ class JsBridge( var callback : JsCallback ) {
     // Js -> Native 호출
     @JavascriptInterface
     fun appAlertPopup( json : String? ) {
-        LogUtil.d("appAlertPopup : ${json}" )
         callback.onRequestFromJs( DefineCode.JS_ALERT_POPUP , json )
     }
 

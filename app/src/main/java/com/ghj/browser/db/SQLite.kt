@@ -7,7 +7,7 @@ import java.lang.Exception
 
 object SQLite {
     val DB_FILE_NAME = "browser.db"
-    val DB_VERSION = 5
+    val DB_VERSION = 6
 
     private var isLocked = false    // true-다른곳에서 사용, false-사용안함
     private var helper : SQLiteHelper? = null

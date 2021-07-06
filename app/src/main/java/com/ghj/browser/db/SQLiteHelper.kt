@@ -12,11 +12,14 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, SQLite.DB_FILE_
         db?.execSQL(DefineQuery.CREATE_HISTORY_TABLE)
         // 콘솔로그 테이블 생성
         db?.execSQL(DefineQuery.CREATE_CONSOLE_LOG_TABLE)
+        // 웹뷰로그 테이블 생성
+        db?.execSQL(DefineQuery.CREATE_WEBKIT_LOG_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL(DefineQuery.DROP_HISTORY_TABLE)
         db?.execSQL(DefineQuery.DROP_CONSOLE_LOG_TABLE)
+        db?.execSQL(DefineQuery.DROP_WEBKIT_LOG_TABLE)
         onCreate(db)
     }
 

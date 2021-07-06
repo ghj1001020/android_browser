@@ -399,7 +399,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                             moveToConsoleLog()
                         }
                         DefineCode.MORE_MENU_WEBVIEW_LOG -> {
-
+                            moveToWebViewLog()
                         }
                         DefineCode.MORE_MENU_JS_EXECUTE -> {
 
@@ -478,6 +478,12 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     // 콘솔로그 페이지로 이동
     fun moveToConsoleLog() {
         val intent : Intent = Intent(this, ConsoleActivity::class.java)
+        startActivity(intent)
+    }
+
+    // 웹뷰로그 페이지로 이동
+    fun moveToWebViewLog() {
+        val intent : Intent = Intent(this, WebViewLogActivity::class.java)
         startActivity(intent)
     }
 

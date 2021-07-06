@@ -158,6 +158,8 @@ abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
 
     // Native -> Js 호출
     fun callJsFunction(webView : WebView?, funcName : String, params : Array<String> ) {
+
+
         try {
             var script = "javascript:" + funcName +"("
 

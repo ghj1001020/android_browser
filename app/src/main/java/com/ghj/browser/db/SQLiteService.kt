@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.text.TextUtils
 import com.ghj.browser.activity.adapter.data.ConsoleData
 import com.ghj.browser.activity.adapter.data.WebSiteData
+import com.ghj.browser.activity.adapter.data.WebViewLogData
 import com.ghj.browser.common.DefineQuery
 import com.ghj.browser.common.WebSiteType
 
@@ -168,9 +169,45 @@ object SQLiteService {
         return list
     }
 
+    // 콘솔로그 데이터 모두 삭제
     fun deleteConsoleLogDataAll(context: Context) : Boolean {
         SQLite.init(context)
         val result = SQLite.execSQL(DefineQuery.DELETE_CONSOLE_LOG_DATA_ALL)
+        SQLite.close()
+
+        return result
+    }
+
+    // 웹킷로그 테이블에 데이터 입력
+    fun insertWebViewLogData(context: Context, params: Array<String>) {
+        SQLite.init(context)
+        SQLite.execSQL(DefineQuery.INSERT_WEBKIT_LOG, params)
+        SQLite.close()
+    }
+
+    // 웹킷로그 테이블의 목록 조회
+    fun selectWebViewLogData(context: Context) : ArrayList<WebViewLogData> {
+        val list : ArrayList<WebViewLogData> = arrayListOf()
+
+        SQLite.init(context)
+        SQLite.select(DefineQuery.SELECT_WEBKIT_LOG) {cursor: Cursor ->
+            while (cursor.moveToNext()) {
+                val date : String = cursor.getString( cursor.getColumnIndex("LOG_DATE") )
+                val function : String = cursor.getString( cursor.getColumnIndex("FUNCTION") )
+                val params : String = cursor.getString( cursor.getColumnIndex("PARAMS") )
+                val description : String = cursor.getString( cursor.getColumnIndex("DESCRIPTION") )
+                list.add( WebViewLogData(date, function, params, description) )
+            }
+        }
+        SQLite.close()
+
+        return list
+    }
+
+    // 웹뷰로그 데이터 모두 삭제
+    fun deleteWebViewLogDataAll(context: Context) : Boolean {
+        SQLite.init(context)
+        val result = SQLite.execSQL(DefineQuery.DELETE_WEBKIT_LOG_DATA_ALL)
         SQLite.close()
 
         return result

@@ -11,6 +11,8 @@
     <string name="share">공유</string>
     <string name="search">검색</string>
     <string name="history_record">방문기록</string>
+    <string name="function">함수</string>
+    <string name="parameter">파라미터</string>
     
     <!-- 메인 -->
     <string name="url_hint">검색어 또는 URL 입력</string>

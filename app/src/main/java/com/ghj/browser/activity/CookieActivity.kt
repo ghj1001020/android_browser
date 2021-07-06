@@ -19,9 +19,6 @@ import kotlinx.android.synthetic.main.appbar_cookie.*
 
 class CookieActivity : BaseActivity() , View.OnClickListener {
 
-    private val TAG = "CookieActivity"
-
-
     // ui
     var actionBar : ActionBar? = null
     lateinit var cookieAdapter : CookieAdapter
