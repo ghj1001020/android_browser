@@ -23,3 +23,4 @@ enum class JobMode(val value: Int) {
 public typealias CommonDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int, data : String?)->Unit
 public typealias ToolbarMoreDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int )->Unit
 public typealias CookieAddDialogCallback = (dialog : Dialog, selected : Int, data : String? )->Unit
+public typealias ScriptInputDialogCallback = (dialog: Dialog, script: String) -> Unit

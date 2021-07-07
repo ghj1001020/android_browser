@@ -19,6 +19,9 @@
     <color name="bg_rip">#e0e0e0</color>
     <color name="bg_head_gray">#E7E7E7</color>
 
+    <!-- 버튼 -->
+    <color name="btn_f76252">#F76252</color>
+
 
 
     <color name="bgcolor">#EEEEEE</color>

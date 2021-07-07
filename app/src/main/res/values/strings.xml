@@ -7,6 +7,8 @@
     <string name="common_notice">알림</string>
     <string name="common_key">키</string>
     <string name="common_cookie">쿠키</string>
+    <string name="cancel">취소</string>
+    <string name="ok">확인</string>
     <string name="delete">삭제</string>
     <string name="share">공유</string>
     <string name="search">검색</string>
@@ -49,5 +51,8 @@
 
     <!-- 메인 페이지 -->
     <string name="file_select_title">파일선택</string>
+
+    <!-- 자바스크립트 입력 -->
+    <string name="guide_js_input">스크립트를 입력하세요</string>
 
 </resources>

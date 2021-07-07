@@ -12,6 +12,7 @@ import android.print.PrintDocumentAdapter
 import android.print.PrintJob
 import android.print.PrintManager
 import android.text.TextUtils
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -32,6 +33,7 @@ import com.ghj.browser.common.DefineCode
 import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.CommonDialog
+import com.ghj.browser.dialog.ScriptInputDialog
 import com.ghj.browser.dialog.ToolbarMoreDialog
 import com.ghj.browser.util.*
 import com.ghj.browser.webkit.JsAlertPopupData
@@ -402,7 +404,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                             moveToWebViewLog()
                         }
                         DefineCode.MORE_MENU_JS_EXECUTE -> {
-
+                            showScriptInputDialog()
                         }
                         DefineCode.MORE_MENU_HTML_ELEMENT -> {
 
@@ -485,6 +487,21 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     fun moveToWebViewLog() {
         val intent : Intent = Intent(this, WebViewLogActivity::class.java)
         startActivity(intent)
+    }
+
+    // 자바스크립트 입력 다이얼로그
+    fun showScriptInputDialog() {
+        val dialog = ScriptInputDialog(this) {dialog: Dialog, script: String ->
+            if( Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT ) {
+                wv_main.evaluateJavascript(script) {result: String ->
+                    CommonDialog( this , 0 , result , null , true, TAG, null).show()
+                }
+            }
+            else {
+                wv_main.loadUrl("javascript:${script}")
+            }
+        }
+        dialog.show()
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {

@@ -80,4 +80,17 @@ object Util {
     fun convertDpToPixcel(context: Context, dp: Float) : Int {
         return (dp * (context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)).toInt()
     }
+
+    // 디바이스 가로너비
+    fun getDisplayWidth(context: Context) : Int {
+        val metrics : DisplayMetrics = context.resources.displayMetrics
+        return metrics.widthPixels
+    }
+
+    // 디바이스 세로너비
+    fun getDisplayHeight(context: Context) : Int {
+        val metrics : DisplayMetrics = context.resources.displayMetrics
+        return metrics.heightPixels
+    }
+
 }
