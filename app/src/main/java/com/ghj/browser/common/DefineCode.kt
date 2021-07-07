@@ -29,7 +29,10 @@ object DefineCode {
         const val HISTORY_URL = "it_param_history_url"  // 이동할 사이트
     }
 
-
+    // Preferences 키
+    object PREF_KEY {
+        const val HTML_ELEMENT = "pref_html_element"    // HTML요소 전달
+    }
 
 
     // 인텐트 파라미터명

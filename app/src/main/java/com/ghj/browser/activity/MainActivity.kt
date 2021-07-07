@@ -30,6 +30,7 @@ import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.common.LargeString
 import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.CommonDialog
@@ -407,7 +408,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                             showScriptInputDialog()
                         }
                         DefineCode.MORE_MENU_HTML_ELEMENT -> {
-
+                            moveToHtmlElement()
                         }
                     }
                 }
@@ -502,6 +503,17 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             }
         }
         dialog.show()
+    }
+
+    // HTML 요소 페이지로 이동
+    fun moveToHtmlElement() {
+        if( Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT ) {
+            wv_main.evaluateJavascript("document.documentElement.outerHTML;") {result: String ->
+                PrefUtil.getInstance(this).put(DefineCode.PREF_KEY.HTML_ELEMENT, result)
+                val intent : Intent = Intent(this, HtmlElementActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
