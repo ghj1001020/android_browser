@@ -7,8 +7,6 @@ import android.webkit.CookieSyncManager
 
 object CookieUtil {
 
-    private val TAG = "CookieUtil"
-
 
     // 특정 url의 key에 해당하는 쿠키값 구하기
     fun getCookieValue( url : String , key : String ) : String {

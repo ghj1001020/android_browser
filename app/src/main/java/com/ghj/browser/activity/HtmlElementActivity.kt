@@ -5,7 +5,6 @@ import android.view.View
 import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseActivity
 import com.ghj.browser.common.DefineCode
-import com.ghj.browser.common.LargeString
 import com.ghj.browser.util.PrefUtil
 import kotlinx.android.synthetic.main.activity_html_element.*
 import kotlinx.android.synthetic.main.appbar_common.*

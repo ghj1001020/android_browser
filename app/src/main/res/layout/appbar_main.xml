@@ -44,14 +44,14 @@
                 android:layout_height="match_parent"
                 android:visibility="visible">
 
-                <ImageButton
-                    android:id="@+id/btn_bookmark"
-                    android:src="@drawable/ic_bookmark"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:scaleType="centerInside"
-                    android:layout_width="@dimen/toolbar_height"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:srcCompat="@drawable/ic_bookmark" />
+                <CheckBox
+                    android:id="@+id/chkBookmark"
+                    android:checked="false"
+                    android:background="@drawable/chk_bookmark"
+                    android:button="@null"
+                    android:layout_marginLeft="8dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"/>
 
                 <RelativeLayout
                     android:id="@+id/layout_txt_url"
@@ -107,7 +107,7 @@
                 android:layout_marginBottom="6dp"
                 android:background="@drawable/url_layout_bg"
                 android:paddingLeft="16dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <!-- flagNoExtractUi : 전체화면과 같이 사용자 편의에 맞춘 UI가 아니라 기본 UI로 출력 -->
                 <EditText

@@ -105,4 +105,37 @@ object DefineQuery {
 
     // 웹킷로그 전체 데이터 삭제
     val DELETE_WEBKIT_LOG_DATA_ALL = "DELETE FROM WEBKIT_LOG_TBL"
+
+    // 즐겨찾기 테이블 생성
+    val CREATE_BOOKMARK_TABLE = "CREATE TABLE IF NOT EXISTS BOOKMARK_TBL ( " +
+                                "       URL     VARCHAR(200)  NOT NULL , " +
+                                "       TITLE   VARCHAR(500)           , " +
+                                "       FAVICON VARCHAR(5000)            " +
+                                ");"
+
+    // 즐겨찾기 테이블 삭제
+    val DROP_BOOKMARK_TABLE = "DROP TABLE IF EXISTS BOOKMARK_TBL"
+
+    // 즐겨찾기 데이터 입력
+    val INSERT_BOOKMARK = "INSERT INTO BOOKMARK_TBL(URL, TITLE, FAVICON) VALUES(?, ?, ?)"
+
+    // 즐겨찾기 데이터 삭제
+    val DELETE_BOOKMARK = "DELETE FROM BOOKMARK_TBL " +
+                          "WHERE       URL = ?"
+
+    // 즐겨찾기 데이터 조회
+    val SELECT_BOOKMARK = "SELECT   URL     , " +
+                          "         TITLE   , " +
+                          "         FAVICON   " +
+                          "FROM     BOOKMARK_TBL " +
+                          "GROUP BY URL          " +
+                          "ORDER BY ROWID DESC"
+
+    // 해당URL의 즐겨찾기 여부
+    val SELECT_BOOKMARK_CNT_BY_URL = "SELECT COUNT(URL) as CNT " +
+                                     "FROM   BOOKMARK_TBL " +
+                                     "WHERE  URL = ?"
+
+    // 즐겨찾기 데이터 전체 삭제
+    val DELETE_BOOKMARK_ALL = "DELETE FROM BOOKMARK_TBL"
 }

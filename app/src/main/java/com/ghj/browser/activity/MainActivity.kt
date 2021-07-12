@@ -12,7 +12,6 @@ import android.print.PrintDocumentAdapter
 import android.print.PrintJob
 import android.print.PrintManager
 import android.text.TextUtils
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -23,14 +22,15 @@ import android.webkit.SslErrorHandler
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.widget.CompoundButton
 import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.common.DefineCode
-import com.ghj.browser.common.LargeString
 import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.CommonDialog
@@ -47,7 +47,7 @@ import kotlinx.android.synthetic.main.webview_loading_bar.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
+class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButton.OnCheckedChangeListener , View.OnTouchListener , JsBridge.JsCallback {
 
     private val TAG : String = "MainActivity"
 
@@ -138,6 +138,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         wv_main?.setActivity( this )
 
         // 앱바
+        chkBookmark.setOnCheckedChangeListener( this )
         btn_refersh?.setOnClickListener( this )
         layout_txt_url?.setOnClickListener( this )
         btn_delete?.setOnClickListener( this )
@@ -265,9 +266,11 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onPageFinished( _webView: WebView, url: String ) {
-        LogUtil.d("onPageFinished url=" + url )
-
         showEditMode( false )
+
+        // 즐겨찾기 표시
+        val bookmark = SQLiteService.selectBookmarkCntByUrl(this, url)
+        chkBookmark.isChecked = bookmark > 0
 
         txt_title?.text = StringUtil.getUrlDoamin( url )
         edit_url?.setText( url )
@@ -277,7 +280,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         // 히스토리 데이터 입력
         _webView.copyBackForwardList().currentItem?.let {
             val date : String = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-            val params: Array<String> = arrayOf( date, it.title, it.url, Util.bitmapToString(it.favicon) )
+            val params: Array<String> = arrayOf( date, it.title, url, Util.bitmapToString(it.favicon) )
             SQLiteService.insertHistoryData(this, params)
         }
     }
@@ -380,7 +383,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             }
             // 북마크
             R.id.btn_toolbar_bookmark -> {
-
+                moveToBookmark()
             }
             // 설정
             R.id.btn_toolbar_more -> {
@@ -413,6 +416,29 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                     }
                 }
                 moreDialog?.show()
+            }
+        }
+    }
+
+    override fun onCheckedChanged(p0: CompoundButton?, isChecked: Boolean) {
+        when(p0?.id) {
+            // 즐겨찾기
+            R.id.chkBookmark -> {
+                var _url = ""
+                var _title = ""
+                var _favIcon = ""
+                wv_main.copyBackForwardList().currentItem?.let {
+                    _url = it.url
+                    _title = it.title
+                    _favIcon = Util.bitmapToString(it.favicon)
+                }
+
+                if( isChecked ) {
+                    SQLiteService.insertBookmarkData(this, arrayOf(_url, _title, _favIcon))
+                }
+                else {
+                    SQLiteService.deleteBookmarkData(this, _url)
+                }
             }
         }
     }
@@ -674,6 +700,12 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     fun moveToDefaultPage() {
         val defaultPage = DefineCode.DEFAULT_PAGE
         loadUrl( defaultPage )
+    }
+
+    // 즐겨찾기 화면으로 이동
+    fun moveToBookmark() {
+        val intent: Intent = Intent(this, BookmarkActivity::class.java)
+        startActivity(intent)
     }
 
     // 웹뷰 스크롤시 타이툴바 툴바 show/hide

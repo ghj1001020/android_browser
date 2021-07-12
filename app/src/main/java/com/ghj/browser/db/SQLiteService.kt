@@ -3,6 +3,7 @@ package com.ghj.browser.db
 import android.content.Context
 import android.database.Cursor
 import android.text.TextUtils
+import com.ghj.browser.activity.adapter.data.BookmarkData
 import com.ghj.browser.activity.adapter.data.ConsoleData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.adapter.data.WebViewLogData
@@ -68,13 +69,10 @@ object SQLiteService {
         var cnt = 0
 
         SQLite.init(context)
-
-        val params : Array<String> = arrayOf(date)
-        SQLite.select( DefineQuery.SELECT_HISTORY_CNT_BY_DATE, params) { cursor: Cursor ->
+        SQLite.select( DefineQuery.SELECT_HISTORY_CNT_BY_DATE, arrayOf(date)) { cursor: Cursor ->
             cursor.moveToNext()
             cnt = cursor.getInt( cursor.getColumnIndex("CNT") )
         }
-
         SQLite.close()
 
         return cnt
@@ -211,5 +209,51 @@ object SQLiteService {
         SQLite.close()
 
         return result
+    }
+
+    // 즐겨찾기 테이블에 데이터 입력
+    fun insertBookmarkData(context: Context, params: Array<String>) {
+        SQLite.init(context)
+        SQLite.execSQL(DefineQuery.INSERT_BOOKMARK, params)
+        SQLite.close()
+    }
+
+    // 즐겨찾기 해당하는 URL 데이터 삭제
+    fun deleteBookmarkData(context: Context, url: String) {
+        SQLite.init(context)
+        SQLite.execSQL(DefineQuery.DELETE_BOOKMARK, arrayOf(url))
+        SQLite.close()
+    }
+
+    // 즐겨찾기 목록 조회
+    fun selectBookmarkData(context: Context) : ArrayList<BookmarkData> {
+        val list : ArrayList<BookmarkData> = arrayListOf()
+
+        SQLite.init(context)
+        SQLite.select(DefineQuery.SELECT_BOOKMARK) {cursor: Cursor ->
+            while ( cursor.moveToNext() ) {
+                val url : String = cursor.getString( cursor.getColumnIndex("URL") )
+                val title : String = cursor.getString( cursor.getColumnIndex("TITLE") )
+                val favicon : String = cursor.getString( cursor.getColumnIndex("FAVICON") )
+                list.add( BookmarkData(url, title, favicon) )
+            }
+        }
+        SQLite.close()
+
+        return list
+    }
+
+    // 해당URL의 즐겨찾기 여부
+    fun selectBookmarkCntByUrl(context: Context, url: String) : Int {
+        var cnt = 0
+
+        SQLite.init(context)
+        SQLite.select(DefineQuery.SELECT_BOOKMARK_CNT_BY_URL, arrayOf(url)) {cursor: Cursor ->
+            cursor.moveToNext()
+            cnt = cursor.getInt( cursor.getColumnIndex("CNT") )
+        }
+        SQLite.close()
+
+        return cnt
     }
 }
