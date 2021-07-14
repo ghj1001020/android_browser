@@ -47,7 +47,7 @@ import kotlinx.android.synthetic.main.webview_loading_bar.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButton.OnCheckedChangeListener , View.OnTouchListener , JsBridge.JsCallback {
+class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
     private val TAG : String = "MainActivity"
 
@@ -95,6 +95,13 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButt
         initLayout()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.getStringExtra( DefineCode.IT_PARAM.LOAD_URL )?.let {
+            loadUrl( it )
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -118,7 +125,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButt
     }
 
     fun initData() {
-        indexSearch = intent.getStringExtra( DefineCode.IT_PARAM_INDEX_URL )
+        indexSearch = intent.getStringExtra( DefineCode.IT_PARAM.LOAD_URL ) ?: DefineCode.DEFAULT_PAGE
     }
 
     fun initLayout() {
@@ -138,7 +145,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButt
         wv_main?.setActivity( this )
 
         // 앱바
-        chkBookmark.setOnCheckedChangeListener( this )
+        chkBookmark.setOnClickListener( this )
         btn_refersh?.setOnClickListener( this )
         layout_txt_url?.setOnClickListener( this )
         btn_delete?.setOnClickListener( this )
@@ -417,11 +424,6 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButt
                 }
                 moreDialog?.show()
             }
-        }
-    }
-
-    override fun onCheckedChanged(p0: CompoundButton?, isChecked: Boolean) {
-        when(p0?.id) {
             // 즐겨찾기
             R.id.chkBookmark -> {
                 var _url = ""
@@ -433,11 +435,11 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButt
                     _favIcon = Util.bitmapToString(it.favicon)
                 }
 
-                if( isChecked ) {
+                if( chkBookmark.isChecked ) {
                     SQLiteService.insertBookmarkData(this, arrayOf(_url, _title, _favIcon))
                 }
                 else {
-                    SQLiteService.deleteBookmarkData(this, _url)
+                    SQLiteService.deleteBookmarkData(this, arrayListOf(_url))
                 }
             }
         }
@@ -705,7 +707,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButt
     // 즐겨찾기 화면으로 이동
     fun moveToBookmark() {
         val intent: Intent = Intent(this, BookmarkActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, DefineCode.ACT_REQ_ID.BOOKMARK)
     }
 
     // 웹뷰 스크롤시 타이툴바 툴바 show/hide
@@ -916,6 +918,19 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , CompoundButt
                     val url = data?.getStringExtra( DefineCode.IT_PARAM.HISTORY_URL )
                     if( !TextUtils.isEmpty(url) ) {
                         loadUrl( url )
+                    }
+                }
+            }
+
+            // 즐겨찾기 액티비티
+            DefineCode.ACT_REQ_ID.BOOKMARK -> {
+                if( resultCode == Activity.RESULT_OK ) {
+                    val isChanged = data?.getBooleanExtra( DefineCode.IT_PARAM.IS_CHANGED, false ) ?: false
+                    if( isChanged ) {
+                        wv_main.copyBackForwardList().currentItem?.let {
+                            val bookmark = SQLiteService.selectBookmarkCntByUrl(this, it.url)
+                            chkBookmark.isChecked = bookmark > 0
+                        }
                     }
                 }
             }

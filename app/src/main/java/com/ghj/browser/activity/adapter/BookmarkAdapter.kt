@@ -11,10 +11,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.data.BookmarkData
+import com.ghj.browser.common.IClickListener
 import com.ghj.browser.common.JobMode
 import com.ghj.browser.util.Util
 
-class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>) : RecyclerView.Adapter<BookmarkAdapter.BookmarkHolder>(){
+class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>, val listener: IClickListener) : RecyclerView.Adapter<BookmarkAdapter.BookmarkHolder>(){
 
     val mInflater: LayoutInflater = LayoutInflater.from(mContext)
     var jobMode = JobMode.VIEW
@@ -66,6 +67,7 @@ class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>) 
             }
         }
 
+        // 마지막행 마진
         val params : ConstraintLayout.LayoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         if( position >= dataList.size-1 ) {
             holder.divider.visibility = View.GONE
@@ -76,6 +78,19 @@ class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>) 
             params.setMargins(0, 0, 0, 0)
         }
         holder.rootItem.layoutParams = params
+
+        // 아이템 클릭
+        holder.rootItem.setOnClickListener { v: View? ->
+            // URL 이동
+            if( jobMode == JobMode.VIEW ) {
+                listener.onItemClick(position)
+            }
+            // 삭제 선택
+            else if( jobMode == JobMode.DELETE ) {
+                data.isSelected = !data.isSelected
+                holder.chkSelect.isChecked = data.isSelected
+            }
+        }
     }
 
     class BookmarkHolder(itemView: View ) : RecyclerView.ViewHolder(itemView) {

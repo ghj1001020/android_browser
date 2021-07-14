@@ -56,7 +56,7 @@ public class IndexActivity : BaseActivity() , View.OnClickListener {
 
         val intent = Intent( this , MainActivity::class.java )
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.putExtra( DefineCode.IT_PARAM_INDEX_URL , search )
+        intent.putExtra( DefineCode.IT_PARAM.LOAD_URL , search )
         startActivity( intent )
 
         edit_index_url?.setText( "" )

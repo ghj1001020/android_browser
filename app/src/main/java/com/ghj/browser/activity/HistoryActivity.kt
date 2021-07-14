@@ -99,7 +99,7 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
         when(v?.id) {
             // 앱바 > 뒤로가기
             R.id.btn_back->{
-                finish()
+                onBackPressed()
             }
 
             // 앱바 > 공유

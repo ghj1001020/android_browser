@@ -121,7 +121,7 @@ object DefineQuery {
 
     // 즐겨찾기 데이터 삭제
     val DELETE_BOOKMARK = "DELETE FROM BOOKMARK_TBL " +
-                          "WHERE       URL = ?"
+                          "WHERE       "
 
     // 즐겨찾기 데이터 조회
     val SELECT_BOOKMARK = "SELECT   URL     , " +

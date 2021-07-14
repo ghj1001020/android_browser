@@ -219,10 +219,28 @@ object SQLiteService {
     }
 
     // 즐겨찾기 해당하는 URL 데이터 삭제
-    fun deleteBookmarkData(context: Context, url: String) {
+    fun deleteBookmarkData(context: Context, params: ArrayList<String>) : Boolean {
+        var isSuccess = false
+
+        val whereParam = params.joinToString(" OR ") {s: String ->
+            "URL='$s'"
+        }
+
+        if( !TextUtils.isEmpty(whereParam) ) {
+            SQLite.init(context)
+            isSuccess = SQLite.execSQL(DefineQuery.DELETE_BOOKMARK + whereParam)
+            SQLite.close()
+        }
+        return isSuccess
+    }
+
+    // 즐겨찾기 전체 삭제
+    fun deleteBookmarkDataAll(context: Context) : Boolean {
         SQLite.init(context)
-        SQLite.execSQL(DefineQuery.DELETE_BOOKMARK, arrayOf(url))
+        val isSuccess = SQLite.execSQL(DefineQuery.DELETE_BOOKMARK_ALL)
         SQLite.close()
+
+        return isSuccess
     }
 
     // 즐겨찾기 목록 조회

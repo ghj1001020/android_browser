@@ -22,11 +22,14 @@ object DefineCode {
         const val IT_FILE_SELECT : Int = 100 // 파일업로드 파일선택 화면
         const val HISTORY : Int = 101 // 히스토리 액티비티
         const val SEARCH : Int = 102  // 검색 액티비티
+        const val BOOKMARK : Int = 103  // 즐겨찾기 액티비티
     }
 
     // 인텐트 파라미터
     object IT_PARAM {
         const val HISTORY_URL = "it_param_history_url"  // 이동할 사이트
+        const val LOAD_URL = "it_param_load_url"    // 이동할 사이트
+        const val IS_CHANGED = "it_param_is_changed"    // 데이터가 변경되었는지 여부
     }
 
     // Preferences 키
@@ -36,7 +39,7 @@ object DefineCode {
 
 
     // 인텐트 파라미터명
-    val IT_PARAM_INDEX_URL = "it_param_index_url"
+//    val IT_PARAM_INDEX_URL = "it_param_index_url"
     val IT_PARAM_COOKIE_URL = "it_param_cookie_url"
 
     // 핸들러 파라미터명
