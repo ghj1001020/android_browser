@@ -12,8 +12,8 @@ import com.ghj.browser.activity.adapter.data.CookieData
 import com.ghj.browser.activity.base.BaseActivity
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.dialog.CookieAddDialog
-import com.ghj.browser.util.CookieUtil
 import com.ghj.browser.util.LogUtil
+import com.ghj.browser.util.NetworkUtil
 import kotlinx.android.synthetic.main.activity_cookie.*
 import kotlinx.android.synthetic.main.appbar_cookie.*
 
@@ -59,7 +59,7 @@ class CookieActivity : BaseActivity() , View.OnClickListener {
 
         // 쿠키목록
         val cookieData : ArrayList<CookieData> = arrayListOf()
-        val cookies : Map<String,String> = CookieUtil.getCookies( domain )
+        val cookies : Map<String,String> = NetworkUtil.getCookies( domain )
         for( cookie in cookies ) {
             cookieData.add( CookieData( cookie.key , cookie.value ) )
         }

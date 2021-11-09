@@ -11,8 +11,6 @@ import java.lang.Exception
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private var TAG : String = "BaseActivity"
-
     // 앱 실행 가능 여부
     private var isAppReady : Boolean = false
     private var isPostCreate : Boolean = false
@@ -46,7 +44,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    abstract fun onCreateAfter()   // 앱 실행 후 기본적인 체크 후 액티비티 로직 실행\
+    abstract fun onCreateAfter()   // 앱 실행 후 기본적인 체크 후 액티비티 로직 실행
 
 
     // 설정 > 권한화면으로 이동

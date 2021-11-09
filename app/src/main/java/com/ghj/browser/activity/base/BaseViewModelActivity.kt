@@ -19,13 +19,13 @@ abstract class BaseViewModelActivity<VM: BaseViewModel> : BaseActivity() {
         removeBaseObserver()
     }
 
-    abstract fun newViewModel() : VM?
+    abstract fun newViewModel() : VM
 
-    fun getViewModel() : VM? {
+    fun getViewModel() : VM {
         if(mViewModel==null) {
             mViewModel = newViewModel()
         }
-        return mViewModel
+        return mViewModel as VM
     }
 
     open fun setNetworkObserver(data: Any) {}    // 네트워크 통신 후 데이터변경 옵저버

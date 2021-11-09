@@ -15,7 +15,7 @@ import com.ghj.browser.common.IClickListener
 import com.ghj.browser.common.JobMode
 import com.ghj.browser.util.Util
 
-class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>, val listener: IClickListener) : RecyclerView.Adapter<BookmarkAdapter.BookmarkHolder>(){
+class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>, val listener: IClickListener) : RecyclerView.Adapter<BookmarkAdapter.BookmarkHolder>() {
 
     val mInflater: LayoutInflater = LayoutInflater.from(mContext)
     var jobMode = JobMode.VIEW

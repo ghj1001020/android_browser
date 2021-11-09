@@ -108,9 +108,9 @@ object DefineQuery {
 
     // 즐겨찾기 테이블 생성
     val CREATE_BOOKMARK_TABLE = "CREATE TABLE IF NOT EXISTS BOOKMARK_TBL ( " +
-                                "       URL     VARCHAR(200)  NOT NULL , " +
-                                "       TITLE   VARCHAR(500)           , " +
-                                "       FAVICON VARCHAR(5000)            " +
+                                "       URL     VARCHAR(200)   PRIMARY KEY , " +
+                                "       TITLE   VARCHAR(500)               , " +
+                                "       FAVICON VARCHAR(10000)               " +
                                 ");"
 
     // 즐겨찾기 테이블 삭제

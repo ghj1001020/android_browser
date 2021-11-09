@@ -57,7 +57,7 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
         super.onDestroy()
     }
 
-    override fun newViewModel(): BookmarkViewModel? {
+    override fun newViewModel(): BookmarkViewModel {
         return ViewModelProvider(this).get(BookmarkViewModel::class.java)
     }
 

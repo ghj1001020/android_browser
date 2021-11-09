@@ -19,7 +19,7 @@ object LogUtil {
             return
         }
 
-        val message = _message.nullToString()
+        val message = StringUtil.nullToString(_message)
         printLog(LEVEL_DEBUG, message)
     }
 
@@ -28,7 +28,7 @@ object LogUtil {
             return
         }
 
-        val message = _message.nullToString()
+        val message = StringUtil.nullToString(_message)
         printLog(LEVEL_ERROR, message)
     }
 

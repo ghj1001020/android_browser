@@ -7,8 +7,6 @@ import java.lang.Exception
 
 object JsonUtil {
 
-    private val TAG : String = "JsonUtil"
-
     // dto -> json string
     fun <T> dtoToJsonString( dto : T? ) : String {
         if( dto == null ) {

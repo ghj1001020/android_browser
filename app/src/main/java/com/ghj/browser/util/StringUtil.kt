@@ -66,34 +66,32 @@ object StringUtil {
 
         return filename
     }
-}
 
-// null to string
-fun String?.nullToString( defaultValue : String? = "" ) : String
-{
-    if( this == null )
+    // null to string
+    fun nullToString( text: String?, defaultValue : String? = "" ) : String
     {
-        if( !TextUtils.isEmpty( defaultValue ) )
+        if( text == null )
         {
+            if( !TextUtils.isEmpty( defaultValue ) )
+            {
 
-            return defaultValue as String
+                return defaultValue as String
+            }
+            else
+            {
+                return ""
+            }
         }
-        else
-        {
+
+        return text
+    }
+
+    // file name extension
+    fun getFileExtension(text: String?) : String {
+        if( TextUtils.isEmpty( text ) ) {
             return ""
         }
+
+        return text?.split(".")?.last() as String
     }
-
-    return this as String
-}
-
-// file name extension
-fun String?.getFileExtension() : String {
-    if( TextUtils.isEmpty( this ) ) {
-        return ""
-    }
-
-    var ext : String = this?.split(".")?.last() as String
-
-    return ext
 }

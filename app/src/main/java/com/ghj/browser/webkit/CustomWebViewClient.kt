@@ -7,15 +7,12 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.text.TextUtils
-import android.util.Log
 import android.webkit.*
 import com.ghj.browser.R
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.db.SQLiteService
-import com.ghj.browser.util.DeviceUtil
-import com.ghj.browser.util.LogUtil
+import com.ghj.browser.util.NetworkUtil
 import com.ghj.browser.util.StringUtil
-import com.ghj.browser.util.getFileExtension
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,7 +60,7 @@ class CustomWebViewClient : WebViewClient {
         }
 
         // 네트워크 체크
-        if( !DeviceUtil.checkNetworkConnection( this.context as Context ) ) {
+        if( !NetworkUtil.checkNetworkConnection( this.context as Context ) ) {
             if( url != null && !url.startsWith( DefineCode.ERROR_PAGE ) ) {
                 val msg = (context as Context).resources.getString( R.string.webview_error_network )
                 listener?.onReceivedError( view , msg, url )
@@ -104,7 +101,7 @@ class CustomWebViewClient : WebViewClient {
         }
 
         // 네트워크 체크
-        if( !DeviceUtil.checkNetworkConnection( this.context as Context ) ) {
+        if( !NetworkUtil.checkNetworkConnection( this.context as Context ) ) {
             if( url != null && !url.startsWith( DefineCode.ERROR_PAGE ) ) {
                 val msg = (context as Context).resources.getString( R.string.webview_error_network )
                 listener?.onReceivedError( view , msg, url )
@@ -146,7 +143,7 @@ class CustomWebViewClient : WebViewClient {
         }
 
         // 네트워크 체크
-        if( !DeviceUtil.checkNetworkConnection( this.context as Context ) ) {
+        if( !NetworkUtil.checkNetworkConnection( this.context as Context ) ) {
             if( !url.startsWith( DefineCode.ERROR_PAGE ) ) {
                 val msg = (context as Context).resources.getString( R.string.webview_error_network )
                 listener?.onReceivedError( view , msg, url )
@@ -329,7 +326,7 @@ class CustomWebViewClient : WebViewClient {
         SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
         // end 웹킷로그
 
-        listener?.onReceivedSslError( view, handler, errorCode, view.url, failingUrl )
+        listener?.onReceivedSslError( view, handler, errorCode, view.url ?: "", failingUrl )
     }
 
 
@@ -344,7 +341,7 @@ class CustomWebViewClient : WebViewClient {
 
         val uri : Uri = Uri.parse( _url )
         val scheme : String = uri.scheme ?: ""
-        val ext : String = _url.getFileExtension()
+        val ext : String = StringUtil.getFileExtension(_url)
         val url = (_url as String).toLowerCase( Locale.KOREAN )
 
         if( ext.endsWith( "mp3", true ) ) {

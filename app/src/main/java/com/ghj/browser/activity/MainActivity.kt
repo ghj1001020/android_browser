@@ -468,7 +468,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         pm?.let {
             val documentAdapter : PrintDocumentAdapter =
                 if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
-                    val documentName = if( !TextUtils.isEmpty( wv_main?.title ) ) wv_main.title else getString( R.string.app_name )
+                    val documentName = if( !TextUtils.isEmpty( wv_main?.title ) ) wv_main.title ?: "" else getString( R.string.app_name )
                     wv_main.createPrintDocumentAdapter( documentName )
                 } else {
                     wv_main.createPrintDocumentAdapter()
@@ -486,7 +486,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
                 val userAgent = it.settings.userAgentString.replace( "Android" , "droidA" ).replace( "Mobile" , "obileM" )
                 it.settings.userAgentString = userAgent
 
-                val url = it.url.replace( Regex("^https:\\/\\/m\\.") , "https://www.").replace( Regex( "^http:\\/\\/m\\.") , "http://www.")
+                val url = it.url?.replace( Regex("^https:\\/\\/m\\.") , "https://www.")?.replace( Regex( "^http:\\/\\/m\\.") , "http://www.")
                 loadUrl( url )
             }
             else {

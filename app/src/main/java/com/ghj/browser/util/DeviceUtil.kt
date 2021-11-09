@@ -16,19 +16,4 @@ object DeviceUtil {
         return lm.isProviderEnabled( LocationManager.GPS_PROVIDER )
     }
 
-    // network check
-    fun checkNetworkConnection( context: Context ) : Boolean {
-        val cm : ConnectivityManager = context.getSystemService( Context.CONNECTIVITY_SERVICE ) as ConnectivityManager? ?: return false
-
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ) {
-            val capabilities : NetworkCapabilities = cm.getNetworkCapabilities( cm.activeNetwork ) ?: return false
-
-            if( capabilities.hasTransport( NetworkCapabilities.TRANSPORT_WIFI ) || capabilities.hasTransport( NetworkCapabilities.TRANSPORT_CELLULAR ) ) {
-                return true
-            }
-        }
-
-        val networkInfo : NetworkInfo? = cm.activeNetworkInfo
-        return networkInfo?.isConnected ?: false
-    }
 }

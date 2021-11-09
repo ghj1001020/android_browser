@@ -44,7 +44,7 @@ class WebViewLogActivity : BaseViewModelActivity<WebViewLogViewModel>(), View.On
         getViewModel()?.queryWebViewLogData(this)
     }
 
-    override fun newViewModel(): WebViewLogViewModel? {
+    override fun newViewModel(): WebViewLogViewModel {
         return ViewModelProvider(this).get(WebViewLogViewModel::class.java)
     }
 

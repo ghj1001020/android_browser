@@ -270,7 +270,7 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
             if( resultCode == Activity.RESULT_OK ) {
                 if( data == null ) return
 
-                val url = data.getStringExtra(DefineCode.IT_PARAM.HISTORY_URL)
+                val url = data.getStringExtra(DefineCode.IT_PARAM.HISTORY_URL) ?: ""
                 moveUrl(url)
             }
         }

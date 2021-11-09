@@ -1,12 +1,31 @@
 package com.ghj.browser.util
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import android.os.Build
 import android.text.TextUtils
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 
-object CookieUtil {
+object NetworkUtil {
 
+    // network check
+    fun checkNetworkConnection( context: Context) : Boolean {
+        val cm : ConnectivityManager = context.getSystemService( Context.CONNECTIVITY_SERVICE ) as ConnectivityManager? ?: return false
+
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ) {
+            val capabilities : NetworkCapabilities = cm.getNetworkCapabilities( cm.activeNetwork ) ?: return false
+
+            if( capabilities.hasTransport( NetworkCapabilities.TRANSPORT_WIFI ) || capabilities.hasTransport( NetworkCapabilities.TRANSPORT_CELLULAR ) ) {
+                return true
+            }
+        }
+
+        val networkInfo : NetworkInfo? = cm.activeNetworkInfo
+        return networkInfo?.isConnected ?: false
+    }
 
     // 특정 url의 key에 해당하는 쿠키값 구하기
     fun getCookieValue( url : String , key : String ) : String {

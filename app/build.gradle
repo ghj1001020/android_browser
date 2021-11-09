@@ -13,15 +13,15 @@ ext {
 def buildCnt = ''
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
 
     defaultConfig {
         applicationId "com.ghj.browser"
         minSdkVersion 14
-        targetSdkVersion 29
-        versionCode 10004
-        versionName "1.0.4"
+        targetSdkVersion 30
+        versionCode 10005
+        versionName "1.0.5"
 
         multiDexEnabled true
 
