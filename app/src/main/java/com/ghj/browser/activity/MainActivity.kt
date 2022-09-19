@@ -22,14 +22,19 @@ import android.webkit.SslErrorHandler
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
+import com.ghj.browser.activity.adapter.SiteAdapter
+import com.ghj.browser.activity.adapter.data.BookmarkData
+import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.base.BaseWebViewActivity
+import com.ghj.browser.activity.viewmodel.MainViewModel
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.dialog.AlertDialogFragment
@@ -40,14 +45,19 @@ import com.ghj.browser.util.*
 import com.ghj.browser.webkit.JsAlertPopupData
 import com.ghj.browser.webkit.JsBridge
 import com.ghj.browser.webkit.JsGetMessageData
+import com.google.android.gms.tasks.Task
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
+class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
     private val TAG : String = "MainActivity"
 
@@ -82,10 +92,15 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     var fileChooserCallback: ValueCallback<Array<Uri>>? = null
     var fileChooserCallbackOld: ValueCallback<Uri?>? = null
 
+    lateinit var siteAdapter: SiteAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView( R.layout.activity_main )
+
+        mContext = this
+        mActivity = this;
 
         if( savedInstanceState != null ) {
             wv_main.restoreState( savedInstanceState )
@@ -93,6 +108,11 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
         initData()
         initLayout()
+        getViewModel().addObserver(this, bookmarkObserver, historyObserver)
+    }
+
+    override fun newViewModel(): MainViewModel {
+        return ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -115,6 +135,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
 
     override fun onDestroy() {
         destroyWebView()
+        getViewModel().removeObserver(bookmarkObserver, historyObserver)
         super.onDestroy()
     }
 
@@ -223,18 +244,48 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
             }
         })
 
+        siteAdapter = SiteAdapter(this)
+        rvSite.adapter = siteAdapter
+
 
         // todo 테스트 하드코딩
         btn_test?.setOnClickListener(){
 //            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
 //            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
 //            wv_main?.loadUrl( "http://m.my.kt.com" )
-            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
+
+//            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
+            val manager : ReviewManager = ReviewManagerFactory.create(mContext)
+            val request : Task<ReviewInfo> = manager.requestReviewFlow()
+            request.addOnCompleteListener { task ->
+                if(task.isSuccessful) {
+                    Toast.makeText(mContext, "requestReviewFlow Success", Toast.LENGTH_SHORT).show()
+                    if( task.result != null ) {
+                        val reviewFlow : Task<Void> = manager.launchReviewFlow(mActivity, task.result!!)
+                        reviewFlow.addOnCompleteListener { taskFlow ->
+                            Toast.makeText(mContext, "launchReviewFlow Complete", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                else {
+                    Toast.makeText(mContext, "requestReviewFlow Fail", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
         btn_appcall?.setOnClickListener() { view ->
             onWebMessage()
 //            onWebMessageReturn()
         }
+    }
+
+    // 즐겨찾기 목록조회 옵저버
+    val bookmarkObserver : Observer<ArrayList<BookmarkData>> = Observer { list: ArrayList<BookmarkData> ->
+
+    }
+
+    // 히스토리 목록조회 옵저버
+    val historyObserver : Observer<ArrayList<WebSiteData>> = Observer { list: ArrayList<WebSiteData> ->
+
     }
 
     override fun onCreateAfter() {
@@ -273,6 +324,7 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
     }
 
     override fun onPageFinished( _webView: WebView, url: String ) {
+        LogUtil.d("onPageFinished ${url}")
         showEditMode( false )
 
         // 즐겨찾기 표시
@@ -941,4 +993,5 @@ class MainActivity : BaseWebViewActivity() , View.OnClickListener , View.OnTouch
         // 확대/축소 안되는 페이지에 viewport 변경
         wv_main.loadUrl("javascript:document.getElementsByName(\"viewport\")[0].setAttribute(\"content\", \"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes\");");
     }
+
 }

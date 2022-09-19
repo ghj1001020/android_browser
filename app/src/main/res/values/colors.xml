@@ -16,6 +16,7 @@
     <color name="txt_gray_url">#888888</color>
 
     <!-- 배경색 -->
+    <color name="bg_list">#F2F2F2</color>
     <color name="bg_rip">#e0e0e0</color>
     <color name="bg_head_gray">#E7E7E7</color>
 

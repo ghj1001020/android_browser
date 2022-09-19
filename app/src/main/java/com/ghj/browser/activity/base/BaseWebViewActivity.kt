@@ -1,6 +1,8 @@
 package com.ghj.browser.activity.base
 
 import android.annotation.TargetApi
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -13,6 +15,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import com.ghj.browser.R
+import com.ghj.browser.activity.viewmodel.BaseViewModel
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.util.LogUtil
@@ -21,9 +24,11 @@ import com.ghj.browser.webkit.OnWebViewListener
 import kotlinx.android.synthetic.main.activity_main.*
 import java.net.URLDecoder
 
-abstract class BaseWebViewActivity : BaseActivity() , OnWebViewListener {
+abstract class BaseWebViewActivity<VM: BaseViewModel> : BaseViewModelActivity<VM>() , OnWebViewListener {
 
     private val TAG : String = "BaseWebViewActivity"
+    lateinit var mContext : Context
+    lateinit var mActivity : Activity
 
     var dialog : CommonDialog? = null
 

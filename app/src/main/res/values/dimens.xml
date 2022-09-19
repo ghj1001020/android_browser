@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="text_letter_pacing">-0.05</dimen>
-    <dimen name="toolbar_height">44dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
     <dimen name="toolbar_sub_height">?android:attr/actionBarSize</dimen>
 
 </resources>

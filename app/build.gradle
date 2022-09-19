@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 
 // 설정변수
 ext {
-    appMode = '"release"'   // 운영 - release , 개발 - dev
+    appMode = '"dev"'   // 운영 - release , 개발 - dev
     isLogBlock = 'false' // 운영 - true , 개발 - false
 }
 
@@ -108,6 +108,10 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // in app review
+    implementation 'com.google.android.play:review:2.0.0'
+
 
 //    testImplementation 'junit:junit:4.12'
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
