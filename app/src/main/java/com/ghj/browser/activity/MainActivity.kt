@@ -244,8 +244,8 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
             }
         })
 
-        siteAdapter = SiteAdapter(this)
-        rvSite.adapter = siteAdapter
+//        siteAdapter = SiteAdapter(this)
+//        rvSite.adapter = siteAdapter
 
 
         // todo 테스트 하드코딩

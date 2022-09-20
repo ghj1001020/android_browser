@@ -11,13 +11,14 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ghj.browser.R
+import com.ghj.browser.activity.adapter.data.HistoryData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.common.WebSiteType
 import com.ghj.browser.common.JobMode
 import com.ghj.browser.util.Util
 
 
-class WebSiteAdapter(val context: Context, val data : ArrayList<WebSiteData>, val listener : IWebSiteListener ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WebSiteAdapter(val context: Context, val data : ArrayList<HistoryData>, val listener : IWebSiteListener ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface IWebSiteListener {
         fun onDateClick( position: Int )
@@ -48,7 +49,7 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<WebSiteData>, va
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val data : WebSiteData = data.get(position)
+        val data : HistoryData = data.get(position)
 
         // 날짜 항목
         if( holder is HistoryDateHolder ) {

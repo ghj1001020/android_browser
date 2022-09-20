@@ -12,6 +12,7 @@ import android.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.WebSiteAdapter
+import com.ghj.browser.activity.adapter.data.HistoryData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.base.BaseViewModelActivity
 import com.ghj.browser.activity.viewmodel.HistoryViewModel
@@ -29,7 +30,7 @@ import kotlin.collections.ArrayList
 
 class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickListener {
 
-    var webSiteDatas : ArrayList<WebSiteData> = ArrayList()
+    var webSiteDatas : ArrayList<HistoryData> = ArrayList()
     lateinit var webSiteAdapter : WebSiteAdapter
 
     // 더보기 > 삭제
@@ -134,7 +135,7 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
     fun queryHistoryData() {
         // 히스토리 날짜, URL목록
         webSiteDatas.clear()
-        val list : ArrayList<WebSiteData> = SQLiteService.selectHistoryDatesAndUrls(this)
+        val list : ArrayList<HistoryData> = SQLiteService.selectHistoryDatesAndUrls(this)
         webSiteDatas.addAll(list)
         webSiteAdapter.notifyDataSetChanged()
     }
@@ -165,7 +166,7 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
                 webSiteAdapter.notifyDataSetChanged()
             }
             else {
-                val removeDatas = arrayListOf<WebSiteData>()
+                val removeDatas = arrayListOf<HistoryData>()
                 for( item in webSiteDatas ) {
                     if( item.type == WebSiteType.URL && item.date.startsWith(date) ) {
                         removeDatas.add(item)

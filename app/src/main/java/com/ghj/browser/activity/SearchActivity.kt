@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.WebSiteAdapter
+import com.ghj.browser.activity.adapter.data.HistoryData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.base.BaseActivity
 import com.ghj.browser.common.DefineCode
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.appbar_search.*
 class SearchActivity : BaseActivity(), View.OnClickListener {
 
     lateinit var searchAdapter : WebSiteAdapter
-    var searchDatas : ArrayList<WebSiteData> = ArrayList()
+    var searchDatas : ArrayList<HistoryData> = ArrayList()
 
 
 
@@ -44,7 +45,7 @@ class SearchActivity : BaseActivity(), View.OnClickListener {
             }
             else {
                 btnDelete.visibility = View.VISIBLE
-                val list : ArrayList<WebSiteData> = SQLiteService.selectHistorySearch(this, it.toString().trim())
+                val list : ArrayList<HistoryData> = SQLiteService.selectHistorySearch(this, it.toString().trim())
                 searchDatas.clear()
                 searchDatas.addAll(list)
                 searchAdapter.notifyDataSetChanged()

@@ -57,6 +57,15 @@ object DefineQuery {
                                 "WHERE    TITLE LIKE '%'||?||'%' OR URL LIKE '%'||?||'%' " +
                                 "ORDER BY VISIT_DATE DESC"
 
+    // 히스토리 테이블의 URL 데이터
+    val SELECT_HISTORY_URL = "SELECT   TITLE      , " +
+                             "         URL        , " +
+                             "         VISIT_DATE , " +
+                             "         FAVICON      " +
+                             "FROM     HISTORY_TBL  " +
+                             "GROUP BY URL          " +
+                             "ORDER BY VISIT_DATE DESC"
+
 
     // 콘솔로그 테이블 생성
     val CREATE_CONSOLE_LOG_TABLE = "CREATE TABLE IF NOT EXISTS CONSOLE_LOG_TBL ( " +

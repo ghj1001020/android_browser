@@ -3,10 +3,7 @@ package com.ghj.browser.db
 import android.content.Context
 import android.database.Cursor
 import android.text.TextUtils
-import com.ghj.browser.activity.adapter.data.BookmarkData
-import com.ghj.browser.activity.adapter.data.ConsoleData
-import com.ghj.browser.activity.adapter.data.WebSiteData
-import com.ghj.browser.activity.adapter.data.WebViewLogData
+import com.ghj.browser.activity.adapter.data.*
 import com.ghj.browser.common.DefineQuery
 import com.ghj.browser.common.WebSiteType
 
@@ -27,8 +24,8 @@ object SQLiteService {
     }
 
     // HISTORY_TBL의 날짜그룹, 오늘날짜 히스토리 목록 조회
-    fun selectHistoryDatesAndUrls( context: Context ) : ArrayList<WebSiteData> {
-        val webSiteList : ArrayList<WebSiteData> = arrayListOf()
+    fun selectHistoryDatesAndUrls( context: Context ) : ArrayList<HistoryData> {
+        val webSiteList : ArrayList<HistoryData> = arrayListOf()
         val params : Array<String> = Array(1) { i -> ""}
 
         SQLite.init(context)
@@ -37,7 +34,7 @@ object SQLiteService {
         SQLite.select( DefineQuery.SELECT_HISTORY_DATE_GROUP ) { cursor: Cursor ->
             while( cursor.moveToNext() ) {
                 val date = cursor.getString( cursor.getColumnIndex("DATE") )
-                webSiteList.add( WebSiteData(WebSiteType.DATE, date))
+                webSiteList.add( HistoryData(WebSiteType.DATE, date))
             }
         }
 
@@ -46,13 +43,13 @@ object SQLiteService {
             params[0] = webSiteList.get(0).date
             webSiteList.get(0).isOpen = true
             SQLite.select( DefineQuery.SELECT_HISTORY_URL_BY_DATE, params ) { cursor: Cursor ->
-                val list : MutableList<WebSiteData> = mutableListOf()
+                val list : MutableList<HistoryData> = mutableListOf()
                 while( cursor.moveToNext() ) {
                     val date : String = cursor.getString( cursor.getColumnIndex("VISIT_DATE") )
                     val title : String = cursor.getString( cursor.getColumnIndex("TITLE") )
                     val url : String = cursor.getString( cursor.getColumnIndex("URL") )
                     val favIcon : String = cursor.getString( cursor.getColumnIndex("FAVICON") )
-                    list.add( WebSiteData(WebSiteType.URL, date, title, url, favIcon) )
+                    list.add( HistoryData(WebSiteType.URL, date, title, url, favIcon) )
                 }
 
                 webSiteList.addAll(1, list)
@@ -79,8 +76,8 @@ object SQLiteService {
     }
 
     // 해당날짜에 방문한 HISTORY_TBL의 URL목록
-    fun selectHistoryUrlsByDate(context: Context, date: String) : ArrayList<WebSiteData> {
-        val webSiteList : ArrayList<WebSiteData> = arrayListOf()
+    fun selectHistoryUrlsByDate(context: Context, date: String) : ArrayList<HistoryData> {
+        val webSiteList : ArrayList<HistoryData> = arrayListOf()
 
         SQLite.init(context)
 
@@ -92,7 +89,7 @@ object SQLiteService {
                 val url : String = cursor.getString( cursor.getColumnIndex("URL") )
                 val favIcon : String = cursor.getString( cursor.getColumnIndex("FAVICON") )
 
-                webSiteList.add( WebSiteData(WebSiteType.URL, date, title, url, favIcon) )
+                webSiteList.add( HistoryData(WebSiteType.URL, date, title, url, favIcon) )
             }
         }
 
@@ -122,8 +119,8 @@ object SQLiteService {
     }
 
     // HISTORY_TBL의 검색 목록
-    fun selectHistorySearch(context: Context, search: String) : ArrayList<WebSiteData> {
-        val webSiteList: ArrayList<WebSiteData> = arrayListOf()
+    fun selectHistorySearch(context: Context, search: String) : ArrayList<HistoryData> {
+        val webSiteList: ArrayList<HistoryData> = arrayListOf()
         SQLite.init(context)
 
         val param = arrayOf(search, search)
@@ -134,9 +131,29 @@ object SQLiteService {
                 val url : String = cursor.getString( cursor.getColumnIndex("URL") )
                 val favIcon : String = cursor.getString( cursor.getColumnIndex("FAVICON") )
 
-                webSiteList.add( WebSiteData(WebSiteType.URL, date, title, url, favIcon) )
+                webSiteList.add( HistoryData(WebSiteType.URL, date, title, url, favIcon) )
             }
         }
+        SQLite.close()
+
+        return webSiteList
+    }
+
+    // HISTORY_TBL의 URL그룹 목록
+    fun selectHistoryUrl(context: Context) : ArrayList<WebSiteData> {
+        val webSiteList : ArrayList<WebSiteData> = arrayListOf()
+        SQLite.init(context)
+
+        SQLite.select(DefineQuery.SELECT_HISTORY_URL) {cursor: Cursor ->  
+            while (cursor.moveToNext()) {
+                val date : String = cursor.getString( cursor.getColumnIndex("VISIT_DATE") )
+                val title : String = cursor.getString( cursor.getColumnIndex("TITLE") )
+                val url : String = cursor.getString( cursor.getColumnIndex("URL") )
+                val favicon : String = cursor.getString( cursor.getColumnIndex("FAVICON") )
+                webSiteList.add( WebSiteData(date, title, url, favicon))
+            }
+        }
+
         SQLite.close()
 
         return webSiteList
