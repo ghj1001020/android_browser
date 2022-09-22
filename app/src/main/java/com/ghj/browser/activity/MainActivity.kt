@@ -11,7 +11,9 @@ import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
 import android.print.PrintJob
 import android.print.PrintManager
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -31,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.ghj.browser.BrowserApp
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.SiteAdapter
+import com.ghj.browser.activity.adapter.SiteMode
 import com.ghj.browser.activity.adapter.data.BookmarkData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.base.BaseWebViewActivity
@@ -94,6 +97,8 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     lateinit var siteAdapter: SiteAdapter
 
+    // 현재페이지 url
+    var currentUrl : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,6 +175,23 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         btn_refersh?.setOnClickListener( this )
         layout_txt_url?.setOnClickListener( this )
         btn_delete?.setOnClickListener( this )
+        edit_url?.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(p0: Editable?) {
+                val search = p0.toString()
+                if(search.isEmpty() || search.equals(currentUrl)) {
+                    siteAdapter.siteMode = SiteMode.BOOKMARK
+                    notifySiteList()
+                }
+                else {
+                    siteAdapter.siteMode = SiteMode.HISTORY
+                    getViewModel().searchHistoryData(search)
+                }
+            }
+        })
         edit_url?.setOnKeyListener { view, keyCode, keyEvent ->
             if( keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER ) {
                 var url = edit_url.text.toString();
@@ -244,8 +266,8 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
             }
         })
 
-//        siteAdapter = SiteAdapter(this)
-//        rvSite.adapter = siteAdapter
+        siteAdapter = SiteAdapter(this)
+        rvSite.adapter = siteAdapter
 
 
         // todo 테스트 하드코딩
@@ -280,15 +302,20 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     // 즐겨찾기 목록조회 옵저버
     val bookmarkObserver : Observer<ArrayList<BookmarkData>> = Observer { list: ArrayList<BookmarkData> ->
-
+        siteAdapter.bookmarkList.addAll(list)
+        notifySiteList()
     }
 
     // 히스토리 목록조회 옵저버
     val historyObserver : Observer<ArrayList<WebSiteData>> = Observer { list: ArrayList<WebSiteData> ->
-
+        siteAdapter.historyList.clear()
+        siteAdapter.historyList.addAll(list)
+        notifySiteList()
     }
 
     override fun onCreateAfter() {
+        getViewModel().queryBookmarkData(this)
+        getViewModel().queryHistoryData(this)
         loadUrl( indexSearch )
     }
 
@@ -297,10 +324,10 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         LogUtil.d("onPageStarted urlType=" + urlType + " , url=" + url )
 
         if( urlType == DefineCode.URL_TYPE_HTTP ) {
-            showEditMode( true )
+            showEditMode( false )
 
             txt_title?.text = url
-            edit_url?.setText( url )
+            setUrlEditText(url)
             showWebViewLoadingBar( true , 0 )
         }
         else {
@@ -314,7 +341,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
         if( urlType == DefineCode.URL_TYPE_HTTP ) {
             txt_title?.text = url
-            edit_url?.setText( url )
+            setUrlEditText(url)
         }
         else {
             super.shouldOverrideLoading( _webView , urlType , url , isRedirect )
@@ -325,14 +352,14 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     override fun onPageFinished( _webView: WebView, url: String ) {
         LogUtil.d("onPageFinished ${url}")
-        showEditMode( false )
+//        showEditMode( false )
 
         // 즐겨찾기 표시
         val bookmark = SQLiteService.selectBookmarkCntByUrl(this, url)
         chkBookmark.isChecked = bookmark > 0
 
         txt_title?.text = StringUtil.getUrlDoamin( url )
-        edit_url?.setText( url )
+        setUrlEditText(url)
         showWebViewLoadingBar( false , 0 )
         changePageMoveButton()
 
@@ -383,12 +410,12 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     }
 
     override fun onProgressChanged(_webView: WebView, newProgress: Int) {
-        if( newProgress >= 100 ) {
+        if( newProgress == 0 ) {
             showEditMode( false )
         }
-        else {
-            showEditMode( true )
-        }
+//        else {
+//            showEditMode( true )
+//        }
 
         showWebViewLoadingBar( true , newProgress )
     }
@@ -625,21 +652,18 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     // URL 입력하도록 변경
     fun changeLayoutUrlEdit( isEdit: Boolean) {
-        if( isEdit ) {
-            layout_url_edit_mode.visibility = View.VISIBLE
-            layout_url_txt_mode.visibility = View.GONE
+        showEditMode(isEdit)
 
+        if( isEdit ) {
             edit_url?.isFocusableInTouchMode = true
             edit_url?.requestFocus()
             showKeyboard( edit_url , true )
         }
         else {
-            layout_url_edit_mode.visibility = View.GONE
-            layout_url_txt_mode.visibility = View.VISIBLE
-
             edit_url?.isFocusableInTouchMode = false
             edit_url?.clearFocus()
-            edit_url?.setText( wv_main?.url )
+
+            setUrlEditText( wv_main?.url )
             showKeyboard( edit_url , false )
         }
         isEditMode = isEdit
@@ -662,6 +686,22 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         }
     }
 
+    // URL입력상자
+    fun setUrlEditText(url: String?) {
+        if(url != null) {
+            currentUrl = url
+            edit_url?.setText(url)
+        }
+    }
+
+    // URL입력 즐겨찾기/히스토리 목록
+    fun notifySiteList() {
+        if(isEditMode) {
+            txtSite.text = if(siteAdapter.siteMode == SiteMode.BOOKMARK) {"즐겨찾기"} else {"방문한 페이지"}
+            siteAdapter.notifyDataSetChanged()
+        }
+    }
+
     // 웹페이지 로딩
     fun loadUrl( _url : String? ) {
         if( TextUtils.isEmpty( _url ) ) {
@@ -677,6 +717,11 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     }
 
     override fun onBackPressed() {
+        if(isEditMode) {
+            changeLayoutUrlEdit(false)
+            return
+        }
+
         if( wv_main?.canGoBack() ?: false ) {
             moveToBackPage()
         }

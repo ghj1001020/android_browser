@@ -75,15 +75,15 @@
 
                     <TextView
                         android:id="@+id/txt_title"
-                        android:gravity="center"
-                        android:text=""
-                        android:textSize="14dp"
-                        android:textColor="@color/txt_webview_title"
-                        android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
                         android:maxLines="3"
-                        tools:text="https://wwww.naver.com"/>
+                        android:text=""
+                        android:textColor="@color/txt_webview_title"
+                        android:textSize="14dp"
+                        tools:text="https://wwww.naver.com" />
 
                 </RelativeLayout>
 
@@ -99,12 +99,13 @@
 
             <!-- 클릭후 -->
             <LinearLayout
+                android:id="@+id/layout_url_edit_mode"
                 android:layout_width="match_parent"
                 android:layout_height="296dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
-                    android:id="@+id/layout_url_edit_mode"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginLeft="8dp"
@@ -112,8 +113,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="6dp"
                     android:background="@drawable/url_layout_bg"
-                    android:paddingLeft="16dp"
-                    android:visibility="visible">
+                    android:paddingLeft="16dp">
 
                     <!-- flagNoExtractUi : 전체화면과 같이 사용자 편의에 맞춘 UI가 아니라 기본 UI로 출력 -->
                     <EditText
@@ -140,6 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="4dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_delete"

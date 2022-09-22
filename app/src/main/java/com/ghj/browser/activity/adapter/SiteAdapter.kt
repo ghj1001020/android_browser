@@ -4,18 +4,21 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.data.BookmarkData
 import com.ghj.browser.activity.adapter.data.WebSiteData
+import com.ghj.browser.util.Util
 
-class SiteAdapter(val context: Context,
-                  val bookmarkList: ArrayList<BookmarkData>,
-                  val historyList: ArrayList<WebSiteData>) : RecyclerView.Adapter<SiteAdapter.SiteHolder>() {
+class SiteAdapter(val context: Context) : RecyclerView.Adapter<SiteAdapter.SiteHolder>() {
 
     var siteMode : SiteMode = SiteMode.BOOKMARK
     val mInflater: LayoutInflater = LayoutInflater.from(context)
+    val bookmarkList: ArrayList<BookmarkData> = arrayListOf()
+    val historyList: ArrayList<WebSiteData> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SiteHolder {
         val view : View = mInflater.inflate(R.layout.item_site, parent, false)
@@ -27,12 +30,14 @@ class SiteAdapter(val context: Context,
             val data : BookmarkData = bookmarkList[position]
             holder.txtTitle.text = data.title
             holder.txtUrl.text = data.url
+            holder.imgFavicon.setImageBitmap(Util.stringToBitmap(data.favicon))
             holder.divider.visibility = if(position == bookmarkList.size-1) { View.GONE } else { View.VISIBLE }
         }
         else {
             val data : WebSiteData = historyList[position]
             holder.txtTitle.text = data.title
             holder.txtUrl.text = data.url
+            holder.imgFavicon.setImageBitmap(Util.stringToBitmap(data.icon))
             holder.divider.visibility = if(position == bookmarkList.size-1) { View.GONE } else { View.VISIBLE }
         }
     }
@@ -48,6 +53,7 @@ class SiteAdapter(val context: Context,
 
 
     class SiteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imgFavicon : AppCompatImageView = itemView.findViewById(R.id.imgFavicon)
         val txtTitle : TextView = itemView.findViewById(R.id.txtTitle)
         val txtUrl : TextView = itemView.findViewById(R.id.txtUrl)
         val divider : View = itemView.findViewById(R.id.divider)

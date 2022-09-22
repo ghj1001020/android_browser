@@ -12,11 +12,12 @@ import com.ghj.browser.db.SQLiteService
 class MainViewModel( application: Application) : BaseViewModel(application) {
 
     // 즐겨찾기 목록 데이터
-    var bookmarkDataList : MutableLiveData<ArrayList<BookmarkData>> = MutableLiveData()
+    var bookmarkDataList : MutableLiveData<ArrayList<BookmarkData>> = MutableLiveData(arrayListOf())
     // 히스토리 목록 데이터
-    var historyDataList : MutableLiveData<ArrayList<WebSiteData>> = MutableLiveData()
+    var historyDataList : MutableLiveData<ArrayList<WebSiteData>> = MutableLiveData(arrayListOf())
     // 히스토리 검색 데이터
-    var historySearchDataList : MutableLiveData<ArrayList<WebSiteData>> = MutableLiveData()
+    var historySearchDataList : MutableLiveData<ArrayList<WebSiteData>> = MutableLiveData(
+        arrayListOf())
 
     // 옵저버 등록
     fun addObserver(owner: LifecycleOwner, observer1: Observer<ArrayList<BookmarkData>>, observer2: Observer<ArrayList<WebSiteData>>) {
@@ -55,8 +56,6 @@ class MainViewModel( application: Application) : BaseViewModel(application) {
                 }
             }
         }
-
-        historySearchDataList.value?.clear()
-        historySearchDataList.value?.addAll(searchList)
+        historySearchDataList.value = searchList
     }
 }
