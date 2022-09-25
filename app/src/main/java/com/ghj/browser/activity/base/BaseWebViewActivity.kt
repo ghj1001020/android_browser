@@ -27,8 +27,6 @@ import java.net.URLDecoder
 abstract class BaseWebViewActivity<VM: BaseViewModel> : BaseViewModelActivity<VM>() , OnWebViewListener {
 
     private val TAG : String = "BaseWebViewActivity"
-    lateinit var mContext : Context
-    lateinit var mActivity : Activity
 
     var dialog : CommonDialog? = null
 

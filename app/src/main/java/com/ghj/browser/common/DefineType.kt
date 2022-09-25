@@ -10,7 +10,8 @@ interface IClickListener {
 // 웹사이트 목록 구분 타입
 enum class WebSiteType(val value: Int) {
     DATE(0) ,   // 날짜
-    URL(1)      // 방문사이트
+    URL(1)  ,   // 방문사이트
+    Empty(2)
 }
 
 // 히스토리 목록 작업 타입

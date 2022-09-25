@@ -82,5 +82,9 @@ class SearchActivity : BaseActivity(), View.OnClickListener {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
+
+        override fun onUrlChecked(position: Int, isCheck: Boolean) {
+            
+        }
     }
 }

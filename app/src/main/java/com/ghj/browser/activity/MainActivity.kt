@@ -99,13 +99,12 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     // 현재페이지 url
     var currentUrl : String = ""
+    var isStarted = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView( R.layout.activity_main )
-
-        mContext = this
-        mActivity = this;
 
         if( savedInstanceState != null ) {
             wv_main.restoreState( savedInstanceState )
@@ -330,6 +329,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         LogUtil.d("onPageStarted urlType=" + urlType + " , url=" + url )
 
         if( urlType == DefineCode.URL_TYPE_HTTP ) {
+            isStarted = true
             showEditMode( false )
 
             txt_title?.text = url
@@ -359,6 +359,17 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     override fun onPageFinished( _webView: WebView, url: String ) {
         LogUtil.d("onPageFinished ${url}")
 
+        // 히스토리 데이터 입력
+        _webView.copyBackForwardList().currentItem?.let {
+            if( isStarted) {
+                isStarted = false
+                val date : String = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
+                val params: Array<String> = arrayOf( date, it.title, url, Util.bitmapToString(it.favicon) )
+                SQLiteService.insertHistoryData(this, params)
+                getViewModel().queryHistoryData(this)
+            }
+        }
+
         // 즐겨찾기 표시
         val bookmark = SQLiteService.selectBookmarkCntByUrl(this, url)
         chkBookmark.isChecked = bookmark > 0
@@ -367,14 +378,6 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         setUrlEditText(url)
         showWebViewLoadingBar( false , 0 )
         changePageMoveButton()
-
-        // 히스토리 데이터 입력
-        _webView.copyBackForwardList().currentItem?.let {
-            val date : String = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-            val params: Array<String> = arrayOf( date, it.title, url, Util.bitmapToString(it.favicon) )
-            SQLiteService.insertHistoryData(this, params)
-            getViewModel().queryHistoryData(this)
-        }
     }
 
     override fun onReceivedIcon(_webView: WebView, icon: Bitmap?) {

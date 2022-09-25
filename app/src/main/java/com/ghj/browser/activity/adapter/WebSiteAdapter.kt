@@ -1,6 +1,7 @@
 package com.ghj.browser.activity.adapter
 
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<HistoryData>, va
     interface IWebSiteListener {
         fun onDateClick( position: Int )
         fun onUrlClick( position: Int )
+        fun onUrlChecked( position: Int, isCheck: Boolean)
     }
 
     val mInflater: LayoutInflater = LayoutInflater.from(context)
@@ -42,9 +44,15 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<HistoryData>, va
             return HistoryDateHolder( view )
         }
         // 방문한사이트
-        else {
+        else if( viewType == WebSiteType.URL.value ) {
             val view : View = mInflater.inflate( R.layout.item_history , parent , false )
             return HistoryHolder( view )
+        }
+        else {
+            val height = Util.convertDpToPixcel(context, 56f)
+            val view : View = View(context)
+            view.layoutParams = ViewGroup.LayoutParams(0, height)
+            return EmptyHolder(view)
         }
     }
 
@@ -127,6 +135,7 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<HistoryData>, va
                 else {
                     data.isSelected = !holder.chkSelect.isChecked
                     holder.chkSelect.isChecked = data.isSelected
+                    listener.onUrlChecked( position, data.isSelected )
                 }
             }
         }
@@ -149,7 +158,7 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<HistoryData>, va
 
     // 방문한사이트 뷰홀더
     class HistoryHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val layoutItemHistory : LinearLayout = view.findViewById(R.id.layoutItemHistory)
+        val layoutItemHistory : ConstraintLayout = view.findViewById(R.id.layoutItemHistory)
         val imgHistoryIcon : ImageView = view.findViewById(R.id.imgHistoryIcon)
         val txtHistoryDate : TextView = view.findViewById(R.id.txtHistoryDate)
         val txtHistoryTitle : TextView = view.findViewById(R.id.txtHistoryTitle)
@@ -157,6 +166,8 @@ class WebSiteAdapter(val context: Context, val data : ArrayList<HistoryData>, va
         val divider : View = view.findViewById(R.id.divider)
         val chkSelect : CheckBox = view.findViewById(R.id.chkSelect)
     }
+
+    class EmptyHolder(val view: View) : RecyclerView.ViewHolder(view) {}
 
     private fun getDisplayDayOfWeek( dayOfWeek: Int ) : String {
         when( dayOfWeek ) {

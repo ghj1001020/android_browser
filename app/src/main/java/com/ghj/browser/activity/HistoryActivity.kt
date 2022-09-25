@@ -9,7 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.WebSiteAdapter
 import com.ghj.browser.activity.adapter.data.HistoryData
@@ -20,6 +22,7 @@ import com.ghj.browser.common.DefineCode
 import com.ghj.browser.common.WebSiteType
 import com.ghj.browser.common.JobMode
 import com.ghj.browser.db.SQLiteService
+import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.util.Util
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.appbar_history.*
@@ -29,6 +32,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickListener {
+    private val TAG: String = "HistoryActivity"
 
     var webSiteDatas : ArrayList<HistoryData> = ArrayList()
     lateinit var webSiteAdapter : WebSiteAdapter
@@ -181,6 +185,23 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
             val url : String = webSiteDatas.get(position).url
             moveUrl(url)
         }
+
+        override fun onUrlChecked(position: Int, isCheck: Boolean) {
+            var isShow = false
+            for(item in webSiteDatas) {
+                if(item.isSelected) {
+                    isShow = true
+                    break
+                }
+            }
+
+            if(isShow) {
+                showOptionButton()
+            }
+            else {
+                hideOptionButton()
+            }
+        }
     }
 
     // 메인에 이동할 URL 전달하고 액티비티 종료
@@ -193,9 +214,15 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
 
     // 전체 히스토리 목록 삭제
     fun deleteHistoryAll() {
-        SQLiteService.deleteHistoryDataAll(this)
-        queryHistoryData()
-        queryHistoryCnt()
+        val buttons = arrayOf(getString(R.string.cancel), getString(R.string.ok))
+        val dialog = CommonDialog( this , 0 , getString(R.string.confirm_delete_all) , buttons, true, TAG ){ dialog, dialogId, selected, data ->
+            if( selected == DefineCode.BTN_RIGHT ) {
+                SQLiteService.deleteHistoryDataAll(this)
+                queryHistoryData()
+                queryHistoryCnt()
+            }
+        }
+        dialog.show()
     }
 
     // 히스토리 목록 삭제
@@ -232,33 +259,57 @@ class HistoryActivity : BaseViewModelActivity<HistoryViewModel>(), View.OnClickL
 
     // 작업 타입변경
     fun changeJobMode( mode: JobMode ) {
+        hideOptionButton()
+
         // 목록조회
         if( mode == JobMode.VIEW ) {
-            val prevJob = webSiteAdapter.jobMode
-            if( prevJob == JobMode.DELETE ) {
-                layoutDelete.visibility = View.GONE
-                layoutDelete.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_out_bottom)
-            }
-            else if( prevJob == JobMode.SHARE ) {
-                layoutShare.visibility = View.GONE
-                layoutShare.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_out_bottom)
-            }
-
             webSiteAdapter.jobMode = JobMode.VIEW
             webSiteAdapter.notifyDataSetChanged()
         }
         // 아이템 삭제
         else if( mode == JobMode.DELETE ) {
-            layoutDelete.visibility = View.VISIBLE
-            layoutDelete.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_in_bottom)
             webSiteAdapter.jobMode = JobMode.DELETE
             webSiteAdapter.notifyDataSetChanged()
         }
         // 아이템 공유
         else if( mode == JobMode.SHARE ) {
-            layoutShare.visibility = View.VISIBLE
-            layoutShare.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_in_bottom)
             webSiteAdapter.jobMode = JobMode.SHARE
+            webSiteAdapter.notifyDataSetChanged()
+        }
+    }
+
+    // 하단 옵션버튼 보이기
+    fun showOptionButton() {
+        if(layoutDelete.visibility == View.GONE && layoutShare.visibility == View.GONE) {
+            val mode = webSiteAdapter.jobMode
+            if(mode == JobMode.DELETE) {
+                layoutDelete.visibility = View.VISIBLE
+                layoutDelete.animation = AnimationUtils.loadAnimation(mContext, R.anim.anim_slide_in_bottom)
+            }
+            else if(mode == JobMode.SHARE) {
+                layoutShare.visibility = View.VISIBLE
+                layoutShare.animation = AnimationUtils.loadAnimation(mContext, R.anim.anim_slide_in_bottom)
+            }
+
+            webSiteDatas.add(HistoryData(WebSiteType.Empty, ""))
+            webSiteAdapter.notifyItemChanged(webSiteDatas.size - 1)
+        }
+    }
+
+    // 하단 옵션버튼 숨기기
+    fun hideOptionButton() {
+        if(layoutDelete.visibility == View.VISIBLE || layoutShare.visibility == View.VISIBLE) {
+            val mode = webSiteAdapter.jobMode
+            if( mode == JobMode.DELETE ) {
+                layoutDelete.visibility = View.GONE
+                layoutDelete.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_out_bottom)
+            }
+            else if( mode == JobMode.SHARE ) {
+                layoutShare.visibility = View.GONE
+                layoutShare.animation = AnimationUtils.loadAnimation(this, R.anim.anim_slide_out_bottom)
+            }
+
+            webSiteDatas.remove(webSiteDatas.last())
             webSiteAdapter.notifyDataSetChanged()
         }
     }

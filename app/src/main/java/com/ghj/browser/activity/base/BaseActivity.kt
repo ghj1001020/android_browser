@@ -1,5 +1,7 @@
 package com.ghj.browser.activity.base
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,6 +17,8 @@ abstract class BaseActivity : AppCompatActivity() {
     private var isAppReady : Boolean = false
     private var isPostCreate : Boolean = false
 
+    var mContext : Context = this
+    var mActivity : Activity = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
