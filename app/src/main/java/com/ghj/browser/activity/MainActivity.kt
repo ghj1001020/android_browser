@@ -38,12 +38,13 @@ import com.ghj.browser.activity.adapter.data.BookmarkData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.activity.viewmodel.MainViewModel
+import com.ghj.browser.bottomSheet.MenuBottomSheet
 import com.ghj.browser.common.DefineCode
+import com.ghj.browser.common.IClickListener
 import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.dialog.AlertDialogFragment
 import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.dialog.ScriptInputDialog
-import com.ghj.browser.dialog.ToolbarMoreDialog
 import com.ghj.browser.util.*
 import com.ghj.browser.webkit.JsAlertPopupData
 import com.ghj.browser.webkit.JsBridge
@@ -58,7 +59,6 @@ import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
@@ -266,7 +266,12 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
             }
         })
 
-        siteAdapter = SiteAdapter(this)
+        siteAdapter = SiteAdapter(this, object : IClickListener {
+            override fun onItemClick(position: Int, url: String) {
+                changeLayoutUrlEdit( false )
+                loadUrl( url )
+            }
+        })
         rvSite.adapter = siteAdapter
 
 
@@ -274,7 +279,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         btn_test?.setOnClickListener(){
 //            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
 //            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
-//            wv_main?.loadUrl( "http://m.my.kt.com" )
+//            wv_main?.ladUorl( "http://m.my.kt.com" )
 
 //            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
             val manager : ReviewManager = ReviewManagerFactory.create(mContext)
@@ -302,6 +307,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     // 즐겨찾기 목록조회 옵저버
     val bookmarkObserver : Observer<ArrayList<BookmarkData>> = Observer { list: ArrayList<BookmarkData> ->
+        siteAdapter.bookmarkList.clear()
         siteAdapter.bookmarkList.addAll(list)
         notifySiteList()
     }
@@ -352,7 +358,6 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     override fun onPageFinished( _webView: WebView, url: String ) {
         LogUtil.d("onPageFinished ${url}")
-//        showEditMode( false )
 
         // 즐겨찾기 표시
         val bookmark = SQLiteService.selectBookmarkCntByUrl(this, url)
@@ -368,6 +373,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
             val date : String = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
             val params: Array<String> = arrayOf( date, it.title, url, Util.bitmapToString(it.favicon) )
             SQLiteService.insertHistoryData(this, params)
+            getViewModel().queryHistoryData(this)
         }
     }
 
@@ -413,9 +419,6 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         if( newProgress == 0 ) {
             showEditMode( false )
         }
-//        else {
-//            showEditMode( true )
-//        }
 
         showWebViewLoadingBar( true , newProgress )
     }
@@ -473,7 +476,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
             }
             // 설정
             R.id.btn_toolbar_more -> {
-                moreDialog = ToolbarMoreDialog(this , 0 ) { dialog, dialogId, selected ->
+                val menuDialog = MenuBottomSheet(this) { dialog, selected ->
                     when( selected ) {
                         DefineCode.MORE_MENU_COOKIE -> {
                             moveToCookie()
@@ -501,7 +504,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                         }
                     }
                 }
-                moreDialog?.show()
+                menuDialog.show()
             }
             // 즐겨찾기
             R.id.chkBookmark -> {
@@ -520,6 +523,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                 else {
                     SQLiteService.deleteBookmarkData(this, arrayListOf(_url))
                 }
+                getViewModel().queryBookmarkData(this)
             }
         }
     }
@@ -641,10 +645,12 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     fun showEditMode( isEdit: Boolean ) {
         if( isEdit ) {
             layout_url_edit_mode.visibility = View.VISIBLE
+            layoutSite.visibility = View.VISIBLE
             layout_url_txt_mode.visibility = View.GONE
         }
         else {
             layout_url_edit_mode.visibility = View.GONE
+            layoutSite.visibility = View.GONE
             layout_url_txt_mode.visibility = View.VISIBLE
         }
         isEditMode = isEdit
@@ -654,10 +660,12 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     fun changeLayoutUrlEdit( isEdit: Boolean) {
         showEditMode(isEdit)
 
+        siteAdapter.siteMode = SiteMode.BOOKMARK
         if( isEdit ) {
             edit_url?.isFocusableInTouchMode = true
             edit_url?.requestFocus()
             showKeyboard( edit_url , true )
+            notifySiteList()
         }
         else {
             edit_url?.isFocusableInTouchMode = false
@@ -1022,8 +1030,10 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
             // 즐겨찾기 액티비티
             DefineCode.ACT_REQ_ID.BOOKMARK -> {
                 if( resultCode == Activity.RESULT_OK ) {
+
                     val isChanged = data?.getBooleanExtra( DefineCode.IT_PARAM.IS_CHANGED, false ) ?: false
                     if( isChanged ) {
+                        getViewModel().queryBookmarkData(this)
                         wv_main.copyBackForwardList().currentItem?.let {
                             val bookmark = SQLiteService.selectBookmarkCntByUrl(this, it.url)
                             chkBookmark.isChecked = bookmark > 0

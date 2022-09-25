@@ -49,6 +49,15 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="TvMenuBottomSheet" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/txt_black</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <!-- 체크박스 -->
     <!-- 목록선택 -->
     <style name="CheckBoxStyle_selector" parent="Widget.AppCompat.CompoundButton.CheckBox">
@@ -59,6 +68,30 @@
         <item name="android:focusableInTouchMode">false</item>
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
+    </style>
+
+
+    <!-- 바텀시트 다이얼로그 -->
+    <style name="BaseBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BaseBottomSheetStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="BaseBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+        <item name="android:windowAnimationStyle">@style/AnimBottomSheetDialog</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <!-- 바텀시트 다이얼로그 애니메이션 -->
+    <style name="AnimBottomSheetDialog">
+        <item name="android:windowEnterAnimation">@anim/anim_slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/anim_slide_out_bottom</item>
     </style>
 
 </resources>

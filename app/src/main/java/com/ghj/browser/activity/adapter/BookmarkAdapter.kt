@@ -83,7 +83,7 @@ class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>, 
         holder.rootItem.setOnClickListener { v: View? ->
             // URL 이동
             if( jobMode == JobMode.VIEW ) {
-                listener.onItemClick(position)
+                listener.onItemClick(position, data.url)
             }
             // 삭제 선택
             else if( jobMode == JobMode.DELETE ) {

@@ -74,6 +74,9 @@ android {
             println "outputFileName = " + outputFileName
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {

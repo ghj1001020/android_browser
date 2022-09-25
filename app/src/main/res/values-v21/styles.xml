@@ -22,4 +22,13 @@
         <item name="android:colorEdgeEffect">@color/app_main_color</item>
     </style>
 
+
+    <!-- 바텀시트 다이얼로그 -->
+    <style name="BaseBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BaseBottomSheetStyle</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
 </resources>

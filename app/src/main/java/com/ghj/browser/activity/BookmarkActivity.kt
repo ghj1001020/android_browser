@@ -40,8 +40,7 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
         btnDoDelete.setOnClickListener( this )
 
         bookmarkAdapter = BookmarkAdapter(this, bookmarkDatas, object: IClickListener{
-            override fun onItemClick(position: Int) {
-                val url = bookmarkDatas.get(position).url
+            override fun onItemClick(position: Int, url: String) {
                 // 메인으로 이동
                 val intent = Intent(this@BookmarkActivity, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP

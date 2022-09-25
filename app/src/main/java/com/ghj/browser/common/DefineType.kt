@@ -4,7 +4,7 @@ import android.app.Dialog
 
 // 목록 클릭 리스너
 interface IClickListener {
-    fun onItemClick( position: Int )
+    fun onItemClick( position: Int, url: String )
 }
 
 // 웹사이트 목록 구분 타입
@@ -21,6 +21,5 @@ enum class JobMode(val value: Int) {
 }
 
 public typealias CommonDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int, data : String?)->Unit
-public typealias ToolbarMoreDialogCallback = (dialog : Dialog, dialogId : Int, selected : Int )->Unit
 public typealias CookieAddDialogCallback = (dialog : Dialog, selected : Int, data : String? )->Unit
 public typealias ScriptInputDialogCallback = (dialog: Dialog, script: String) -> Unit

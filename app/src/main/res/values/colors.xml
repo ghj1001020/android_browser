@@ -19,6 +19,7 @@
     <color name="bg_list">#F2F2F2</color>
     <color name="bg_rip">#e0e0e0</color>
     <color name="bg_head_gray">#E7E7E7</color>
+    <color name="bg_bottomsheet_handle">#D3D3D3</color>
 
     <!-- 버튼 -->
     <color name="btn_f76252">#F76252</color>

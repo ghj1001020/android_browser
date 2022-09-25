@@ -29,7 +29,7 @@
         <com.ghj.browser.webkit.CustomWebView
             android:id="@+id/wv_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <include layout="@layout/webview_loading_bar" />
 
@@ -44,6 +44,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/toolbar_main" />
+
+    <!-- 사이트목록 -->
+    <LinearLayout
+        android:id="@+id/layoutSite"
+        app:layout_constraintTop_toBottomOf="@id/appbar_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/txtSite"
+            android:text="즐겨찾기"
+            android:textSize="15dp"
+            android:textColor="@color/txt_black"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:background="@color/bg_list"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSite"
+            android:background="@color/bg_list"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_site"
+            tools:itemCount="5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 
     <!-- todo 테스트 하드코딩 -->

@@ -11,9 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.data.BookmarkData
 import com.ghj.browser.activity.adapter.data.WebSiteData
+import com.ghj.browser.common.IClickListener
 import com.ghj.browser.util.Util
 
-class SiteAdapter(val context: Context) : RecyclerView.Adapter<SiteAdapter.SiteHolder>() {
+class SiteAdapter(val context: Context, val listener: IClickListener) : RecyclerView.Adapter<SiteAdapter.SiteHolder>() {
 
     var siteMode : SiteMode = SiteMode.BOOKMARK
     val mInflater: LayoutInflater = LayoutInflater.from(context)
@@ -26,12 +27,14 @@ class SiteAdapter(val context: Context) : RecyclerView.Adapter<SiteAdapter.SiteH
     }
 
     override fun onBindViewHolder(holder: SiteHolder, position: Int) {
+        var url = ""
         if(siteMode == SiteMode.BOOKMARK) {
             val data : BookmarkData = bookmarkList[position]
             holder.txtTitle.text = data.title
             holder.txtUrl.text = data.url
             holder.imgFavicon.setImageBitmap(Util.stringToBitmap(data.favicon))
             holder.divider.visibility = if(position == bookmarkList.size-1) { View.GONE } else { View.VISIBLE }
+            url = data.url
         }
         else {
             val data : WebSiteData = historyList[position]
@@ -39,6 +42,11 @@ class SiteAdapter(val context: Context) : RecyclerView.Adapter<SiteAdapter.SiteH
             holder.txtUrl.text = data.url
             holder.imgFavicon.setImageBitmap(Util.stringToBitmap(data.icon))
             holder.divider.visibility = if(position == bookmarkList.size-1) { View.GONE } else { View.VISIBLE }
+            url = data.url
+        }
+
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(position, url)
         }
     }
 

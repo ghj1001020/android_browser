@@ -17,7 +17,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:padding="0dp"
         android:contentInsetLeft="0dp"
         android:contentInsetStart="0dp"
@@ -38,39 +38,40 @@
             <!-- 클릭전 -->
             <LinearLayout
                 android:id="@+id/layout_url_txt_mode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:layout_alignParentTop="true"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
                 android:visibility="visible">
 
                 <CheckBox
                     android:id="@+id/chkBookmark"
-                    android:checked="false"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:background="@drawable/chk_bookmark"
                     android:button="@null"
-                    android:layout_marginLeft="8dp"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"/>
+                    android:checked="false" />
 
                 <RelativeLayout
                     android:id="@+id/layout_txt_url"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:clickable="true"
                     android:focusable="true">
 
                     <ImageButton
                         android:id="@+id/btn_info"
-                        android:src="@drawable/ic_lock"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:scaleType="centerInside"
-                        android:layout_toLeftOf="@id/txt_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/txt_title"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_lock"
                         app:srcCompat="@drawable/ic_lock" />
 
                     <TextView
@@ -89,85 +90,59 @@
 
                 <ImageButton
                     android:id="@+id/btn_refersh"
-                    android:src="@drawable/ic_refresh"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:scaleType="centerInside"
-                    android:layout_width="@dimen/toolbar_height"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:srcCompat="@drawable/ic_refresh"/>
+                    android:src="@drawable/ic_refresh"
+                    app:srcCompat="@drawable/ic_refresh" />
             </LinearLayout>
 
             <!-- 클릭후 -->
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/layout_url_edit_mode"
                 android:layout_width="match_parent"
-                android:layout_height="296dp"
-                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/url_layout_bg"
+                android:paddingLeft="16dp"
                 android:visibility="gone">
 
-                <RelativeLayout
+                <!-- flagNoExtractUi : 전체화면과 같이 사용자 편의에 맞춘 UI가 아니라 기본 UI로 출력 -->
+                <EditText
+                    android:id="@+id/edit_url"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="6dp"
-                    android:background="@drawable/url_layout_bg"
-                    android:paddingLeft="16dp">
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toLeftOf="@id/btn_delete"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/url_hint"
+                    android:imeOptions="actionGo|flagNoExtractUi"
+                    android:inputType="textUri"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@color/txt_webview_title"
+                    android:textColorHint="@color/txt_hint_url"
+                    android:textCursorDrawable="@drawable/cursor_url"
+                    android:textSize="14dp" />
 
-                    <!-- flagNoExtractUi : 전체화면과 같이 사용자 편의에 맞춘 UI가 아니라 기본 UI로 출력 -->
-                    <EditText
-                        android:id="@+id/edit_url"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@id/btn_delete"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/url_hint"
-                        android:imeOptions="actionGo|flagNoExtractUi"
-                        android:inputType="textUri"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true"
-                        android:textColor="@color/txt_webview_title"
-                        android:textColorHint="@color/txt_hint_url"
-                        android:textCursorDrawable="@drawable/cursor_url"
-                        android:textSize="14dp" />
+                <ImageButton
+                    android:id="@+id/btn_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_delete"
+                    app:srcCompat="@drawable/ic_delete" />
 
-                    <ImageButton
-                        android:id="@+id/btn_delete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="4dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_delete"
-                        app:srcCompat="@drawable/ic_delete" />
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/txtSite"
-                    android:text="즐겨찾기"
-                    android:textSize="15dp"
-                    android:textColor="@color/txt_black"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="8dp"
-                    android:background="@color/bg_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvSite"
-                    android:background="@color/bg_list"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_site"
-                    tools:itemCount="5"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
 
