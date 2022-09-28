@@ -37,7 +37,7 @@
     <string name="toolbar_more_mobile_mode">모바일 버전</string>
     <string name="toolbar_more_history">방문한 페이지</string>
     <string name="toolbar_more_console">콘솔로그</string>
-    <string name="toolbar_more_webview">웹뷰로그</string>
+    <string name="toolbar_more_webview">웹킷로그</string>
     <string name="toolbar_more_js_execute">자바스크립트 실행</string>
     <string name="toolbar_more_html_element">HTML 소스보기</string>
     <string name="toolbar_more_bookmark">즐겨찾기</string>

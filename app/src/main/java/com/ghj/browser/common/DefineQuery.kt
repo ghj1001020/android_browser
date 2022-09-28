@@ -90,10 +90,13 @@ object DefineQuery {
     // 콘솔로그 전체 데이터 삭제
     val DELETE_CONSOLE_LOG_DATA_ALL = "DELETE FROM CONSOLE_LOG_TBL"
 
+
     // 웹킷로그 테이블 생성
     val CREATE_WEBKIT_LOG_TABLE = "CREATE TABLE IF NOT EXISTS WEBKIT_LOG_TBL ( " +
+                                  "       INSERT_TIME VARCHAR(14)   NOT NULL , " +
+                                  "       URL         VARCHAR(200)  NOT NULL , " +
                                   "       LOG_DATE    VARCHAR(14)   NOT NULL , " +
-                                  "       FUNCTION    VARCHAR(500)  , " +
+                                  "       _FUNCTION   VARCHAR(500)  , " +
                                   "       PARAMS      VARCHAR(5000) , " +
                                   "       DESCRIPTION VARCHAR(5000) " +
                                   ");"
@@ -102,18 +105,29 @@ object DefineQuery {
     val DROP_WEBKIT_LOG_TABLE = "DROP TABLE IF EXISTS WEBKIT_LOG_TBL"
 
     // 웹킷로그 데이터 입력
-    val INSERT_WEBKIT_LOG = "INSERT INTO WEBKIT_LOG_TBL(LOG_DATE, FUNCTION, PARAMS, DESCRIPTION) VALUES(?, ?, ?, ?)"
+    val INSERT_WEBKIT_LOG = "INSERT INTO WEBKIT_LOG_TBL(INSERT_TIME, URL, LOG_DATE, _FUNCTION, PARAMS, DESCRIPTION) VALUES(?, ?, ?, ?, ?, ?)"
+
+    // 웹킷로그 그룹 조회
+    val SELECT_WEBKIT_LOG_GROUP = "SELECT   INSERT_TIME ,    " +
+                                  "         URL              " +
+                                  "FROM     WEBKIT_LOG_TBL   " +
+                                  "GROUP BY INSERT_TIME, URL " +
+                                  "ORDER BY INSERT_TIME DESC "
 
     // 웹킷로그 데이터 조회
-    val SELECT_WEBKIT_LOG = "SELECT   LOG_DATE ,  " +
-                            "         FUNCTION ,  " +
-                            "         PARAMS   ,  " +
-                            "         DESCRIPTION " +
+    val SELECT_WEBKIT_LOG = "SELECT   INSERT_TIME ,  " +
+                            "         URL         ,  " +
+                            "         LOG_DATE    ,  " +
+                            "         _FUNCTION   ,  " +
+                            "         PARAMS      ,  " +
+                            "         DESCRIPTION    " +
                             "FROM     WEBKIT_LOG_TBL " +
-                            "ORDER BY LOG_DATE DESC"
+                            "WHERE    INSERT_TIME=? AND URL=? " +
+                            "ORDER BY LOG_DATE "
 
     // 웹킷로그 전체 데이터 삭제
     val DELETE_WEBKIT_LOG_DATA_ALL = "DELETE FROM WEBKIT_LOG_TBL"
+
 
     // 즐겨찾기 테이블 생성
     val CREATE_BOOKMARK_TABLE = "CREATE TABLE IF NOT EXISTS BOOKMARK_TBL ( " +

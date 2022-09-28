@@ -17,10 +17,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/imgOpen"
         android:paddingLeft="26dp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="2021-04-02"/>
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="2021-04-022021-04-022021-04-022021-04-022021-04-02"/>
 
     <ImageView
         android:id="@+id/imgOpen"

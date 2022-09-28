@@ -101,6 +101,12 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     var currentUrl : String = ""
     var isStarted = false
 
+    // 시작페이지
+    companion object {
+        var WEBVIEW_LOAD_URL = ""
+        var WEBVIEW_LOAD_TIME = ""
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -330,8 +336,8 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
         if( urlType == DefineCode.URL_TYPE_HTTP ) {
             isStarted = true
-            showEditMode( false )
 
+            showEditMode( false )
             txt_title?.text = url
             setUrlEditText(url)
             showWebViewLoadingBar( true , 0 )

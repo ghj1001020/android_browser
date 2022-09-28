@@ -9,6 +9,8 @@ import android.os.Build
 import android.text.TextUtils
 import android.webkit.*
 import com.ghj.browser.R
+import com.ghj.browser.activity.MainActivity
+import com.ghj.browser.activity.adapter.WebkitLogType
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.db.SQLiteService
 import com.ghj.browser.util.NetworkUtil
@@ -44,11 +46,10 @@ class CustomWebViewClient : WebViewClient {
 
         // start 웹킷로그
         START_TIME = Date().time
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "onPageStarted"
+        MainActivity.WEBVIEW_LOAD_TIME = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
+        MainActivity.WEBVIEW_LOAD_URL = url!!
         val _param = url ?: ""
-        val _description = "웹페이지 로드가 시작되었음을 알립니다."
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_START, _param)
         // end 웹킷로그
 
         // url 타입 체크
@@ -85,11 +86,8 @@ class CustomWebViewClient : WebViewClient {
         }
 
         // start 웹킷로그
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "[deprecation] shouldOverrideUrlLoading"
-        val _param = url ?: ""
-        val _description = "웹페이지가 로드 되려고 할 때 어플리케이션이 제어 할 수있는 기회를 제공합니다"
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        val _param = "${startUrl}\n->\n${url ?: ""}"
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_REDIRECT1, _param)
         // end 웹킷로그
 
         // url 타입 체크
@@ -127,11 +125,8 @@ class CustomWebViewClient : WebViewClient {
         val url : String = request.url.toString()
 
         // start 웹킷로그
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "shouldOverrideUrlLoading"
-        val _param = url
-        val _description = "웹페이지가 로드 되려고 할 때 어플리케이션이 제어 할 수있는 기회를 제공합니다"
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        val _param = "${startUrl}\n->\n${url}"
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_REDIRECT2, _param)
         // end 웹킷로그
 
         // url 타입 체크
@@ -167,11 +162,8 @@ class CustomWebViewClient : WebViewClient {
 
         // start 웹킷로그
         val loadTime : Double = Math.round( (Date().time - START_TIME)/1000.0 * 100) / 100.0
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "onPageFinished"
-        val _param = "${loadTime}초\n${url ?: ""}"
-        val _description = "웹페이지 로드가 완료되었음을 알립니다."
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        val _param = "${loadTime}초"
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_FINISH, _param)
         // end 웹킷로그
 
         listener?.onPageFinished( view, url!! )
@@ -227,11 +219,8 @@ class CustomWebViewClient : WebViewClient {
         }
 
         // start 웹킷로그
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "[deprecation] onReceivedError"
         val _param = "${failingUrl}\n[${errorCode}] ${description ?: ""})"
-        val _description = "웹 리소스 로딩동안 오류를 알립니다"
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_ERROR1, _param)
         // end 웹킷로그
 
         if( startUrl.equals( failingUrl ) ) {
@@ -257,11 +246,8 @@ class CustomWebViewClient : WebViewClient {
         val failingUrl = request?.url.toString()
 
         // start 웹킷로그
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "onReceivedError"
         val _param = "${failingUrl}\n[${errorCode}] ${errorMsg})"
-        val _description = "웹 리소스 로딩동안 오류를 알립니다"
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_ERROR2, _param)
         // end 웹킷로그
 
         if( startUrl.equals( failingUrl ) ) {
@@ -286,11 +272,8 @@ class CustomWebViewClient : WebViewClient {
         val failingUrl = request?.url.toString()
 
         // start 웹킷로그
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "onReceivedHttpError"
         val _param = "${failingUrl}\nResponse Code : ${errorCode}"
-        val _description = "웹 리소스 로딩동안 서버에서 HTTP 오류가 수신되었음을 알립니다"
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_HTTP_ERROR, _param)
         // end 웹킷로그
 
         if( view.url.equals( failingUrl ) ) {
@@ -319,11 +302,8 @@ class CustomWebViewClient : WebViewClient {
         val failingUrl = error?.url ?: ""
 
         // start 웹킷로그
-        val _date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val _function = "onReceivedSslError"
         val _param = "${failingUrl}\nError Code : ${errorCode}"
-        val _description = "웹 리소스 로딩동안 SSL 오류가 발생했음을 알립니다"
-        SQLiteService.insertWebViewLogData(this.context as Context, arrayOf(_date, _function, _param, _description))
+        SQLiteService.insertWebViewLogData(this.context as Context, WebkitLogType.WEBVIEW_SSL, _param)
         // end 웹킷로그
 
         listener?.onReceivedSslError( view, handler, errorCode, view.url ?: "", failingUrl )

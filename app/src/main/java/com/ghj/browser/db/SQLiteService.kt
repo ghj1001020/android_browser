@@ -3,9 +3,14 @@ package com.ghj.browser.db
 import android.content.Context
 import android.database.Cursor
 import android.text.TextUtils
+import com.ghj.browser.activity.MainActivity
+import com.ghj.browser.activity.adapter.WebkitLogType
 import com.ghj.browser.activity.adapter.data.*
 import com.ghj.browser.common.DefineQuery
 import com.ghj.browser.common.WebSiteType
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 object SQLiteService {
 
@@ -194,7 +199,58 @@ object SQLiteService {
     }
 
     // 웹킷로그 테이블에 데이터 입력
-    fun insertWebViewLogData(context: Context, params: Array<String>) {
+    fun insertWebViewLogData(context: Context, type: WebkitLogType, argument: String) {
+        val data : MutableList<String> = mutableListOf()
+
+        val date = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
+        data.add( MainActivity.WEBVIEW_LOAD_TIME )
+        data.add( MainActivity.WEBVIEW_LOAD_URL )
+        data.add( date )
+
+        when(type) {
+            WebkitLogType.WEBVIEW_START -> {
+                data.add( "onPageStarted" )
+                data.add( argument )
+                data.add( "웹페이지 로드가 시작되었음을 알립니다." )
+            }
+            WebkitLogType.WEBVIEW_REDIRECT1 -> {
+                data.add( "[deprecation] shouldOverrideUrlLoading" )
+                data.add( argument )
+                data.add( "웹페이지가 로드 되려고 할 때 어플리케이션이 제어 할 수있는 기회를 제공합니다." )
+            }
+            WebkitLogType.WEBVIEW_REDIRECT2 -> {
+                data.add( "shouldOverrideUrlLoading" )
+                data.add( argument )
+                data.add( "웹페이지가 로드 되려고 할 때 어플리케이션이 제어 할 수있는 기회를 제공합니다." )
+            }
+            WebkitLogType.WEBVIEW_FINISH -> {
+                data.add( "onPageFinished" )
+                data.add( argument )
+                data.add( "웹페이지 로드가 완료되었음을 알립니다." )
+            }
+            WebkitLogType.WEBVIEW_ERROR1 -> {
+                data.add( "[deprecation] onReceivedError" )
+                data.add( argument )
+                data.add( "웹 리소스 로딩동안 오류를 알립니다." )
+            }
+            WebkitLogType.WEBVIEW_ERROR2 -> {
+                data.add( "onReceivedError" )
+                data.add( argument )
+                data.add( "웹 리소스 로딩동안 오류를 알립니다." )
+            }
+            WebkitLogType.WEBVIEW_HTTP_ERROR -> {
+                data.add( "onReceivedHttpError" )
+                data.add( argument )
+                data.add( "웹 리소스 로딩동안 서버에서 HTTP 오류가 수신되었음을 알립니다." )
+            }
+            WebkitLogType.WEBVIEW_SSL -> {
+                data.add( "onReceivedSslError" )
+                data.add( argument )
+                data.add( "웹 리소스 로딩동안 SSL 오류가 발생했음을 알립니다." )
+            }
+        }
+
+        val params : Array<String> = data.toTypedArray()
         SQLite.init(context)
         SQLite.execSQL(DefineQuery.INSERT_WEBKIT_LOG, params)
         SQLite.close()
@@ -205,15 +261,58 @@ object SQLiteService {
         val list : ArrayList<WebViewLogData> = arrayListOf()
 
         SQLite.init(context)
-        SQLite.select(DefineQuery.SELECT_WEBKIT_LOG) {cursor: Cursor ->
+
+        SQLite.select(DefineQuery.SELECT_WEBKIT_LOG_GROUP) {cursor: Cursor ->
             while (cursor.moveToNext()) {
-                val date : String = cursor.getString( cursor.getColumnIndex("LOG_DATE") )
-                val function : String = cursor.getString( cursor.getColumnIndex("FUNCTION") )
-                val params : String = cursor.getString( cursor.getColumnIndex("PARAMS") )
-                val description : String = cursor.getString( cursor.getColumnIndex("DESCRIPTION") )
-                list.add( WebViewLogData(date, function, params, description) )
+                val insertTime : String = cursor.getString( cursor.getColumnIndex("INSERT_TIME") )
+                val url : String = cursor.getString( cursor.getColumnIndex("URL") )
+                if( !insertTime.isEmpty() && !url.isEmpty() ) {
+                    list.add( WebViewLogData(insertTime, url) )
+                }
             }
         }
+
+        if(list.size > 0) {
+            list[0].isOpen = true
+
+            val params : Array<String> = arrayOf(list[0].insertTime, list[0].url)
+            SQLite.select(DefineQuery.SELECT_WEBKIT_LOG, params) {cursor: Cursor ->
+                while (cursor.moveToNext()) {
+                    val insertTime : String = cursor.getString( cursor.getColumnIndex("INSERT_TIME") )
+                    val url : String = cursor.getString( cursor.getColumnIndex("URL") )
+                    val date : String = cursor.getString( cursor.getColumnIndex("LOG_DATE") )
+                    val function : String = cursor.getString( cursor.getColumnIndex("_FUNCTION") )
+                    val argument : String = cursor.getString( cursor.getColumnIndex("PARAMS") )
+                    val description : String = cursor.getString( cursor.getColumnIndex("DESCRIPTION") )
+                    list.add( 1, WebViewLogData(insertTime, url, date, function, argument, description) )
+                }
+            }
+        }
+
+        SQLite.close()
+
+        return list
+    }
+
+    // 웹뷰로그 URL별 웹킷로그
+    fun selectWebViewLogsByUrl(context: Context, _insertTime: String, _url: String) : ArrayList<WebViewLogData> {
+        val list : ArrayList<WebViewLogData> = arrayListOf()
+
+        SQLite.init(context)
+
+        val params : Array<String> = arrayOf(_insertTime, _url)
+        SQLite.select(DefineQuery.SELECT_WEBKIT_LOG, params) {cursor: Cursor ->
+            while (cursor.moveToNext()) {
+                val insertTime : String = cursor.getString( cursor.getColumnIndex("INSERT_TIME") )
+                val url : String = cursor.getString( cursor.getColumnIndex("URL") )
+                val date : String = cursor.getString( cursor.getColumnIndex("LOG_DATE") )
+                val function : String = cursor.getString( cursor.getColumnIndex("_FUNCTION") )
+                val argument : String = cursor.getString( cursor.getColumnIndex("PARAMS") )
+                val description : String = cursor.getString( cursor.getColumnIndex("DESCRIPTION") )
+                list.add( WebViewLogData(insertTime, url, date, function, argument, description) )
+            }
+        }
+
         SQLite.close()
 
         return list

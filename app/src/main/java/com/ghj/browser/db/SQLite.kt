@@ -7,7 +7,7 @@ import java.lang.Exception
 
 object SQLite {
     val DB_FILE_NAME = "browser.db"
-    val DB_VERSION = 11
+    val DB_VERSION = 12
 
     private var helper : SQLiteHelper? = null
     private var readDB : SQLiteDatabase? = null
