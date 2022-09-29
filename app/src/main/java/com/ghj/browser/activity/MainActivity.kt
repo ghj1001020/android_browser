@@ -35,6 +35,7 @@ import com.ghj.browser.R
 import com.ghj.browser.activity.adapter.SiteAdapter
 import com.ghj.browser.activity.adapter.SiteMode
 import com.ghj.browser.activity.adapter.data.BookmarkData
+import com.ghj.browser.activity.adapter.data.ConsoleData
 import com.ghj.browser.activity.adapter.data.WebSiteData
 import com.ghj.browser.activity.base.BaseWebViewActivity
 import com.ghj.browser.activity.viewmodel.MainViewModel
@@ -59,6 +60,7 @@ import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
@@ -100,6 +102,9 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     // 현재페이지 url
     var currentUrl : String = ""
     var isStarted = false
+
+    // 콘솔데이터 리스트
+    var consoleList : ArrayList<ConsoleData> = arrayListOf()
 
     // 시작페이지
     companion object {
@@ -336,6 +341,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
         if( urlType == DefineCode.URL_TYPE_HTTP ) {
             isStarted = true
+            consoleList.clear()
 
             showEditMode( false )
             txt_title?.text = url
@@ -601,6 +607,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     // 콘솔로그 페이지로 이동
     fun moveToConsoleLog() {
         val intent : Intent = Intent(this, ConsoleActivity::class.java)
+        intent.putExtra( DefineCode.IT_PARAM_CONSOLE, consoleList )
         startActivity(intent)
     }
 
@@ -999,8 +1006,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     override fun onConsoleMessage(log: String) {
         val date : String = SimpleDateFormat( "yyyyMMddHHmmss" , Locale.getDefault() ).format( Date() )
-        val url : String = wv_main?.url ?: ""
-        SQLiteService.insertConsoleLogData(this, arrayOf(date, url, log))
+        consoleList.add(ConsoleData(date, log))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

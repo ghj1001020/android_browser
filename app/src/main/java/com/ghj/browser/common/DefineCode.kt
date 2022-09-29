@@ -41,6 +41,7 @@ object DefineCode {
     // 인텐트 파라미터명
 //    val IT_PARAM_INDEX_URL = "it_param_index_url"
     val IT_PARAM_COOKIE_URL = "it_param_cookie_url"
+    val IT_PARAM_CONSOLE = "it_param_console"
 
     // 핸들러 파라미터명
     val HDL_PARAM_WV_BRIDGE_RTN = "hdl_param_wv_bridge_rtn"

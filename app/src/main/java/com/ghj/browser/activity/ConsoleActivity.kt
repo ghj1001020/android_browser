@@ -9,13 +9,14 @@ import com.ghj.browser.activity.adapter.ConsoleAdapter
 import com.ghj.browser.activity.adapter.data.ConsoleData
 import com.ghj.browser.activity.base.BaseViewModelActivity
 import com.ghj.browser.activity.viewmodel.ConsoleViewModel
+import com.ghj.browser.common.DefineCode
 import kotlinx.android.synthetic.main.activity_console.*
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.appbar_common.*
 
 class ConsoleActivity : BaseViewModelActivity<ConsoleViewModel>(), View.OnClickListener {
 
-    val consoleDatas : ArrayList<ConsoleData> = ArrayList()
+    lateinit var consoleDatas : ArrayList<ConsoleData>
     lateinit var consoleAdapter : ConsoleAdapter
 
 
@@ -23,18 +24,13 @@ class ConsoleActivity : BaseViewModelActivity<ConsoleViewModel>(), View.OnClickL
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_console)
 
+        consoleDatas = intent.getSerializableExtra( DefineCode.IT_PARAM_CONSOLE ) as ArrayList<ConsoleData>
         initLayout()
-        getViewModel()?.addObserver(this, consoleLogDataObserver, consoleLogDataDeleteAllObserver)
-    }
-
-    override fun onDestroy() {
-        getViewModel()?.removeObserver(consoleLogDataObserver, consoleLogDataDeleteAllObserver)
-        super.onDestroy()
     }
 
     fun initLayout() {
         btnBack.setOnClickListener(this)
-        btnDelete.setOnClickListener(this)
+        btnDelete.visibility = View.GONE
         toolbarTitle.text = getString(R.string.toolbar_more_console)
 
         consoleAdapter = ConsoleAdapter(this, consoleDatas)
@@ -42,7 +38,7 @@ class ConsoleActivity : BaseViewModelActivity<ConsoleViewModel>(), View.OnClickL
     }
 
     override fun onCreateAfter() {
-        getViewModel()?.queryConsoleLogData(this)
+        consoleAdapter.notifyDataSetChanged()
     }
 
     override fun newViewModel() : ConsoleViewModel {
@@ -55,30 +51,6 @@ class ConsoleActivity : BaseViewModelActivity<ConsoleViewModel>(), View.OnClickL
             R.id.btnBack-> {
                 finish()
             }
-
-            // 모두지우기
-            R.id.btnDelete-> {
-                deleteAllConsoleLog()
-            }
         }
-    }
-
-    // 콘솔로그 데이터 옵저버
-    val consoleLogDataObserver : Observer<ArrayList<ConsoleData>> = Observer { list: ArrayList<ConsoleData> ->
-        consoleDatas.clear()
-        consoleDatas.addAll( list )
-        consoleAdapter.notifyDataSetChanged()
-    }
-
-    // 콘솔로그 모든 데이터 삭제 옵저버
-    val consoleLogDataDeleteAllObserver : Observer<Boolean> = Observer { isSuccess: Boolean ->
-        if(isSuccess) {
-            getViewModel()?.queryConsoleLogData(this)
-        }
-    }
-
-    // 콘솔로그 모두 지우기
-    fun deleteAllConsoleLog() {
-        getViewModel()?.queryConsoleLogDataDeleteAll(this)
     }
 }

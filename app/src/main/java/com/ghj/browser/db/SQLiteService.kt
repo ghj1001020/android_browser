@@ -164,39 +164,6 @@ object SQLiteService {
         return webSiteList
     }
 
-    // CONSOLE_LOG_TBL에 데이터 입력
-    fun insertConsoleLogData(context: Context, params: Array<String>) {
-        SQLite.init(context)
-        SQLite.execSQL(DefineQuery.INSERT_CONSOLE_LOG, params)
-        SQLite.close()
-    }
-
-    // CONSOLE_LOG_TBL의 목록 조회
-    fun selectConsoleLogData(context: Context) : ArrayList<ConsoleData> {
-        val list : ArrayList<ConsoleData> = arrayListOf()
-
-        SQLite.init(context)
-        SQLite.select(DefineQuery.SELECT_CONSOLE_LOG) {cursor: Cursor ->
-            while(cursor.moveToNext()) {
-                val date : String = cursor.getString( cursor.getColumnIndex("LOG_DATE") )
-                val url : String = cursor.getString( cursor.getColumnIndex("URL") )
-                val log : String = cursor.getString( cursor.getColumnIndex("LOG") )
-                list.add( ConsoleData(date, url, log))
-            }
-        }
-        SQLite.close()
-
-        return list
-    }
-
-    // 콘솔로그 데이터 모두 삭제
-    fun deleteConsoleLogDataAll(context: Context) : Boolean {
-        SQLite.init(context)
-        val result = SQLite.execSQL(DefineQuery.DELETE_CONSOLE_LOG_DATA_ALL)
-        SQLite.close()
-
-        return result
-    }
 
     // 웹킷로그 테이블에 데이터 입력
     fun insertWebViewLogData(context: Context, type: WebkitLogType, argument: String) {

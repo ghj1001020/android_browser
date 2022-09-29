@@ -32,16 +32,15 @@ class ConsoleAdapter( val mContext: Context, var dataList: List<ConsoleData> ) :
         val data : ConsoleData = dataList.get(position)
 
         holder.txtDate.text = Util.convertDateFormat(data.date, "yyyyMMddHHmmss", "yyyy-MM-dd HH:mm:ss")
-        holder.txtUrl.text = data.url
         holder.txtLog.text = data.log
 
         val params : ConstraintLayout.LayoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        val pixcel = Util.convertDpToPixcel(mContext, 16.0f)
+        val dp12 = Util.convertDpToPixcel(mContext, 12.0f)
         if( position == dataList.size-1 ) {
-            params.setMargins(pixcel, pixcel, pixcel, pixcel)
+            params.setMargins(dp12, dp12, dp12, dp12)
         }
         else {
-            params.setMargins(pixcel, pixcel, pixcel, 0)
+            params.setMargins(dp12, dp12, dp12, 0)
         }
         holder.rootItem.layoutParams = params
     }
@@ -50,7 +49,6 @@ class ConsoleAdapter( val mContext: Context, var dataList: List<ConsoleData> ) :
     class ConsoleHolder( val view: View ) : RecyclerView.ViewHolder(view) {
         val rootItem : ConstraintLayout = view.findViewById(R.id.rootItem)
         val txtDate : TextView = view.findViewById(R.id.txtDate)
-        val txtUrl : TextView = view.findViewById(R.id.txtUrl)
         val txtLog : TextView = view.findViewById(R.id.txtLog)
     }
 }
