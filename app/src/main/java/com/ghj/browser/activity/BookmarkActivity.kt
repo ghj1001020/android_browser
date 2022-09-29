@@ -31,7 +31,7 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
         setContentView(R.layout.activity_bookmark)
 
         initLayout()
-        getViewModel()?.addObserver(this, bookmarkDataObserver, bookmarkDataDeleteObserver)
+        getViewModel().addObserver(this, bookmarkDataObserver, bookmarkDataDeleteObserver)
     }
 
     fun initLayout() {
@@ -52,7 +52,7 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
     }
 
     override fun onDestroy() {
-        getViewModel()?.removeObserver(bookmarkDataObserver, bookmarkDataDeleteObserver)
+        getViewModel().removeObserver(bookmarkDataObserver, bookmarkDataDeleteObserver)
         super.onDestroy()
     }
 
@@ -61,7 +61,7 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
     }
 
     override fun onCreateAfter() {
-        getViewModel()?.queryBookmarkData(this)
+        getViewModel().queryBookmarkData(this)
     }
 
     // 즐겨찾기 목록조회 옵저버

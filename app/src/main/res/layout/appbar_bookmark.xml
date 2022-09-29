@@ -81,8 +81,8 @@
                     android:layout_width="41dp"
                     android:layout_height="41dp"
                     android:padding="8dp"
-                    android:src="@drawable/ic_morevert_36"
-                    app:srcCompat="@drawable/ic_morevert_36" />
+                    android:src="@drawable/ic_trash"
+                    app:srcCompat="@drawable/ic_trash" />
 
             </FrameLayout>
 
