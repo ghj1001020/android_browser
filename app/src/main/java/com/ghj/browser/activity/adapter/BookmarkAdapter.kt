@@ -50,6 +50,7 @@ class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>, 
 
         holder.imgFavicon.setImageBitmap(Util.stringToBitmap(data.favicon))
         holder.txtTitle.text = data.title
+        holder.txtUrl.text = data.url
 
         // 배경
         if( itemCount == 1 ) {
@@ -98,6 +99,7 @@ class BookmarkAdapter( val mContext: Context, var dataList: List<BookmarkData>, 
         val chkSelect : AppCompatCheckBox = itemView.findViewById(R.id.chkSelect)
         val imgFavicon : AppCompatImageView = itemView.findViewById(R.id.imgFavicon)
         val txtTitle : TextView = itemView.findViewById(R.id.txtTitle)
+        val txtUrl : TextView = itemView.findViewById(R.id.txtUrl)
         val divider : View = itemView.findViewById(R.id.divider)
     }
 }

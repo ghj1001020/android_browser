@@ -347,6 +347,10 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
             txt_title?.text = url
             setUrlEditText(url)
             showWebViewLoadingBar( true , 0 )
+
+            // 즐겨찾기 표시
+            val bookmark = SQLiteService.selectBookmarkCntByUrl(this, url)
+            chkBookmark.isChecked = bookmark > 0
         }
         else {
             super.onPageStarted( _webView , urlType , url )
@@ -381,10 +385,6 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                 getViewModel().queryHistoryData(this)
             }
         }
-
-        // 즐겨찾기 표시
-        val bookmark = SQLiteService.selectBookmarkCntByUrl(this, url)
-        chkBookmark.isChecked = bookmark > 0
 
         txt_title?.text = StringUtil.getUrlDoamin( url )
         setUrlEditText(url)

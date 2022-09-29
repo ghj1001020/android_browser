@@ -15,11 +15,15 @@ import com.ghj.browser.activity.viewmodel.BookmarkViewModel
 import com.ghj.browser.common.DefineCode
 import com.ghj.browser.common.IClickListener
 import com.ghj.browser.common.JobMode
+import com.ghj.browser.db.SQLiteService
+import com.ghj.browser.dialog.CommonDialog
 import com.ghj.browser.util.AlertUtil
 import kotlinx.android.synthetic.main.activity_bookmark.*
 import kotlinx.android.synthetic.main.appbar_bookmark.*
 
 class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClickListener {
+
+    private val TAG : String = "BookmarkActivity"
 
     val bookmarkDatas : ArrayList<BookmarkData> = arrayListOf()
     lateinit var bookmarkAdapter: BookmarkAdapter
@@ -74,7 +78,7 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
     // 즐겨찾기 삭제결과 옵저버
     val bookmarkDataDeleteObserver : Observer<Boolean> = Observer { isSuccess: Boolean ->
         if( isSuccess ) {
-            getViewModel()?.queryBookmarkData(this)
+            getViewModel().queryBookmarkData(this)
             isChanged = true
         }
     }
@@ -107,7 +111,7 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
                     }
                     // 전체삭제
                     else if( position == 1 ) {
-                        getViewModel()?.queryBookmarkDataDeleteAll(this)
+                        deleteBookmarkAll()
                     }
                 }
                 morePopup.show()
@@ -144,5 +148,16 @@ class BookmarkActivity : BaseViewModelActivity<BookmarkViewModel>(), View.OnClic
 
         getViewModel()?.queryBookmarkDataDelete(this, params)
         changeJobMode(JobMode.VIEW)
+    }
+
+    // 즐겨찾기 모두 삭제
+    fun deleteBookmarkAll() {
+        val buttons = arrayOf(getString(R.string.cancel), getString(R.string.ok))
+        val dialog = CommonDialog( this , 0 , getString(R.string.confirm_delete_all) , buttons, true, TAG ){ dialog, dialogId, selected, data ->
+            if( selected == DefineCode.BTN_RIGHT ) {
+                getViewModel().queryBookmarkDataDeleteAll(this)
+            }
+        }
+        dialog.show()
     }
 }
