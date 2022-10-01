@@ -54,7 +54,7 @@
 
     <!-- 더보기 > 쿠키 -->
     <color name="txt_cookie_key">#535252</color>
-    <color name="txt_cookie_value">#000000</color>
+    <color name="txt_cookie_value">#1f1f1f</color>
     <color name="btn_cookie_add">#477dba</color>
 
     <!-- 시작페이지 -->

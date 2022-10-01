@@ -52,13 +52,15 @@ object NetworkUtil {
         val cookieList = mutableMapOf<String,String>()    // 쿠키 목록 결과값
 
         val cookies = CookieManager.getInstance().getCookie( url )
-        val arrCookies : List<String> = cookies.trim().split( ";" )
+        if(cookies != null) {
+            val arrCookies : List<String> = cookies.trim().split( ";" )
 
-        for( item : String in arrCookies ) {
-            val arrItem : List<String> = item.split( "=" )
-            if( arrItem.size < 2 ) continue
+            for( item : String in arrCookies ) {
+                val arrItem : List<String> = item.split( "=" )
+                if( arrItem.size < 2 ) continue
 
-            cookieList.put( arrItem[0] , arrItem[1] )
+                cookieList.put( arrItem[0] , arrItem[1] )
+            }
         }
 
         return cookieList
@@ -106,7 +108,7 @@ object NetworkUtil {
         if( TextUtils.isEmpty( key ) ) return
 
         val cookieManager : CookieManager = CookieManager.getInstance()
-        cookieManager.setCookie( key , value )
+        cookieManager.setCookie( url , "${key}=${value}" )
 
         flushCookies()
     }
@@ -117,8 +119,7 @@ object NetworkUtil {
 
         for( key in cookies.keys ) {
             if( TextUtils.isEmpty( key ) ) continue
-
-            cookieManager.setCookie( key , cookies.get(key) as String )
+            cookieManager.setCookie( url , "${key}=${cookies[key]}" )
         }
 
         flushCookies()

@@ -65,23 +65,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <FrameLayout
+                <ImageButton
                     android:id="@+id/btn_back"
-                    android:clickable="true"
-                    android:focusable="true"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:background="@android:color/transparent"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="41dp"
-                        android:layout_height="41dp"
-                        android:background="@android:color/transparent"
-                        android:padding="4dp"
-                        android:src="@drawable/btn_back"
-                        app:srcCompat="@drawable/btn_back" />
-
-                </FrameLayout>
+                    android:padding="4dp"
+                    android:src="@drawable/btn_back"
+                    app:srcCompat="@drawable/btn_back" />
 
                 <TextView
                     android:text="@string/toolbar_more_cookie"
@@ -99,23 +91,16 @@
                     android:layout_height="wrap_content" />
 
                 <!-- 쿠키추가 -->
-                <FrameLayout
+                <ImageButton
                     android:id="@+id/btn_cookie_add"
-                    android:clickable="true"
-                    android:focusable="true"
+                    android:src="@drawable/ic_cookie_add"
+                    app:srcCompat="@drawable/ic_cookie_add"
+                    android:background="@android:color/transparent"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:src="@drawable/ic_cookie_add"
-                        app:srcCompat="@drawable/ic_cookie_add"
-                        android:background="@android:color/transparent"
-                        android:padding="8dp"
-                        android:layout_width="41dp"
-                        android:layout_height="41dp" />
-
-                </FrameLayout>
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp" />
 
             </LinearLayout>
 

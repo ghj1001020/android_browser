@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.appbar_cookie.*
 
 class CookieActivity : BaseActivity() , View.OnClickListener {
 
+    val cookieData : ArrayList<CookieData> = arrayListOf()
+
     // ui
     var actionBar : ActionBar? = null
     lateinit var cookieAdapter : CookieAdapter
@@ -45,6 +47,8 @@ class CookieActivity : BaseActivity() , View.OnClickListener {
     fun initData( intent : Intent ) {
         domain = intent.getStringExtra( DefineCode.IT_PARAM_COOKIE_URL ) ?: ""
         LogUtil.d("domain=" + domain )
+
+        queryCookieList()
     }
 
     fun initLayout() {
@@ -58,12 +62,6 @@ class CookieActivity : BaseActivity() , View.OnClickListener {
         }
 
         // 쿠키목록
-        val cookieData : ArrayList<CookieData> = arrayListOf()
-        val cookies : Map<String,String> = NetworkUtil.getCookies( domain )
-        for( cookie in cookies ) {
-            cookieData.add( CookieData( cookie.key , cookie.value ) )
-        }
-
         cookieAdapter = CookieAdapter( this , cookieData )
         list_cookies.adapter = cookieAdapter
 
@@ -72,7 +70,7 @@ class CookieActivity : BaseActivity() , View.OnClickListener {
             list_cookies.startNestedScroll( View.OVER_SCROLL_ALWAYS )
         }
 
-        txt_toolbar_sub_desc1.text = String.format( getString(R.string.toolbar_more_cookie_desc) , cookieAdapter.count )
+        txt_toolbar_sub_desc1.text = String.format( getString(R.string.toolbar_more_cookie_desc) , cookieData.size )
         txt_toolbar_sub_desc2.text = domain
 
         btn_back.setOnClickListener( this )
@@ -82,7 +80,7 @@ class CookieActivity : BaseActivity() , View.OnClickListener {
     override fun onClick(p0: View?) {
         when( p0?.id ) {
             R.id.btn_back -> {
-
+                finish()
             }
 
             R.id.btn_cookie_add -> {
@@ -91,12 +89,21 @@ class CookieActivity : BaseActivity() , View.OnClickListener {
         }
     }
 
+    // 쿠키목록조회
+    fun queryCookieList() {
+        cookieData.clear()
+        val cookies : Map<String,String> = NetworkUtil.getCookies( domain )
+        for( cookie in cookies ) {
+            cookieData.add( CookieData( cookie.key , cookie.value ) )
+        }
+    }
+
     // 쿠키추가 다이얼로그
     fun onCookieAdd() {
-        dialog?.dismiss()
-
-        dialog = CookieAddDialog( this ) { dialog: Dialog, selected: Int, data: String? ->
-
+        dialog = CookieAddDialog( this, domain) { dialog: Dialog->
+            queryCookieList()
+            cookieAdapter.notifyDataSetChanged()
+            txt_toolbar_sub_desc1.text = String.format( getString(R.string.toolbar_more_cookie_desc) , cookieData.size )
         }
         dialog?.show()
     }

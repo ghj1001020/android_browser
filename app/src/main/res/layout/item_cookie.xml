@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -13,7 +13,7 @@
     <TextView
         android:id="@+id/txt_cookie_key"
         android:gravity="center_vertical"
-        android:textSize="16dp"
+        android:textSize="15dp"
         android:textColor="@color/txt_cookie_key"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,9 +22,9 @@
     <TextView
         android:id="@+id/txt_cookie_value"
         android:gravity="center_vertical"
-        android:textSize="19dp"
+        android:textSize="16dp"
         android:textColor="@color/txt_cookie_value"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="MM_CHANNEL_MORE_SUBSCRIBE_BANNER" />
