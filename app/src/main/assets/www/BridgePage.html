@@ -11,16 +11,61 @@
 </head>
 
 <body>
-
-    <div>
-        <p id="txt_getMessage"></p>
-        <p>타이틀 : <span id="txt_getMessage_title"></span></p>
-        <p>내용 : <span id="txt_getMessage_msg"></span></p>
-    </div>
     
-	<div>
-		<button id="btn_toast">팝업</button>
-	</div>
-	
+    <ul>
+        <li>
+            <div>
+                <h1>웹 -> 앱 호출</h1>
+                <button id="btnPopup">팝업</button>
+            </div>
+        </li>
+        
+        <li>
+            <div>
+                <h1>앱 -> 웹 호출</h1>
+                <p id="txtAppMessage"></p>
+            </div>
+        </li>
+        
+        <li>
+            <div>
+                <h1>앱 -> 웹 호출 -> 앱으로 값 리턴</h1>
+                <p id="txtAppMessageReturn"></p>
+            </div>
+        </li>
+        
+        <li>
+            <div>
+                <h1>문자앱 호출</h1>
+                <p id="txtSmsBody">가나다라마바사아자차카타파하 ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 ~!@#$%^*()_`-[]\{}|;'?,. abcdefghijklmnopqrstuvwxyz</p>
+                <button id="btnSms">문자전송</button>
+            </div>
+        </li>
+        
+        <li>
+            <div>
+                <h1>전화앱 호출</h1>
+                <button id="btnTel">tel:010-1234-1234</button>
+            </div>
+        </li>
+        
+        <li>
+            <div>
+                <h1>파일 다운로드</h1>
+                <p id="txtDownload">https://www.gov.kr/main?d=AA100DataDownApp&SAVE_FILE_NM=51800.pdf</p>
+                <button id="btnDownload">다운로드</button>
+            </div>
+        </li>
+        
+        <li>
+            <div>
+                <h1>동영상보기</h1>
+                <iframe width="280" height="155" src="https://www.youtube.com/embed/WeNPtVhr6qk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </li>
+        
+    </ul>
+
+    
 </body>
 </html>

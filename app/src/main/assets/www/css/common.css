@@ -1,21 +1,53 @@
 @charset "UTF-8";
 
 html {
-	background-color: #ffcf10;
+	background-color: #edeef0;
 }
 
 div {
-	width: 100%;
+	width: auto;
 	text-align: center;
-	margin-top: 32px;
+    padding: 10px;
+}
+
+html, body, ul, li, h1, h2, h3, h4 {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    border: 1px solid #222222;
+    border-radius: 16px;
+    padding: 16px 0;
+    margin: 16px;
+    background-color: #ffffff;
+}
+
+h1 {
+    font-size: 1.3rem;
+    color: #000000;
+}
+
+h1, h2, h3, h4, p, span {
+    word-break: break-all;
 }
 
 button {
 	width: 180px;
 	height: 44px;
 	font-weight: bold;
-	background-color: #ffffff;
-	color: #f48024;
+	background-color: #f48024;
+	color: #ffffff;
 	border: 1px solid #f48024;
 	border-radius: 3px;
+    margin-top: 5px;
 }

@@ -10,6 +10,7 @@ object DefineCode {
     val DEFAULT_PAGE = "https://www.naver.com"
     private val BASE_LOCAL_PAGE = "file:///android_asset/www/"
     val ERROR_PAGE = BASE_LOCAL_PAGE + "ErrorPage.html"
+    val TEST_PAGE = BASE_LOCAL_PAGE + "BridgePage.html"
 
     // 인텐트 스키마
     val SCHEME_APP_MARKET = "market://details?id="

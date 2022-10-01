@@ -8,6 +8,7 @@ var pages = {
 	
 	init : function() {
 		pages.initInterface();
+        console.log("123 콘솔 로그 테스트!!!!");
 	} ,
 	
 	initInterface : function() {

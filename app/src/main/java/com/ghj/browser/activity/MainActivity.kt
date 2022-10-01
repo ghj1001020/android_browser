@@ -25,7 +25,6 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.EditText
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
@@ -50,17 +49,12 @@ import com.ghj.browser.util.*
 import com.ghj.browser.webkit.JsAlertPopupData
 import com.ghj.browser.webkit.JsBridge
 import com.ghj.browser.webkit.JsGetMessageData
-import com.google.android.gms.tasks.Task
-import com.google.android.play.core.review.ReviewInfo
-import com.google.android.play.core.review.ReviewManager
-import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener , View.OnTouchListener , JsBridge.JsCallback {
 
@@ -86,9 +80,6 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     var jsReturnHandler = JsReturnHandler()
     var indexSearch = DefineCode.DEFAULT_PAGE
 
-    // dialog
-    var moreDialog : Dialog? = null
-
     // full screen
     var wvCustomView : View? = null
     var wvCustomViewCallback : WebChromeClient.CustomViewCallback? = null
@@ -105,6 +96,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
     // 콘솔데이터 리스트
     var consoleList : ArrayList<ConsoleData> = arrayListOf()
+
 
     // 시작페이지
     companion object {
@@ -286,29 +278,6 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
 
         // todo 테스트 하드코딩
-        btn_test?.setOnClickListener(){
-//            wv_main?.loadUrl( "https://m.help.kt.com/store/s_KtStoreSearch.do" )
-//            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
-//            wv_main?.ladUorl( "http://m.my.kt.com" )
-
-//            wv_main?.loadUrl( "file:///android_asset/www/BridgePage.html" )
-            val manager : ReviewManager = ReviewManagerFactory.create(mContext)
-            val request : Task<ReviewInfo> = manager.requestReviewFlow()
-            request.addOnCompleteListener { task ->
-                if(task.isSuccessful) {
-                    Toast.makeText(mContext, "requestReviewFlow Success", Toast.LENGTH_SHORT).show()
-                    if( task.result != null ) {
-                        val reviewFlow : Task<Void> = manager.launchReviewFlow(mActivity, task.result!!)
-                        reviewFlow.addOnCompleteListener { taskFlow ->
-                            Toast.makeText(mContext, "launchReviewFlow Complete", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-                else {
-                    Toast.makeText(mContext, "requestReviewFlow Fail", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
         btn_appcall?.setOnClickListener() { view ->
             onWebMessage()
 //            onWebMessageReturn()
@@ -332,6 +301,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     override fun onCreateAfter() {
         getViewModel().queryBookmarkData(this)
         getViewModel().queryHistoryData(this)
+
         loadUrl( indexSearch )
     }
 

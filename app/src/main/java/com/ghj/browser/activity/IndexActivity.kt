@@ -35,6 +35,7 @@ public class IndexActivity : BaseActivity() , View.OnClickListener {
             }
         };
         btn_index_search.setOnClickListener( this )
+        btnTestPage.setOnClickListener( this )
     }
 
 
@@ -42,6 +43,9 @@ public class IndexActivity : BaseActivity() , View.OnClickListener {
         when (v?.id) {
             R.id.btn_index_search -> {
                 indexPageSearch()
+            }
+            R.id.btnTestPage -> {
+                moveToMain(DefineCode.TEST_PAGE)
             }
         }
     }
@@ -51,14 +55,16 @@ public class IndexActivity : BaseActivity() , View.OnClickListener {
         var search = edit_index_url.text.toString()
         if( TextUtils.isEmpty( search ) ) {
             search = DefineCode.DEFAULT_PAGE
-            edit_index_url.setText(search)
         }
 
+        moveToMain(search)
+    }
+
+    // 메인화면으로 이동
+    fun moveToMain(search: String) {
         val intent = Intent( this , MainActivity::class.java )
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.putExtra( DefineCode.IT_PARAM.LOAD_URL , search )
         startActivity( intent )
-
-        edit_index_url?.setText( "" )
     }
 }
