@@ -28,6 +28,8 @@
 
         <com.ghj.browser.webkit.CustomWebView
             android:id="@+id/wv_main"
+            android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+            android:scrollbarTrackVertical="@drawable/scrollbar_track"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -77,6 +79,16 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/custom_view_container"
+        android:background="#f00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:visibility="gone"/>
 
     <!-- todo 테스트 하드코딩 -->
     <Button
@@ -89,15 +101,5 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
-    <FrameLayout
-        android:id="@+id/custom_view_container"
-        android:background="#f00"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

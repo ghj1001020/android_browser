@@ -80,7 +80,7 @@ class CustomWebView : WebView {
         isHorizontalScrollBarEnabled = true
         isVerticalScrollBarEnabled = true
         scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
-        isScrollbarFadingEnabled = true
+        isScrollbarFadingEnabled = false
 
         // 쿠키 허용
         val cookieManager : CookieManager = CookieManager.getInstance()
