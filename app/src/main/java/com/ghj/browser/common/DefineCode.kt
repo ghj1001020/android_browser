@@ -24,6 +24,7 @@ object DefineCode {
         const val HISTORY : Int = 101 // 히스토리 액티비티
         const val SEARCH : Int = 102  // 검색 액티비티
         const val BOOKMARK : Int = 103  // 즐겨찾기 액티비티
+        const val SETTING : Int = 104  // 설정 액티비티
     }
 
     // 인텐트 파라미터
@@ -33,6 +34,7 @@ object DefineCode {
         const val IS_CHANGED = "it_param_is_changed"    // 데이터가 변경되었는지 여부
         const val LOCAL_STORAGE = "it_param_localstorage"    // 로컬스토리지
         const val SESSION_STORAGE = "it_param_sessionstorage"    // 세션스토리지
+        const val USERAGENT = "it_param_useragent"  // User-Agent
     }
 
     // Preferences 키

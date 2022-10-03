@@ -79,6 +79,9 @@
         <activity android:name=".activity.StorageActivity"
             android:exported="false" />
 
+        <activity android:name=".activity.SettingActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

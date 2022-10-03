@@ -45,6 +45,9 @@ class StorageActivity : BaseActivity(), View.OnClickListener {
         }
         catch (e: Exception) {
             LogUtil.e(e.message)
+            if(!strLocal.isEmpty()) {
+                localData.add( StorageData(StorageType.STORAGE, "", strLocal) )
+            }
         }
         if(localData.size == 0) {
             storageList.add(StorageData(StorageType.EMPTY))
@@ -64,6 +67,9 @@ class StorageActivity : BaseActivity(), View.OnClickListener {
         }
         catch (e: Exception) {
             LogUtil.e(e.message)
+            if(!strSession.isEmpty()) {
+                localData.add( StorageData(StorageType.STORAGE, "", strSession) )
+            }
         }
         if(sessionData.size == 0) {
             storageList.add(StorageData(StorageType.EMPTY))

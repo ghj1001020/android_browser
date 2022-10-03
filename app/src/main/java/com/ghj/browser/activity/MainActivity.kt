@@ -491,7 +491,7 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                             moveToHtmlElement()
                         }
                         DefineCode.MORE_MENU_SETTING -> {
-
+                            moveToSetting()
                         }
                     }
                 }
@@ -584,23 +584,22 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     }
 
     // 데스크탑 모드 <-> 모바일 모드 토클
-    fun chnagePcMobileMode() {
+    fun changePcMobileMode() {
         wv_main?.let {
+            BrowserApp.isMobile = !BrowserApp.isMobile
             if( BrowserApp.isMobile ) {
+                val userAgent = it.settings.userAgentString.replace( "droidA" , "Android" ).replace( "obileM" , "Mobile" )
+                it.settings.userAgentString = userAgent
+
+                it.reload()
+            }
+            else {
                 val userAgent = it.settings.userAgentString.replace( "Android" , "droidA" ).replace( "Mobile" , "obileM" )
                 it.settings.userAgentString = userAgent
 
                 val url = it.url?.replace( Regex("^https:\\/\\/m\\.") , "https://www.")?.replace( Regex( "^http:\\/\\/m\\.") , "http://www.")
                 loadUrl( url )
             }
-            else {
-                val userAgent = it.settings.userAgentString.replace( "droidA" , "Android" ).replace( "obileM" , "Mobile" )
-                it.settings.userAgentString = userAgent
-
-                it.reload()
-            }
-
-            BrowserApp.isMobile = !BrowserApp.isMobile
         }
     }
 
@@ -647,6 +646,16 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                 startActivity(intent)
             }
         }
+    }
+
+    // 설정 페이지로 이동
+    fun moveToSetting() {
+        val userAgent : String = wv_main.settings.userAgentString
+        LogUtil.d("User-Agent : ${userAgent}")
+
+        val intent : Intent = Intent(this, SettingActivity::class.java)
+        intent.putExtra(DefineCode.IT_PARAM.USERAGENT, userAgent)
+        startActivityForResult(intent, DefineCode.ACT_REQ_ID.SETTING)
     }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
@@ -1067,6 +1076,16 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                             val bookmark = SQLiteService.selectBookmarkCntByUrl(this, it.url)
                             chkBookmark.isChecked = bookmark > 0
                         }
+                    }
+                }
+            }
+
+            // 설정 액티비티
+            DefineCode.ACT_REQ_ID.SETTING -> {
+                if( resultCode == Activity.RESULT_OK ) {
+                    val isChanged = data?.getBooleanExtra( DefineCode.IT_PARAM.IS_CHANGED, false) ?: false
+                    if( isChanged ) {
+                        changePcMobileMode()
                     }
                 }
             }
