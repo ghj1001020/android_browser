@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutStorage"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:id="@+id/txtKey"
+            style="@style/TvKey"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:text="MM_CHANNEL_MORE_SUBSCRIBE_BANNER"/>
+
+        <TextView
+            android:id="@+id/txtValue"
+            style="@style/TvValue"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintTop_toBottomOf="@id/txtKey"
+            app:layout_constraintLeft_toLeftOf="@id/txtKey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="MM_CHANNEL_MORE_SUBSCRIBE_BANNER"/>
+        
+        <View
+            android:id="@+id/divider"
+            style="@style/Divider"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView 
+        android:id="@+id/noData"
+        style="@style/TvNoData"
+        android:visibility="gone"/>
+
+</FrameLayout>

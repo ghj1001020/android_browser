@@ -127,6 +127,37 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/divider1"
+            android:background="@color/divider"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/storage"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:src="@drawable/ic_toolbar_storage"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:text="Storage"
+                style="@style/TvMenuBottomSheet"
+                android:layout_marginLeft="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+        <View
             android:background="@color/divider"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -157,6 +188,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/divider2"
             android:background="@color/divider"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -194,36 +226,6 @@
             android:layout_height="1dp" />
 
         <LinearLayout
-            android:id="@+id/pcMobile"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <ImageView
-                android:src="@drawable/ic_toolbar_desktop"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_width="28dp"
-                android:layout_height="28dp" />
-
-            <TextView
-                android:text="PC/모바일전환"
-                style="@style/TvMenuBottomSheet"
-                android:layout_marginLeft="12dp"
-                android:layout_width="match_parent"
-                android:layout_height="50dp" />
-
-        </LinearLayout>
-
-        <View
-            android:background="@color/divider"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-        <LinearLayout
             android:id="@+id/printer"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -239,6 +241,36 @@
 
             <TextView
                 android:text="프린터"
+                style="@style/TvMenuBottomSheet"
+                android:layout_marginLeft="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+        <View
+            android:background="@color/divider"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/setting"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:src="@drawable/ic_toolbar_setting"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp" />
+
+            <TextView
+                android:text="설정"
                 style="@style/TvMenuBottomSheet"
                 android:layout_marginLeft="12dp"
                 android:layout_width="match_parent"

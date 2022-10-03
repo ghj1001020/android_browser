@@ -49,10 +49,13 @@ import com.ghj.browser.util.*
 import com.ghj.browser.webkit.JsAlertPopupData
 import com.ghj.browser.webkit.JsBridge
 import com.ghj.browser.webkit.JsGetMessageData
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import kotlinx.android.synthetic.main.webview_loading_bar.*
+import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -469,8 +472,8 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                         DefineCode.MORE_MENU_PRINTER -> {
                             moveToPrinter()
                         }
-                        DefineCode.MORE_MENU_PCM_MODE -> {
-                            chnagePcMobileMode()
+                        DefineCode.MORE_MENU_STORAGE -> {
+                            moveToStorage()
                         }
                         DefineCode.MORE_MENU_HISTORY -> {
                             moveToHistory()
@@ -486,6 +489,9 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
                         }
                         DefineCode.MORE_MENU_HTML_ELEMENT -> {
                             moveToHtmlElement()
+                        }
+                        DefineCode.MORE_MENU_SETTING -> {
+
                         }
                     }
                 }
@@ -544,6 +550,36 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
 
             val printJobName : String = getString( R.string.app_name )
             val printJob : PrintJob = it.print( printJobName , documentAdapter , PrintAttributes.Builder().build() )
+        }
+    }
+
+    // 스토리지 페이지로 이동
+    fun moveToStorage() {
+        if( Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT ) {
+            wv_main?.evaluateJavascript("javascript:JSON.stringify(localStorage);") { localS: String ->
+                val strLocal = localS
+                    .replace("\\\"", "\"")
+                    .replace("\\\\\"", "\"")
+                    .replace("\"{", "{")
+                    .replace("}\"","}")
+                    .replace("\"[", "[")
+                    .replace("]\"", "]")
+
+                wv_main?.evaluateJavascript("javascript:JSON.stringify(sessionStorage);") { sessionS: String ->
+                    val strSession = sessionS
+                        .replace("\\\"", "\"")
+                        .replace("\\\\\"", "\"")
+                        .replace("\"{", "{")
+                        .replace("}\"","}")
+                        .replace("\"[", "[")
+                        .replace("]\"", "]")
+
+                    val intent = Intent(this, StorageActivity::class.java)
+                    intent.putExtra(DefineCode.IT_PARAM.LOCAL_STORAGE, strLocal)
+                    intent.putExtra(DefineCode.IT_PARAM.SESSION_STORAGE, strSession)
+                    startActivity(intent)
+                }
+            }
         }
     }
 
@@ -805,12 +841,12 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
     override fun onScrollChanged(t: Int, oldt: Int) {
         if( t == 0 ) {
             if( appbar_main?.visibility != View.VISIBLE ) {
-                isAppbarShowing = false
+                isAppbarShowing = true
                 isAppbarHiding = false
                 appbar_main?.startAnimation( animationAppbarShow )
             }
             if( toolbar_main?.visibility != View.VISIBLE ) {
-                isToolbarShowing = false
+                isToolbarShowing = true
                 isToolbarHiding = false
                 toolbar_main?.startAnimation( animationToolbarShow )
             }
@@ -832,18 +868,26 @@ class MainActivity : BaseWebViewActivity<MainViewModel>() , View.OnClickListener
         // 아래로 스크롤하면 숨기고
         if( scrollSum > appbar_main.height ) {
             if( appbar_main?.visibility == View.VISIBLE && !isAppbarHiding ) {
+                isAppbarShowing = false
+                isAppbarHiding = true
                 appbar_main?.startAnimation( animationAppbarHide )
             }
             if( toolbar_main?.visibility == View.VISIBLE && !isToolbarHiding ) {
+                isToolbarShowing = false
+                isToolbarHiding = true
                 toolbar_main?.startAnimation( animationToolbarHide )
             }
         }
         // 위로 스크롤하면 보인다
         else if( scrollSum < -appbar_main.height) {
             if( appbar_main?.visibility != View.VISIBLE && !isAppbarShowing ) {
+                isAppbarShowing = true
+                isAppbarHiding = false
                 appbar_main?.startAnimation( animationAppbarShow )
             }
             if( toolbar_main?.visibility != View.VISIBLE && !isToolbarShowing ) {
+                isToolbarShowing = true
+                isToolbarHiding = false
                 toolbar_main?.startAnimation( animationToolbarShow )
             }
         }

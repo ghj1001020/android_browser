@@ -58,6 +58,32 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="TvNoData" parent="Widget.AppCompat.TextView">
+        <item name="android:text">데이터가 없습니다.</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/txt_black</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+    </style>
+
+    <style name="TvKey" parent="Widget.AppCompat.TextView">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/txt_cookie_key</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TvValue" parent="Widget.AppCompat.TextView">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/txt_cookie_value</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <!-- 체크박스 -->
     <!-- 목록선택 -->
     <style name="CheckBoxStyle_selector" parent="Widget.AppCompat.CompoundButton.CheckBox">
@@ -68,6 +94,14 @@
         <item name="android:focusableInTouchMode">false</item>
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
+    </style>
+
+
+    <!-- 디바이더 -->
+    <style name="Divider">
+        <item name="android:background">@color/divider</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
     </style>
 
 

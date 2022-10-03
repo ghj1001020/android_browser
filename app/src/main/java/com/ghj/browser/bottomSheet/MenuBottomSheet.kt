@@ -2,6 +2,7 @@ package com.ghj.browser.bottomSheet
 
 import android.app.Dialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import com.ghj.browser.R
@@ -25,8 +26,16 @@ class MenuBottomSheet(context: Context, val callback: MenuClickCallback) : Botto
         cookie.setOnClickListener(this)
         scriptExe.setOnClickListener(this)
         htmlSource.setOnClickListener(this)
-        pcMobile.setOnClickListener(this)
+        storage.setOnClickListener(this)
         printer.setOnClickListener(this)
+        setting.setOnClickListener(this)
+
+        if( Build.VERSION_CODES.KITKAT > Build.VERSION.SDK_INT ) {
+            divider1.visibility = View.GONE
+            divider2.visibility = View.GONE
+            storage.visibility = View.GONE
+            htmlSource.visibility = View.GONE
+        }
     }
 
     override fun onClick(p0: View?) {
@@ -50,11 +59,14 @@ class MenuBottomSheet(context: Context, val callback: MenuClickCallback) : Botto
             R.id.htmlSource -> {
                 callback(this, DefineCode.MORE_MENU_HTML_ELEMENT)
             }
-            R.id.pcMobile -> {
-                callback(this, DefineCode.MORE_MENU_PCM_MODE)
+            R.id.storage -> {
+                callback(this, DefineCode.MORE_MENU_STORAGE)
             }
             R.id.printer -> {
                 callback(this, DefineCode.MORE_MENU_PRINTER)
+            }
+            R.id.setting -> {
+                callback(this, DefineCode.MORE_MENU_SETTING)
             }
         }
     }

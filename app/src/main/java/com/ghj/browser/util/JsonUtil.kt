@@ -94,4 +94,26 @@ object JsonUtil {
             return null
         }
     }
+
+    // json string -> map
+    fun parseMap( json : String? ) : Map<String, String>? {
+        if( TextUtils.isEmpty(json) || "{}" == json ) {
+            return null
+        }
+
+        try {
+            val builder : GsonBuilder = GsonBuilder()
+            builder.excludeFieldsWithoutExposeAnnotation()
+            builder.serializeNulls()
+
+            val gson : Gson = builder.create()
+
+            return gson.fromJson(json, object : TypeToken<Map<String, String>>(){}.type)
+        }
+        catch ( e : Exception) {
+            e.printStackTrace()
+            LogUtil.e("err = " + e.message )
+            return null
+        }
+    }
 }

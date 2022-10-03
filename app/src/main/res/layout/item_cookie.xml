@@ -12,21 +12,13 @@
 
     <TextView
         android:id="@+id/txt_cookie_key"
-        android:gravity="center_vertical"
-        android:textSize="15dp"
-        android:textColor="@color/txt_cookie_key"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/TvKey"
         tools:text="MM_CHANNEL_MORE_SUBSCRIBE_BANNER" />
 
     <TextView
         android:id="@+id/txt_cookie_value"
-        android:gravity="center_vertical"
-        android:textSize="16dp"
-        android:textColor="@color/txt_cookie_value"
+        style="@style/TvValue"
         android:layout_marginTop="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         tools:text="MM_CHANNEL_MORE_SUBSCRIBE_BANNER" />
 
 </LinearLayout>

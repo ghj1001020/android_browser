@@ -41,6 +41,7 @@
     <string name="toolbar_more_js_execute">자바스크립트 실행</string>
     <string name="toolbar_more_html_element">HTML 소스보기</string>
     <string name="toolbar_more_bookmark">즐겨찾기</string>
+    <string name="toolbar_more_storage">Storage</string>
 
     <string name="toolbar_more_cookie_desc">저장된 쿠키 %d개</string>
     <string name="toolbar_more_history_desc1">오늘 웹페이지 %d개 방문함</string>

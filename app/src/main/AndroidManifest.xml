@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  <!-- 정확한 위치에 액세스 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />  <!-- 대략적인 위치에 액세스 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 단말에 파일 저장 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
@@ -73,6 +74,9 @@
             android:exported="false" />
 
         <activity android:name=".activity.BookmarkActivity"
+            android:exported="false" />
+
+        <activity android:name=".activity.StorageActivity"
             android:exported="false" />
 
     </application>

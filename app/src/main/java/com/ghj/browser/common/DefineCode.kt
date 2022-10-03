@@ -31,6 +31,8 @@ object DefineCode {
         const val HISTORY_URL = "it_param_history_url"  // 이동할 사이트
         const val LOAD_URL = "it_param_load_url"    // 이동할 사이트
         const val IS_CHANGED = "it_param_is_changed"    // 데이터가 변경되었는지 여부
+        const val LOCAL_STORAGE = "it_param_localstorage"    // 로컬스토리지
+        const val SESSION_STORAGE = "it_param_sessionstorage"    // 세션스토리지
     }
 
     // Preferences 키
@@ -79,12 +81,14 @@ object DefineCode {
     private val BASE_MORE_MENU = 2000
     val MORE_MENU_COOKIE = BASE_MORE_MENU + 1
     val MORE_MENU_PRINTER = BASE_MORE_MENU + 2
-    val MORE_MENU_PCM_MODE = BASE_MORE_MENU + 3
+//    val MORE_MENU_PCM_MODE = BASE_MORE_MENU + 3
+    val MORE_MENU_STORAGE = BASE_MORE_MENU + 3
     val MORE_MENU_HISTORY = BASE_MORE_MENU + 4
     val MORE_MENU_CONSOLE = BASE_MORE_MENU + 5
     val MORE_MENU_WEBVIEW_LOG = BASE_MORE_MENU + 6
     val MORE_MENU_JS_EXECUTE = BASE_MORE_MENU + 7
     val MORE_MENU_HTML_ELEMENT = BASE_MORE_MENU + 8
+    val MORE_MENU_SETTING = BASE_MORE_MENU + 9
 
     // JS브릿지 타입
     private val BASE_JS_ID = 3000
